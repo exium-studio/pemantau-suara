@@ -3,17 +3,16 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerHeader,
-  DrawerOverlay,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useLightDarkColor } from "../../constant/colors";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
-import CContainer from "./wrapper/CContainer";
-import DisclosureHeader from "../dependent/DisclosureHeader";
 import useBackOnClose from "../../hooks/useBackOnClose";
 import backOnClose from "../../lib/backOnClose";
+import DisclosureHeader from "../dependent/DisclosureHeader";
+import CContainer from "./wrapper/CContainer";
 
 export default function DetailGeoJSONData() {
   // SX
@@ -37,9 +36,19 @@ export default function DetailGeoJSONData() {
 
   return (
     <Drawer isOpen={isOpen} onClose={handleOnClose} size={"md"}>
-      <DrawerOverlay />
-      <DrawerContent bg={"transparent"} p={2}>
-        <CContainer bg={lightDarkColor} overflowY={"auto"} borderRadius={12}>
+      {/* <DrawerOverlay /> */}
+      <DrawerContent
+        bg={"transparent"}
+        p={2}
+        // h={"min-content"}
+      >
+        <CContainer
+          bg={lightDarkColor}
+          overflowY={"auto"}
+          borderRadius={12}
+          pb={5}
+          // border={"1px solid red"}
+        >
           <DrawerHeader p={0}>
             <DisclosureHeader title="Detail Data" />
           </DrawerHeader>

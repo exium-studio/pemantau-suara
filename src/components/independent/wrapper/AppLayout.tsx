@@ -69,7 +69,7 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
       </VStack>
 
       <CContainer justify={"center"} align={"center"}>
-        <MapboxMap latitude={-6.98445} longitude={110.408296} zoom={11} />
+        <MapboxMap latitude={-7.05} longitude={110.38} zoom={11} />
       </CContainer>
 
       {/* Detail GeoJSON Data */}

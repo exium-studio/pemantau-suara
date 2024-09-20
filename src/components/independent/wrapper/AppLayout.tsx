@@ -4,14 +4,15 @@ import { useLightDarkColor } from "../../../constant/colors";
 import navs from "../../../constant/navs";
 import { iconSize } from "../../../constant/sizes";
 import MapboxMap from "../../dependent/MapboxMap";
+import DetailGeoJSONData from "../DetailGeoJSONData";
 import CContainer from "./CContainer";
 
 interface AppLayoutProps {
   children?: any;
-  activeNav?: number;
+  activeIndex?: number;
 }
 
-export default function AppLayout({ children, activeNav }: AppLayoutProps) {
+export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
   // SX
   const lightDarkColor = useLightDarkColor();
 
@@ -49,27 +50,29 @@ export default function AppLayout({ children, activeNav }: AppLayoutProps) {
                 icon={
                   <Icon
                     as={nav.icon}
-                    // weight={activeNav === i ? "bold" : "regular"}
+                    weight={"bold"}
                     fontSize={iconSize}
+                    // color={activeIndex === i ? "p.500" : "current"}
                   />
                 }
-                colorScheme="ap"
-                variant={"ghost"}
-                // className={activeNav === i ? "btn-apa" : "btn"}
-                color={"p.500"}
+                className="btn"
+                // className={activeIndex === i ? "btn-apa" : "btn"}
               />
             </Tooltip>
           ))}
         </VStack>
 
         <VStack p={1} gap={2} borderRadius={12} bg={lightDarkColor}>
-          <ColorModeSwitcher mt={"auto"} className="btn" color={"p.500"} />
+          <ColorModeSwitcher mt={"auto"} className="btn" />
         </VStack>
       </VStack>
 
       <CContainer justify={"center"} align={"center"}>
-        <MapboxMap latitude={-6.98445} longitude={110.408296} zoom={12} />
+        <MapboxMap latitude={-6.98445} longitude={110.408296} zoom={11} />
       </CContainer>
+
+      {/* Detail GeoJSON Data */}
+      <DetailGeoJSONData />
     </CContainer>
   );
 }

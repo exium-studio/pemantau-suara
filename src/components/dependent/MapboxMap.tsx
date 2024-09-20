@@ -1,8 +1,16 @@
 import { Box, HStack, Text, useColorMode } from "@chakra-ui/react";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { CSSProperties, FC, useEffect, useState } from "react";
-import Map, { Layer, Marker, Source } from "react-map-gl";
+import {
+  CSSProperties,
+  FC,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import Map, { Layer, MapRef, Marker, Source } from "react-map-gl";
 import { useLightDarkColor } from "../../constant/colors";
+import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
 import CContainer from "../independent/wrapper/CContainer";
 
 interface MapProps {
@@ -52,20 +60,8 @@ const MapboxMap: FC<MapProps> = ({
   markerLng,
   style,
 }) => {
-  // SX
   const lightDarkColor = useLightDarkColor();
-
-  const [viewState, setViewState] = useState({
-    latitude,
-    longitude,
-    zoom,
-  });
-
-  const [mapStyle, setMapStyle] = useState(
-    "mapbox://styles/mapbox/streets-v12"
-  );
   const { colorMode } = useColorMode();
-
   useEffect(() => {
     if (colorMode === "dark") {
       setMapStyle("mapbox://styles/mapbox/dark-v11");
@@ -78,6 +74,18 @@ const MapboxMap: FC<MapProps> = ({
     width: "100vw",
     height: "100vh",
   };
+
+  const [mapStyle, setMapStyle] = useState(
+    "mapbox://styles/mapbox/streets-v12"
+  );
+
+  const [viewState, setViewState] = useState({
+    latitude,
+    longitude,
+    zoom,
+  });
+
+  const mapRef = useRef<MapRef>(null);
 
   // State to store loaded GeoJSON data
   const [geojsonData, setGeojsonData] = useState<any[]>([]);
@@ -93,10 +101,46 @@ const MapboxMap: FC<MapProps> = ({
       .catch((err) => console.error("Error loading GeoJSON files:", err));
   }, []);
 
+  // Function to handle layer clicks
+  const { setDetailGeoJSONData } = useDetailGeoJSONData();
+  const handleLayerClick = useCallback(
+    (event: any) => {
+      const clickedFeature = event.features[0];
+      console.log("clickedFeature", clickedFeature);
+      if (clickedFeature) {
+        setDetailGeoJSONData(clickedFeature);
+      }
+    },
+    [setDetailGeoJSONData]
+  );
+
+  // Handle Click GeoJSON
+  useEffect(() => {
+    const map = mapRef.current?.getMap();
+    if (!map) return;
+
+    // Loop through geojsonLayers and add click listeners for each layer
+    geojsonLayers.forEach((_, index) => {
+      const layerId = `geojson-layer-${index}`;
+
+      // Ensure that the layer exists before attaching the click event
+      map.on("click", layerId, handleLayerClick);
+    });
+
+    // Clean up the event listener
+    return () => {
+      geojsonLayers.forEach((_, index) => {
+        const layerId = `geojson-layer-${index}`;
+        map.off("click", layerId, handleLayerClick);
+      });
+    };
+  }, [geojsonData, handleLayerClick]);
+
   return (
     <div style={{ position: "relative" }}>
       {/* Map component */}
       <Map
+        ref={mapRef} // Pass the ref to the Map component
         {...viewState}
         style={{ ...baseStyle, ...style }}
         mapStyle={mapStyle}
@@ -113,7 +157,9 @@ const MapboxMap: FC<MapProps> = ({
           <Source key={index} type="geojson" data={geojson}>
             <Layer
               id={`geojson-layer-${index}`}
-              type="fill" // Customize this based on what you need
+              type="fill"
+              //@ts-ignore
+              interactive={true} // Ensure the layer is interactive
               paint={{
                 "fill-color": geojsonLayers[index].color, // Use the color from the array
                 "fill-opacity": 0.4, // Adjust opacity for elegance

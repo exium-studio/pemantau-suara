@@ -1,19 +1,19 @@
 import { create } from "zustand";
 
 interface State {
-  isAdmin: boolean;
+  panel: boolean;
 }
 
 interface Actions {
-  setIsAdmin: () => void;
+  setActiveDrawerId: () => void;
 }
 
-const useAuth = create<State & Actions>((set) => ({
-  isAdmin: false,
-  setIsAdmin: () =>
+const usePanel = create<State & Actions>((set) => ({
+  panel: false,
+  setActiveDrawerId: () =>
     set((ps) => ({
-      isAdmin: !ps.isAdmin,
+      panel: !ps.panel,
     })),
 }));
 
-export default useAuth;
+export default usePanel;

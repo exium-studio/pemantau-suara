@@ -5,12 +5,12 @@ interface State {
 }
 
 interface Actions {
-  setPanel: () => void;
+  togglePanel: () => void;
 }
 
 const usePanel = create<State & Actions>((set) => ({
-  panel: false,
-  setPanel: () =>
+  panel: localStorage.getItem("panel") === "1" ? true : false,
+  togglePanel: () =>
     set((ps) => ({
       panel: !ps.panel,
     })),

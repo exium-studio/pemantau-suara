@@ -1,7 +1,6 @@
 import "mapbox-gl/dist/mapbox-gl.css";
-import { CSSProperties, FC, useEffect, useState } from "react";
+import { CSSProperties, FC, useState } from "react";
 import Map, { Marker } from "react-map-gl";
-import usePanel from "../../global/usePanel";
 
 interface MapProps {
   latitude: number;
@@ -12,7 +11,7 @@ interface MapProps {
   style?: CSSProperties;
 }
 
-const MapboxMap: FC<MapProps> = ({
+const MapboxMapLogin: FC<MapProps> = ({
   latitude,
   longitude,
   zoom,
@@ -20,39 +19,34 @@ const MapboxMap: FC<MapProps> = ({
   markerLng,
   style,
 }) => {
-  // const [mapKey, setMapKey] = useState(1);
   const [viewState, setViewState] = useState({
     latitude,
     longitude,
     zoom,
-    // pitch: 45, // Sudut kemiringan untuk tampilan 3D
-    // bearing: -17.6, // Sudut rotasi peta
+    pitch: 45, // Sudut kemiringan untuk tampilan 3D
+    bearing: -17.6, // Sudut rotasi peta
   });
 
   const [mapStyle] = useState("mapbox://styles/mapbox/streets-v12");
 
-  const [containerW, setContainerW] = useState("100vw");
-  const { panel } = usePanel();
-  useEffect(() => {
-    // console.log(panel);
-    if (panel) {
-      setTimeout(() => {
-        setContainerW("50vw");
-      }, 200);
-    } else {
-      setContainerW("100vw");
-    }
-    // setMapKey((ps) => ps + 1);
-  }, [panel]);
+  // const { colorMode } = useColorMode();
+
+  // useEffect(() => {
+  //   // Mengganti style peta sesuai dengan mode gelap atau terang
+  //   if (colorMode === "dark") {
+  //     setMapStyle("mapbox://styles/mapbox/dark-v11"); // Peta mode gelap
+  //   } else {
+  //     setMapStyle("mapbox://styles/mapbox/light-v10"); // Peta mode terang
+  //   }
+  // }, [colorMode]);
 
   const baseStyle = {
-    width: containerW,
+    width: "100vw",
     height: "100vh",
   };
 
   return (
     <Map
-      // key={mapKey}
       {...viewState}
       style={{ ...baseStyle, ...style }}
       mapStyle={mapStyle}
@@ -68,4 +62,4 @@ const MapboxMap: FC<MapProps> = ({
   );
 };
 
-export default MapboxMap;
+export default MapboxMapLogin;

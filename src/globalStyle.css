@@ -7,6 +7,7 @@
   /* user-select: none !important; */
 }
 
+.mapboxgl-ctrl,
 .mapboxgl-ctrl-bottom-right {
   opacity: 0;
 }
@@ -35,7 +36,7 @@
   --p900a: #016cd7d0;
 
   --divider: #7e7e7e15;
-  --divider2: #7e7e7e25;
+  --divider2: #7e7e7e22;
   --divider3: #7e7e7e40;
   --divider-text: #858585c1;
 
@@ -103,27 +104,29 @@ button:focus-visible {
   box-shadow: none !important;
 }
 
-.btn-solid {
-  background: var(--divider) !important;
+.btn {
+  background: transparent !important;
 }
 .btn-outline {
   background-color: transparent !important;
   border: 1px solid var(--divider3);
 }
-.btn-outline:hover:not(:disabled),
+.btn-solid {
+  background: var(--divider) !important;
+}
+
+.btn:hover:not(:disabled),
+.btn-outline:hover:not(:disabled) {
+  background: var(--divider) !important;
+}
 .btn-solid:hover:not(:disabled) {
   background: var(--divider2) !important;
 }
-/* .btn-outline:hover:not(:disabled) {
-  border: 1px solid var(--divider3);
-} */
-.btn {
-  background: transparent !important;
-}
-.btn:hover:not(:disabled) {
+
+.btn:active:not(:disabled),
+.btn-outline:active:not(:disabled) {
   background: var(--divider2) !important;
 }
-.btn:active:not(:disabled),
 .btn-solid:active:not(:disabled) {
   background: var(--divider3) !important;
 }
@@ -140,11 +143,11 @@ button:focus-visible {
 }
 
 .btn-apa:not(:disabled) {
-  background: var(--p500a4) !important;
+  background: var(--p500a5) !important;
   color: var(--p500) !important;
 }
 .btn-apa:hover:not(:disabled) {
-  background: var(--p500a3) !important;
+  background: var(--p500a4) !important;
 }
 .btn-apa:active:not(:disabled) {
   background: var(--p500a3) !important;

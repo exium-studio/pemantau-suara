@@ -99,9 +99,10 @@ export const globalTheme = extendTheme({
 
     Badge: {
       baseStyle: (props) => ({
-        p: "4px 10px",
+        p: "4px 12px",
         borderRadius: 6,
         fontSize: [10, null, 12],
+        fontWeight: 500,
         // textTransform: "none",
       }),
     },
@@ -111,9 +112,9 @@ export const globalTheme = extendTheme({
         fontWeight: 550,
         borderRadius: 8,
       },
-      variants: {
-        outline: {
-          // border: "2px solid",
+      sizes: {
+        md: {
+          px: 6,
         },
       },
     },
@@ -126,7 +127,10 @@ export const globalTheme = extendTheme({
         control: {
           border: props.isInvalid
             ? "1.5px solid #E53E3E"
-            : "2px solid var(--divider3) !important",
+            : "3px solid var(--divider3) !important",
+          _focusVisible: {
+            boxShadow: "none !important",
+          },
         },
       }),
     },
@@ -181,19 +185,32 @@ export const globalTheme = extendTheme({
         },
         divider: {
           my: 0,
+          // mx: -1,
+          borderColor: "var(--divider3)",
         },
         list: {
-          bg: props.colorMode === "dark" ? "dark" : "white",
-          border: "1px solid var(--divider3)",
-          p: 0,
+          // bg: props.colorMode === "dark" ? "dark" : "white",
+          bg: "#303030df",
+          color: "white",
+          backdropFilter: "blur(20px)",
+          border: "1px solid var(--divider)",
           overflow: "hidden",
           boxShadow: "none",
           borderRadius: 8,
+          p: "0px !important",
+          // p: "4px",
         },
         item: {
+          // borderRadius: "6px",
           bg: "transparent",
-          _hover: { bg: "var(--divider)" },
+          _hover: { bg: "var(--divider3)" },
+          _focus: { border: "none !important", boxShadow: "none !important" },
+          _focusVisible: {
+            border: "none !important",
+            boxShadow: "none !important",
+          },
           fontSize: 14,
+          justifyContent: "space-between",
           py: 3,
           px: 4,
         },
@@ -203,26 +220,32 @@ export const globalTheme = extendTheme({
     Modal: {
       baseStyle: (props) => ({
         dialogContainer: {
-          // p: 4,
+          p: 4,
+          className: "scrollY",
         },
         dialog: {
           bg: props.colorMode === "dark" ? "dark" : "white",
           color: props.colorMode === "dark" ? "wt" : "bt",
+          // bg: "#252525ee",
+          // color: "white !important",
+          backdropFilter: "blur(40px)",
           boxShadow: "none",
           borderRadius: 12,
-          m: 4,
+          // m: 4,
           border: "1px solid var(--divider2)",
+          className: "scrollY",
           // maxH: "100%",
         },
         overlay: {
           bg: "#00000011",
-          backdropFilter: "blur(5px)",
+          backdropFilter: "blur(8px)",
         },
         header: {
-          pt: "18px",
-          pr: "20px",
-          pb: "20px",
-          pl: "24px",
+          p: 0,
+          // pt: "18px",
+          // pr: "20px",
+          // pb: "20px",
+          // pl: "24px",
         },
         body: {
           px: "24px",
@@ -233,7 +256,7 @@ export const globalTheme = extendTheme({
         },
         footer: {
           px: "24px",
-          pt: "20px",
+          pt: "24px",
           pb: "24px",
         },
         closeButton: {
@@ -309,13 +332,19 @@ export const globalTheme = extendTheme({
         fontSize: [13, null, 15],
         borderRadius: 8,
       },
+      container: {
+        w: "100% !important",
+        maxW: "500px !important",
+      },
     },
 
     Tooltip: {
       baseStyle: {
-        bg: "dark",
+        bg: "#252525ee",
         color: "white !important",
-        "--popper-arrow-bg": "#0097e8",
+        "--popper-arrow-bg": "#252525ee",
+        backdropFilter: "blur(40px)",
+        border: "1px solid var(--divider3)",
         borderRadius: 8,
         px: 4,
         py: 2,

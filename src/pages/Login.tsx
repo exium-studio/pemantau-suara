@@ -15,7 +15,7 @@ import * as yup from "yup";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import PasswordInput from "../components/dependent/input/PasswordInput";
 import StringInput from "../components/dependent/input/StringInput";
-import MapboxMap from "../components/dependent/MapboxMap";
+import MapboxMapLogin from "../components/dependent/MapboxMapLogin";
 import SmallLink from "../components/independent/SmallLink";
 import CContainer from "../components/independent/wrapper/CContainer";
 import { useLightDarkColor } from "../constant/colors";
@@ -52,7 +52,7 @@ export default function Login() {
   return (
     <Center minH={"100vh"} p={responsiveSpacing}>
       <Box position={"fixed"} left={0} top={0}>
-        <MapboxMap latitude={-6.98445} longitude={110.408296} zoom={18} />
+        <MapboxMapLogin latitude={-6.98445} longitude={110.408296} zoom={18} />
       </Box>
 
       <Box
@@ -77,7 +77,6 @@ export default function Login() {
           position={"absolute"}
           top={2}
           left={2}
-          ml={0}
         />
 
         <CContainer align={"center"} mt={4} mb={8}>
@@ -131,26 +130,28 @@ export default function Login() {
               Login
             </Button> */}
 
-            <Button
-              colorScheme="ap"
-              className="btn-ap clicky"
-              as={Link}
-              to={"/dashboard"}
-              mb={2}
-            >
-              Login Dashboard
-            </Button>
-            <Button
-              colorScheme="ap"
-              className="btn-ap clicky"
-              as={Link}
-              mb={4}
-              to={"/pelaksana"}
-            >
-              Login Pelaksana
-            </Button>
+            <ButtonGroup mb={4}>
+              <Button
+                w={"100%"}
+                colorScheme="ap"
+                className="btn-ap clicky"
+                as={Link}
+                to={"/dashboard"}
+              >
+                Login Dashboard
+              </Button>
+              <Button
+                w={"100%"}
+                colorScheme="ap"
+                className="btn-ap clicky"
+                as={Link}
+                to={"/pelaksana"}
+              >
+                Login Pelaksana
+              </Button>
+            </ButtonGroup>
 
-            <SmallLink to="/forgot-password" ml={"auto"}>
+            <SmallLink to="/forgot-password" mx={"auto"}>
               Lupa password?
             </SmallLink>
           </>

@@ -8,10 +8,6 @@ const useTableStripedColor = () => {
   return useColorModeValue("#fbfbfb", "#161616");
 };
 
-const useBodyColor = () => {
-  return useColorModeValue("white", "#191919");
-};
-
 const useWhiteDarkColor = () => {
   return useColorModeValue("white", "dark");
 };
@@ -56,7 +52,6 @@ const statusKaryawanColorScheme = {
 
 export {
   useContentBgColor,
-  useBodyColor,
   useWhiteDarkColor,
   statusKaryawanColorScheme,
   useLightDarkColor,

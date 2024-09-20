@@ -15,7 +15,7 @@ export const App = () => (
         <Route
           path="/dashboard"
           element={
-            <AppLayout activeNav={0}>
+            <AppLayout>
               <Dashboard />
             </AppLayout>
           }

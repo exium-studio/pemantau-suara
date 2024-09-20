@@ -50,7 +50,7 @@ export default function SingleSelectDrawer({
   nonNullable,
   ...props
 }: Props) {
-  const [search, setSearch] = useState<string | undefined>("");
+  const [search, setSearch] = useState<string>("");
   const [selected, setSelected] = useState<Interface__SelectOption | undefined>(
     inputValue
   );
@@ -60,7 +60,7 @@ export default function SingleSelectDrawer({
         return (
           option.value.toString().toLowerCase().includes(searchTerm) ||
           option.label.toString().toLowerCase().includes(searchTerm) ||
-          option.subLabel?.toString().toLowerCase().includes(searchTerm)
+          option.label2?.toString().toLowerCase().includes(searchTerm)
         );
       })
     : options;
@@ -123,7 +123,7 @@ export default function SingleSelectDrawer({
           </Text>
 
           <Text fontWeight={400} opacity={0.4}>
-            {inputValue && inputValue.subLabel}
+            {inputValue && inputValue.label2}
           </Text>
         </HStack>
 
@@ -205,7 +205,7 @@ export default function SingleSelectDrawer({
               >
                 <Text>{option.label}</Text>
 
-                <Text opacity={0.4}>{option.subLabel}</Text>
+                <Text opacity={0.4}>{option.label2}</Text>
               </Button>
             ))}
           </VStack>

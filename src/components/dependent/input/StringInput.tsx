@@ -1,33 +1,40 @@
 import {
+  Box,
+  BoxProps,
   Input as ChakraInput,
   InputProps,
+  Text,
+  TextProps,
   useColorMode,
 } from "@chakra-ui/react";
 import { css, Global } from "@emotion/react";
 
 interface Props extends InputProps {
+  fRef?: any;
   name: string;
   onChangeSetter: (inputValue: string | undefined) => void;
   inputValue: string | undefined;
   isError?: boolean;
   placeholder?: string;
+  boxProps?: BoxProps;
+  placeholderprops?: TextProps;
 }
 
 export default function StringInput({
+  fRef,
   name,
   onChangeSetter,
   inputValue,
   isError,
-  placeholder,
+  placeholder = "",
+  boxProps,
+  placeholderprops,
   ...props
 }: Props) {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     onChangeSetter(e.target.value);
   }
 
-  console.log("stringInput", inputValue);
-
-  // SX
   const { colorMode } = useColorMode();
   const darkLightColorManual = colorMode === "light" ? "white" : "var(--dark)";
 
@@ -48,18 +55,38 @@ export default function StringInput({
         `}
       />
 
-      <ChakraInput
-        name={name}
-        border={"1px solid var(--divider3) !important"}
-        _focus={{
-          border: "1px solid var(--p500) !important",
-          boxShadow: "none !important",
-        }}
-        onChange={handleChange}
-        value={inputValue}
-        placeholder={placeholder}
-        {...props}
-      />
+      <Box position={"relative"} w={"100%"} overflow={"visible"} {...boxProps}>
+        <ChakraInput
+          ref={fRef}
+          name={name}
+          border={"1px solid var(--divider3) !important"}
+          _focus={{
+            border: "1px solid var(--p500) !important",
+            boxShadow: "none !important",
+          }}
+          onChange={handleChange}
+          value={inputValue}
+          placeholder=" "
+          {...props}
+        />
+        {!inputValue && (
+          <Text
+            w={"calc(100% - 32px)"}
+            position={"absolute"}
+            top={"8px"}
+            left={props?.pl || 4}
+            pr={props?.pr}
+            whiteSpace={"nowrap"}
+            overflow={"hidden"}
+            textOverflow={"ellipsis"}
+            color={`#96969691`}
+            pointerEvents={"none"}
+            {...placeholderprops}
+          >
+            {placeholder}
+          </Text>
+        )}
+      </Box>
     </>
   );
 }

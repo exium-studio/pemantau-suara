@@ -1,4 +1,4 @@
-import { Button, Image, Text, VStack } from "@chakra-ui/react";
+import { Button, Text, VStack } from "@chakra-ui/react";
 
 import { Link } from "react-router-dom";
 
@@ -9,7 +9,7 @@ export default function MissingPage() {
   return (
     <VStack h={"100vh"} gap={0}>
       <VStack p={8} flex={1} justify={"center"} gap={4} w={"100%"}>
-        <Image src="/vectors/error404.webp" w={"100%"} maxW={"300px"} mb={4} />
+        {/* <Image src="/vectors/error404.webp" w={"100%"} maxW={"300px"} mb={4} /> */}
 
         <Text textAlign={"center"} fontSize={32} fontWeight={600}>
           404 Page Not Found

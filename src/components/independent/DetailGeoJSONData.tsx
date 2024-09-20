@@ -16,16 +16,23 @@ export default function DetailGeoJSONData() {
   const lightDarkColor = useLightDarkColor();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { detailGeoJSONData } = useDetailGeoJSONData();
+  const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
 
   useEffect(() => {
+    console.log(detailGeoJSONData);
     if (detailGeoJSONData) {
       onOpen();
     }
   }, [detailGeoJSONData, onOpen]);
 
   return (
-    <Drawer isOpen={isOpen} onClose={onClose}>
+    <Drawer
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+        setDetailGeoJSONData(undefined);
+      }}
+    >
       <DrawerContent bg={"transparent"} p={4}>
         <CContainer bg={lightDarkColor} overflowY={"auto"} borderRadius={12}>
           <DrawerHeader>Detail Data</DrawerHeader>

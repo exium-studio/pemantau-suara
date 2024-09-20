@@ -2,6 +2,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { CSSProperties, FC, useEffect, useState } from "react";
 import Map, { Marker } from "react-map-gl";
 import usePanel from "../../global/usePanel";
+import { useColorMode } from "@chakra-ui/react";
 
 interface MapProps {
   latitude: number;
@@ -29,7 +30,19 @@ const MapboxMap: FC<MapProps> = ({
     // bearing: -17.6, // Sudut rotasi peta
   });
 
-  const [mapStyle] = useState("mapbox://styles/mapbox/streets-v12");
+  const [mapStyle, setMapStyle] = useState(
+    "mapbox://styles/mapbox/streets-v12"
+  );
+
+  const { colorMode } = useColorMode();
+
+  useEffect(() => {
+    if (colorMode === "dark") {
+      setMapStyle("mapbox://styles/mapbox/dark-v11");
+    } else {
+      setMapStyle("mapbox://styles/mapbox/streets-v12");
+    }
+  }, [colorMode]);
 
   const [containerW, setContainerW] = useState("100vw");
   const { panel } = usePanel();

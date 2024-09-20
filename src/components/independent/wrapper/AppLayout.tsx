@@ -17,7 +17,8 @@ export default function AppLayout({ children, activeNav }: AppLayoutProps) {
   return (
     <HStack gap={0} align={"stretch"} h={"100vh"} overflow={"clip"}>
       <CContainer p={2} gap={2}>
-        <Image src="/logo.png" mb={2} />
+        <Image src="/asset/logo.png" mb={2} borderRadius={"full"} />
+
         {navs.map((nav, i) => (
           <Tooltip label={nav.label} placement="right" ml={2}>
             <IconButton
@@ -25,7 +26,7 @@ export default function AppLayout({ children, activeNav }: AppLayoutProps) {
               icon={
                 <Icon
                   as={nav.icon}
-                  weight={activeNav === i ? "fill" : "regular"}
+                  weight={activeNav === i ? "bold" : "regular"}
                   fontSize={iconSize}
                 />
               }

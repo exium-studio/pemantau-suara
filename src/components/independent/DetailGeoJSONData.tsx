@@ -3,6 +3,7 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerHeader,
+  DrawerOverlay,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -33,7 +34,8 @@ export default function DetailGeoJSONData() {
         setDetailGeoJSONData(undefined);
       }}
     >
-      <DrawerContent bg={"transparent"} p={4}>
+      <DrawerOverlay />
+      <DrawerContent bg={"transparent"} p={2}>
         <CContainer bg={lightDarkColor} overflowY={"auto"} borderRadius={12}>
           <DrawerHeader>Detail Data</DrawerHeader>
           <DrawerBody overflowY={"auto"} className="scrollY">

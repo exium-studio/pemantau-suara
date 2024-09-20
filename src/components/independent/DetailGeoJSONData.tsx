@@ -13,6 +13,7 @@ import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
 import CContainer from "./wrapper/CContainer";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import useBackOnClose from "../../hooks/useBackOnClose";
+import backOnClose from "../../lib/backOnClose";
 
 export default function DetailGeoJSONData() {
   // SX
@@ -22,6 +23,11 @@ export default function DetailGeoJSONData() {
   useBackOnClose(`detail-data-drawer`, isOpen, onOpen, onClose);
   const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
 
+  function handleOnClose() {
+    backOnClose();
+    setDetailGeoJSONData(undefined);
+  }
+
   useEffect(() => {
     console.log(detailGeoJSONData);
     if (detailGeoJSONData) {
@@ -30,14 +36,7 @@ export default function DetailGeoJSONData() {
   }, [detailGeoJSONData, onOpen]);
 
   return (
-    <Drawer
-      isOpen={isOpen}
-      onClose={() => {
-        onClose();
-        setDetailGeoJSONData(undefined);
-      }}
-      size={"md"}
-    >
+    <Drawer isOpen={isOpen} onClose={handleOnClose} size={"md"}>
       <DrawerOverlay />
       <DrawerContent bg={"transparent"} p={2}>
         <CContainer bg={lightDarkColor} overflowY={"auto"} borderRadius={12}>

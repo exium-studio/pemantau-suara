@@ -45,7 +45,7 @@ const MapboxMap: FC<MapProps> = ({
     setMapStyle(
       colorMode === "dark"
         ? "mapbox://styles/mapbox/dark-v11"
-        : "mapbox://styles/mapbox/streets-v12"
+        : "mapbox://styles/mapbox/light-v11"
     );
   }, [colorMode]);
 

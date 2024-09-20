@@ -25,18 +25,21 @@ export default function LegendComponent() {
     <VStack
       mx={"auto"}
       position={"absolute"}
-      bottom={2}
+      bottom={
+        isOpen ? "8px" : `calc(-${containerRef?.current?.offsetHeight}px)`
+      }
       left={"50%"}
       gap={0}
-      transform={
-        isOpen
-          ? "translateX(-50%) translateY(0)"
-          : `translateX(-50%) translateY(calc(${containerRef?.current?.offsetHeight}px + 8px))`
-      }
+      // transform={
+      //   isOpen
+      //     ? "translateX(-50%) translateY(0)"
+      //     : `translateX(-50%) translateY(calc(${containerRef?.current?.offsetHeight}px + 8px))`
+      // }
+      transform={"translateX(-50%)"}
       transition={"200ms"}
     >
       <Button
-        size={"sm"}
+        // size={"sm"}
         rightIcon={<Icon as={isOpen ? CaretDown : CaretUp} />}
         mb={2}
         zIndex={2}
@@ -44,7 +47,7 @@ export default function LegendComponent() {
         _hover={{ bg: bg }}
         _active={{ bg: bg }}
         onClick={onToggle}
-        pr={2}
+        pr={5}
       >
         Legenda
       </Button>

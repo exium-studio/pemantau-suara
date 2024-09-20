@@ -6,6 +6,7 @@ import {
   Center,
   FormControl,
   HStack,
+  Image,
   Text,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
@@ -51,6 +52,16 @@ export default function Login() {
 
   return (
     <Center minH={"100vh"} p={responsiveSpacing}>
+      <ColorModeSwitcher
+        className="btn"
+        size={"sm"}
+        position={"absolute"}
+        top={2}
+        left={2}
+        zIndex={99}
+        color={"white"}
+      />
+
       <Box position={"fixed"} left={0} top={0}>
         <MapboxMapLogin latitude={-6.98445} longitude={110.408296} zoom={18} />
       </Box>
@@ -71,13 +82,7 @@ export default function Login() {
         bg={lightDarkColor}
         position={"relative"}
       >
-        <ColorModeSwitcher
-          className="btn"
-          size={"sm"}
-          position={"absolute"}
-          top={2}
-          left={2}
-        />
+        <Image src="/asset/logo.png" w={"80px"} mx={"auto"} />
 
         <CContainer align={"center"} mt={4} mb={8}>
           <Text textAlign={"center"} fontSize={20} fontWeight={700} mb={2}>
@@ -118,17 +123,6 @@ export default function Login() {
                 />
               </FormControl>
             </form>
-
-            {/* <Button
-              type="submit"
-              form="loginForm"
-              colorScheme="ap"
-              className="btn-ap clicky"
-              mb={4}
-              isLoading={loading}
-            >
-              Login
-            </Button> */}
 
             <ButtonGroup mb={4}>
               <Button

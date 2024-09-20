@@ -1,4 +1,4 @@
-import { color, useColorMode } from "@chakra-ui/react";
+import { useColorMode } from "@chakra-ui/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { CSSProperties, FC, useEffect, useState } from "react";
 import Map, { Marker } from "react-map-gl";

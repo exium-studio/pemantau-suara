@@ -9,19 +9,19 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
+import { Link } from "react-router-dom";
+import { getCookie, removeCookie } from "typescript-cookie";
 import * as yup from "yup";
+import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import PasswordInput from "../components/dependent/input/PasswordInput";
 import StringInput from "../components/dependent/input/StringInput";
+import MapboxMap from "../components/dependent/MapboxMap";
 import SmallLink from "../components/independent/SmallLink";
 import CContainer from "../components/independent/wrapper/CContainer";
 import { useLightDarkColor } from "../constant/colors";
 import { responsiveSpacing } from "../constant/sizes";
-import { ColorModeSwitcher } from "../ColorModeSwitcher";
-import { getCookie, removeCookie } from "typescript-cookie";
-import getUserData from "../lib/getUserData";
 import useRenderTrigger from "../hooks/useRenderTrigger";
-import MapboxMap from "../components/dependent/MapboxMap";
-import { useState } from "react";
+import getUserData from "../lib/getUserData";
 
 export default function Login() {
   // SX
@@ -30,8 +30,9 @@ export default function Login() {
   const authToken = getCookie("__auth_token");
   const userData = getUserData();
 
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
   const { rt, setRt } = useRenderTrigger();
+  // const navigate = useNavigate();
 
   const formik = useFormik({
     validateOnChange: false,
@@ -41,8 +42,7 @@ export default function Login() {
       password: yup.string().required("Harus diisi"),
     }),
     onSubmit: (values, { resetForm }) => {
-      setLoading(true);
-
+      // setLoading(true);
       // TODO api login
     },
   });
@@ -120,7 +120,7 @@ export default function Login() {
               </FormControl>
             </form>
 
-            <Button
+            {/* <Button
               type="submit"
               form="loginForm"
               colorScheme="ap"
@@ -129,6 +129,25 @@ export default function Login() {
               isLoading={loading}
             >
               Login
+            </Button> */}
+
+            <Button
+              colorScheme="ap"
+              className="btn-ap clicky"
+              as={Link}
+              to={"/dashboard"}
+              mb={2}
+            >
+              Login Dashboard
+            </Button>
+            <Button
+              colorScheme="ap"
+              className="btn-ap clicky"
+              as={Link}
+              mb={4}
+              to={"/pelaksana"}
+            >
+              Login Pelaksana
             </Button>
 
             <SmallLink to="/forgot-password" ml={"auto"}>

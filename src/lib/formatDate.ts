@@ -1,7 +1,7 @@
 const formatDate = (dateString: Date | string, options?: any) => {
   // Cek jika dateString kosong atau tidak valid
   if (!dateString) {
-    return "-";
+    return "";
   }
 
   const defaultFormat: Intl.DateTimeFormatOptions = {
@@ -31,9 +31,14 @@ const formatDate = (dateString: Date | string, options?: any) => {
   };
 
   const shortFormat: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "2-digit",
     year: "numeric",
-    month: "numeric",
-    day: "numeric",
+  };
+
+  const periodeFormat: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
   };
 
   const prefixOptions: Record<string, Intl.DateTimeFormatOptions> = {
@@ -42,16 +47,42 @@ const formatDate = (dateString: Date | string, options?: any) => {
     long: longFormat,
     longShort: longShortFormat,
     short: shortFormat,
+    periode: periodeFormat,
   };
 
-  const date = new Date(dateString);
+  // Convert dd-mm-yyyy to yyyy-mm-dd for Date constructor
+  let date: Date;
+  if (
+    typeof dateString === "string" &&
+    /^\d{2}-\d{2}-\d{4}$/.test(dateString)
+  ) {
+    const [day, month, year] = dateString.split("-");
+    date = new Date(`${year}-${month}-${day}T00:00:00`);
+  } else {
+    date = new Date(dateString);
+  }
+
+  // Check if the date is valid
+  if (isNaN(date.getTime())) {
+    return "";
+  }
 
   const formatOptions =
     typeof options === "string"
       ? prefixOptions[options]
       : options || defaultFormat;
 
-  const formattedDate = date.toLocaleDateString("id-ID", formatOptions);
+  let formattedDate;
+
+  if (options === "iso") {
+    formattedDate = date.toISOString();
+  } else if (options === "short") {
+    formattedDate = date
+      .toLocaleDateString("id-ID", formatOptions)
+      .replace(/\//g, "-"); // Replace slashes with hyphens
+  } else {
+    formattedDate = date.toLocaleDateString("id-ID", formatOptions);
+  }
 
   return formattedDate;
 };

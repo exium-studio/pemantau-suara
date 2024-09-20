@@ -13,6 +13,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Tooltip,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
@@ -33,6 +34,8 @@ import DisclosureHeader from "../DisclosureHeader";
 import MonthYearInputModal from "./MonthYearInputModal";
 type PrefixOption = "basic" | "basicShort" | "long" | "longShort" | "short";
 
+type PresetConfig = "thisMonth" | "nextMonth" | "thisWeek" | "nextWeek";
+
 interface Props extends ButtonProps {
   id: string;
   name: string;
@@ -43,6 +46,7 @@ interface Props extends ButtonProps {
   nonNullable?: boolean;
   isError?: boolean;
   maxRange?: number;
+  presetsConfig?: PresetConfig[];
 }
 
 export default function DateRangePickerModal({
@@ -55,6 +59,7 @@ export default function DateRangePickerModal({
   nonNullable,
   isError,
   maxRange,
+  presetsConfig = ["thisMonth", "thisWeek"],
   ...props
 }: Props) {
   const initialRef = useRef(null);
@@ -74,16 +79,12 @@ export default function DateRangePickerModal({
   const [selected, setSelected] = useState<any>(inputValue);
 
   function handleSelect(range: any) {
-    if (maxRange && range?.from && range?.to) {
-      const diffTime = Math.abs(range.to - range.from);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      if (diffDays > maxRange - 1) {
-        // Handle exceeding max range logic here
-        const newTo = new Date(range.from);
-        newTo.setDate(newTo.getDate() + maxRange - 1);
-        range = { from: range.from, to: newTo };
-      }
+    if (maxRange && countDateRange(range?.from, range?.to) > maxRange) {
+      const newTo = new Date(range.from);
+      newTo.setDate(newTo.getDate() + maxRange - 1);
+      range = { from: range.from, to: newTo };
     }
+
     setSelected(range);
   }
 
@@ -102,6 +103,7 @@ export default function DateRangePickerModal({
       backOnClose();
     }
   }
+
   function setSelectedToThisWeek() {
     const today = new Date();
 
@@ -123,6 +125,28 @@ export default function DateRangePickerModal({
     setBulan(today.getMonth());
     setTahun(today.getFullYear());
   }
+  function setSelectedToNextWeek() {
+    const today = new Date();
+
+    // Get the current day of the week (0 - Sunday, 6 - Saturday)
+    const dayOfWeek = today.getDay();
+
+    // Calculate the date of the start of the next week (Monday)
+    const startOfNextWeek = new Date(today);
+    const dayDiffToNextMonday = dayOfWeek === 0 ? 1 : 8 - dayOfWeek; // if today is Sunday, set the difference to 1, else calculate to next Monday
+    startOfNextWeek.setDate(today.getDate() + dayDiffToNextMonday);
+
+    // Calculate the date of the end of the next week (Sunday)
+    const endOfNextWeek = new Date(startOfNextWeek);
+    endOfNextWeek.setDate(startOfNextWeek.getDate() + 6); // 6 days after Monday is Sunday
+
+    // Set the state with the calculated dates
+    setDate(today);
+    setSelected({ from: startOfNextWeek, to: endOfNextWeek });
+    setBulan(startOfNextWeek.getMonth());
+    setTahun(startOfNextWeek.getFullYear());
+  }
+
   function setSelectedToThisMonth() {
     const today = new Date();
     const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -132,6 +156,29 @@ export default function DateRangePickerModal({
     setSelected({ from: startOfMonth, to: endOfMonth });
     setBulan(today.getMonth());
     setTahun(today.getFullYear());
+  }
+  function setSelectedToNextMonth() {
+    const today = new Date();
+
+    // Calculate the date of the start of the next month
+    const startOfNextMonth = new Date(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      1
+    );
+
+    // Calculate the date of the end of the next month
+    const endOfNextMonth = new Date(
+      today.getFullYear(),
+      today.getMonth() + 2,
+      0
+    );
+
+    // Set the state with the calculated dates
+    setDate(today);
+    setSelected({ from: startOfNextMonth, to: endOfNextMonth });
+    setBulan(startOfNextMonth.getMonth());
+    setTahun(startOfNextMonth.getFullYear());
   }
 
   function nextMonth() {
@@ -159,73 +206,133 @@ export default function DateRangePickerModal({
     setTahun(prevMonth.getFullYear());
   }
 
+  const renderPresets = {
+    thisMonth: (
+      <Button
+        w={"100%"}
+        className="btn-outline clicky"
+        onClick={setSelectedToThisMonth}
+        isDisabled={!!(maxRange && maxRange < 31)}
+      >
+        Bulan Ini
+      </Button>
+    ),
+    nextMonth: (
+      <Button
+        w={"100%"}
+        className="btn-outline clicky"
+        onClick={setSelectedToNextMonth}
+        isDisabled={!!(maxRange && maxRange < 31)}
+      >
+        Bulan Depan
+      </Button>
+    ),
+    thisWeek: (
+      <Button
+        w={"100%"}
+        className="btn-outline clicky"
+        onClick={setSelectedToThisWeek}
+        isDisabled={!!(maxRange && maxRange < 7)}
+      >
+        Minggu Ini
+      </Button>
+    ),
+    nextWeek: (
+      <Button
+        w={"100%"}
+        className="btn-outline clicky"
+        onClick={setSelectedToNextWeek}
+        isDisabled={!!(maxRange && maxRange < 7)}
+      >
+        Minggu Depan
+      </Button>
+    ),
+  };
+
   // SX
   const errorColor = useErrorColor();
   const warningColor = useWarningColor();
 
   return (
     <>
-      <Button
-        className="btn-clear"
-        w={"100%"}
-        justifyContent={"space-between"}
-        borderRadius={8}
-        border={"1px solid var(--divider3)"}
-        boxShadow={isError ? `0 0 0px 1px ${errorColor}` : ""}
-        px={"16px !important"}
-        h={"40px"}
-        fontWeight={400}
-        cursor={"pointer"}
-        onClick={() => {
-          onOpen();
-          setSelected(inputValue);
-          setDate(inputValue ? inputValue.from : new Date());
-          setBulan(
-            inputValue ? inputValue.from?.getMonth() : new Date().getMonth()
-          );
-          setTahun(
-            inputValue
-              ? inputValue.from?.getFullYear()
-              : new Date().getFullYear()
-          );
-        }}
-        // _focus={{ boxShadow: "0 0 0px 2px var(--p500)" }}
-        _focus={{ border: "1px solid var(--p500)", boxShadow: "none" }}
-        {...props}
+      <Tooltip
+        label={`${
+          inputValue?.from
+            ? `${formatDate(inputValue.from, "basicShort")}`
+            : "Pilih tanggal awal"
+        } - ${
+          inputValue?.to
+            ? `${formatDate(inputValue.to, "basicShort")}`
+            : "Pilih tanggal akhir"
+        } ${
+          inputValue && inputValue.from && inputValue.to
+            ? `(${countDateRange(inputValue.from, inputValue.to)} hari)`
+            : ""
+        }`}
+        openDelay={500}
       >
-        {inputValue ? (
-          <Text
-            overflow={"hidden"}
-            whiteSpace={"nowrap"}
-            textOverflow={"ellipsis"}
-            mr={4}
-          >{`${
-            inputValue?.from
-              ? `${formatDate(inputValue.from, "short")}`
-              : "Pilih tanggal awal"
-          } - ${
-            inputValue?.to
-              ? `${formatDate(inputValue.to, "short")}`
-              : "Pilih tanggal akhir"
-          } ${
-            inputValue && inputValue.from && inputValue.to
-              ? `(${countDateRange(inputValue.from, inputValue.to)} hari)`
-              : ""
-          }`}</Text>
-        ) : (
-          <Text
-            opacity={0.3}
-            overflow={"hidden"}
-            whiteSpace={"nowrap"}
-            textOverflow={"ellipsis"}
-            mr={4}
-          >
-            {placeholder || `Pilih Rentang Tanggal`}
-          </Text>
-        )}
+        <Button
+          className="btn-clear"
+          w={"100%"}
+          justifyContent={"space-between"}
+          borderRadius={8}
+          border={"1px solid var(--divider3)"}
+          boxShadow={isError ? `0 0 0px 1px ${errorColor}` : ""}
+          px={"16px !important"}
+          h={"40px"}
+          fontWeight={400}
+          cursor={"pointer"}
+          onClick={() => {
+            onOpen();
+            setSelected(inputValue);
+            setDate(inputValue ? inputValue.from : new Date());
+            setBulan(
+              inputValue ? inputValue.from?.getMonth() : new Date().getMonth()
+            );
+            setTahun(
+              inputValue
+                ? inputValue.from?.getFullYear()
+                : new Date().getFullYear()
+            );
+          }}
+          // _focus={{ boxShadow: "0 0 0px 2px var(--p500)" }}
+          {...props}
+        >
+          {inputValue ? (
+            <Text
+              overflow={"hidden"}
+              whiteSpace={"nowrap"}
+              textOverflow={"ellipsis"}
+              mr={4}
+            >{`${
+              inputValue?.from
+                ? `${formatDate(inputValue.from, "basicShort")}`
+                : "Pilih tanggal awal"
+            } - ${
+              inputValue?.to
+                ? `${formatDate(inputValue.to, "basicShort")}`
+                : "Pilih tanggal akhir"
+            } ${
+              inputValue && inputValue.from && inputValue.to
+                ? `(${countDateRange(inputValue.from, inputValue.to)} hari)`
+                : ""
+            }`}</Text>
+          ) : (
+            <Text
+              //@ts-ignore
+              color={props?._placeholder?.color || "#96969691"}
+              overflow={"hidden"}
+              whiteSpace={"nowrap"}
+              textOverflow={"ellipsis"}
+              mr={4}
+            >
+              {placeholder || `Pilih Rentang Tanggal`}
+            </Text>
+          )}
 
-        <Icon as={RiCalendarLine} />
-      </Button>
+          <Icon as={RiCalendarLine} />
+        </Button>
+      </Tooltip>
 
       <Modal
         isOpen={isOpen}
@@ -265,7 +372,7 @@ export default function DateRangePickerModal({
                       fontSize={20}
                     />
                   }
-                  pr={"10px"}
+                  pr={"18px"}
                   className="btn-outline clicky"
                   onClick={prevMonth}
                   w={"100%"}
@@ -285,7 +392,7 @@ export default function DateRangePickerModal({
                 <Button
                   aria-label="Next Month"
                   rightIcon={<Icon as={RiArrowRightSLine} fontSize={20} />}
-                  pl={"10px"}
+                  pl={"18px"}
                   className="btn-outline clicky"
                   onClick={nextMonth}
                   w={"100%"}
@@ -306,22 +413,11 @@ export default function DateRangePickerModal({
 
               <VStack mt={4}>
                 <ButtonGroup w={"100%"}>
-                  <Button
-                    flex={1}
-                    className="btn-outline clicky"
-                    onClick={setSelectedToThisMonth}
-                    isDisabled={!!(maxRange && maxRange < 31)}
-                  >
-                    Bulan Ini
-                  </Button>
-                  <Button
-                    flex={1}
-                    className="btn-outline clicky"
-                    onClick={setSelectedToThisWeek}
-                    isDisabled={!!(maxRange && maxRange < 7)}
-                  >
-                    Minggu Ini
-                  </Button>
+                  {presetsConfig.map((preset, i) => (
+                    <Box w={"100%"} key={i}>
+                      {renderPresets[preset]}
+                    </Box>
+                  ))}
                 </ButtonGroup>
 
                 <HStack w={"100%"} position={"relative"}>
@@ -335,14 +431,16 @@ export default function DateRangePickerModal({
                       <Text
                         textAlign={"center"}
                         opacity={selected?.from ? 1 : 0.6}
+                        color={selected?.from && selected?.to && "p.500"}
+                        fontWeight={selected?.from && selected?.to && "600"}
                       >
                         {`${
                           selected?.from
-                            ? `${formatDate(selected.from, "short")}`
+                            ? `${formatDate(selected.from, "basicShort")}`
                             : "Pilih tanggal awal"
                         } - ${
                           selected?.to
-                            ? `${formatDate(selected.to, "short")}`
+                            ? `${formatDate(selected.to, "basicShort")}`
                             : "Pilih tanggal akhir"
                         } ${
                           selected && selected.from && selected.to
@@ -360,38 +458,36 @@ export default function DateRangePickerModal({
             </VStack>
           </ModalBody>
 
-          <ModalFooter>
-            <VStack align={"stretch"} gap={0} w={"100%"}>
-              <Button
-                w={"100%"}
-                className="btn-solid clicky"
-                onClick={() => {
-                  setSelected(undefined);
-                }}
-              >
-                Clear
-              </Button>
+          <ModalFooter gap={2}>
+            <Button
+              w={"100%"}
+              className="btn-solid clicky"
+              onClick={() => {
+                setSelected(undefined);
+              }}
+            >
+              Clear
+            </Button>
 
-              <Button
-                mt={2}
-                colorScheme="ap"
-                className="btn-ap clicky"
-                w={"100%"}
-                isDisabled={
-                  nonNullable
-                    ? selected && selected.from && selected.to
-                      ? false
-                      : true
-                    : (selected && selected.from && selected.to) ||
-                      selected === undefined
+            <Button
+              mt={2}
+              colorScheme="ap"
+              className="btn-ap clicky"
+              w={"100%"}
+              isDisabled={
+                nonNullable
+                  ? selected && selected.from && selected.to
                     ? false
                     : true
-                }
-                onClick={confirmSelected}
-              >
-                Konfirmasi
-              </Button>
-            </VStack>
+                  : (selected && selected.from && selected.to) ||
+                    selected === undefined
+                  ? false
+                  : true
+              }
+              onClick={confirmSelected}
+            >
+              Konfirmasi
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

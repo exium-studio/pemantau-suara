@@ -6,10 +6,8 @@ import {
   HStack,
   Icon,
   IconButton,
-  Input,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -26,7 +24,8 @@ import { iconSize } from "../../../constant/sizes";
 import useBackOnClose from "../../../hooks/useBackOnClose";
 import backOnClose from "../../../lib/backOnClose";
 import formatDate from "../../../lib/formatDate";
-import parseNumber from "../../../lib/parseNumber";
+import DisclosureHeader from "../DisclosureHeader";
+import StringInput from "./StringInput";
 
 interface Props extends StackProps {
   id: string;
@@ -35,7 +34,7 @@ interface Props extends StackProps {
   setBulan: Dispatch<number>;
   tahun: number;
   setTahun: Dispatch<number>;
-  setDate: Dispatch<Date>;
+  setDate?: Dispatch<Date>;
 }
 
 export default function PeriodPickerModal({
@@ -122,7 +121,9 @@ export default function PeriodPickerModal({
   function onConfirm() {
     setBulan(bulanLocal);
     setTahun(tahunLocal);
-    setDate(new Date(tahunLocal, bulanLocal));
+    if (setDate) {
+      setDate(new Date(tahunLocal, bulanLocal));
+    }
     backOnClose();
   }
 
@@ -133,7 +134,9 @@ export default function PeriodPickerModal({
         className="btn-outline clicky"
         justify={"center"}
         flex={1}
+        minH={"40px"}
         _hover={{ bg: "var(--divider)" }}
+        flexShrink={0}
         onClick={() => {
           onOpen();
           setBulanLocal(bulan);
@@ -159,13 +162,8 @@ export default function PeriodPickerModal({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalCloseButton />
           <ModalHeader ref={initialRef}>
-            <HStack align={"start"} justify={"space-between"}>
-              <Text fontSize={20} fontWeight={600}>
-                Set Bulan & Tahun
-              </Text>
-            </HStack>
+            <DisclosureHeader title="Pilih Periode Bulan & Tahun" />
           </ModalHeader>
 
           <ModalBody className="scrollY">
@@ -176,8 +174,8 @@ export default function PeriodPickerModal({
                   <Button
                     key={i}
                     flex={"1 1 100px"}
-                    borderColor={i === bulanLocal ? "p.500" : ""}
-                    bg={i === bulanLocal ? "var(--p500a3) !important" : ""}
+                    borderColor={i === bulanLocal ? "var(--p500)" : ""}
+                    bg={i === bulanLocal ? "var(--p500a5) !important" : ""}
                     className="btn-outline"
                     onClick={() => {
                       setBulanLocal(i);
@@ -212,19 +210,17 @@ export default function PeriodPickerModal({
                   }}
                   onTouchEnd={handleMouseUpDecrement}
                 />
-                <Input
+                <StringInput
                   name="tahun"
                   textAlign={"center"}
                   placeholder="Tahun"
-                  onChange={(e) => {
-                    const value = parseNumber(e.target.value);
-                    if (value) {
-                      setTahunLocal(value);
-                    } else if (value === null) {
-                      setTahunLocal(0);
-                    }
+                  onChangeSetter={(input) => {
+                    setTahunLocal(parseInt(input as string));
                   }}
-                  value={tahunLocal === 0 ? "" : tahunLocal}
+                  inputValue={tahunLocal ? tahunLocal.toString() : ""}
+                  placeholderprops={{
+                    textAlign: "center",
+                  }}
                 />
                 <IconButton
                   aria-label="year plus button"

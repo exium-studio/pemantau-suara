@@ -24,10 +24,10 @@ import useBackOnClose from "../../../hooks/useBackOnClose";
 import useScreenHeight from "../../../hooks/useScreenHeight";
 import backOnClose from "../../../lib/backOnClose";
 import ComponentSpinner from "../../independent/ComponentSpinner";
+import NotFound from "../../independent/feedback/NotFound";
 import CContainer from "../../independent/wrapper/CContainer";
 import DisclosureHeader from "../DisclosureHeader";
 import SearchComponent from "./SearchComponent";
-import NotFound from "../../independent/feedback/NotFound";
 
 interface Props {
   id: string;

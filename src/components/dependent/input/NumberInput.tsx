@@ -1,13 +1,17 @@
+import { BoxProps, InputProps } from "@chakra-ui/react";
 import formatNumber from "../../../lib/formatNumber";
 import parseNumber from "../../../lib/parseNumber";
 import StringInput from "./StringInput";
 
-interface Props {
+interface Props extends InputProps {
   name: string;
   onChangeSetter: (inputValue: number | undefined) => void;
   inputValue: number | undefined;
   isError?: boolean;
   placeholder?: string;
+  noFormat?: boolean;
+  boxProps?: BoxProps;
+  formatValue?: (value: number | undefined) => string;
 }
 
 export default function NumberInput({
@@ -16,11 +20,20 @@ export default function NumberInput({
   inputValue,
   isError,
   placeholder,
+  noFormat,
+  boxProps,
+  formatValue,
   ...props
 }: Props) {
+  const formattedInputValue = formatValue
+    ? formatValue(inputValue)
+    : noFormat
+    ? inputValue?.toString()
+    : formatNumber(inputValue);
+
   return (
     <StringInput
-      name="tinggi_badan"
+      name={name}
       inputMode="numeric"
       onChangeSetter={(i) => {
         if (i === "") {
@@ -30,8 +43,9 @@ export default function NumberInput({
           onChangeSetter(parseNumber(i));
         }
       }}
-      inputValue={formatNumber(inputValue) || ""}
-      placeholder={placeholder}
+      inputValue={formattedInputValue || ""}
+      placeholder={placeholder || "Masukan Nominal"}
+      boxProps={boxProps}
       {...props}
     />
   );

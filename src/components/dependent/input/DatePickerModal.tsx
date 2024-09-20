@@ -151,12 +151,18 @@ export default function DatePickerModal({
         {...props}
       >
         {inputValue ? (
-          <Text>{formatDate(inputValue, dateFormatOptions)}</Text>
+          <Text>
+            {formatDate(inputValue, dateFormatOptions || "basicShort")}
+          </Text>
         ) : (
-          <Text opacity={0.6}>{placeholder || `Pilih Tanggal`}</Text>
+          <Text //@ts-ignore
+            color={props?._placeholder?.color || "#96969691"}
+          >
+            {placeholder || `Pilih Tanggal`}
+          </Text>
         )}
 
-        <Icon as={RiCalendarLine} mb={"1px"} />
+        <Icon as={RiCalendarLine} ml={4} />
       </Button>
 
       <Modal
@@ -183,7 +189,7 @@ export default function DatePickerModal({
                       fontSize={20}
                     />
                   }
-                  pr={"10px"}
+                  pr={"18px"}
                   className="btn-outline clicky"
                   onClick={prevMonth}
                   w={"100%"}
@@ -203,7 +209,7 @@ export default function DatePickerModal({
                 <Button
                   aria-label="Next Month"
                   rightIcon={<Icon as={RiArrowRightSLine} fontSize={20} />}
-                  pl={"10px"}
+                  pl={"18px"}
                   className="btn-outline clicky"
                   onClick={nextMonth}
                   w={"100%"}
@@ -254,7 +260,11 @@ export default function DatePickerModal({
                 justify={"center"}
                 h={"40px"}
               >
-                <Text opacity={selected ? 1 : 0.6} fontWeight={500}>
+                <Text
+                  opacity={selected ? 1 : 0.6}
+                  color={selected && "p.500"}
+                  fontWeight={selected && "600"}
+                >
                   {selected
                     ? `${formatDate(selected, "longShort")}`
                     : "Pilih tanggal"}
@@ -264,10 +274,12 @@ export default function DatePickerModal({
           </ModalBody>
 
           <ModalFooter pt={5}>
-            <VStack align={"stretch"} w={"100%"}>
+            <ButtonGroup w={"100%"}>
               <Button
+                w={"50%"}
                 flexShrink={0}
                 className="btn-solid clicky"
+                // border={"1px solid var(--divider3)"}
                 onClick={() => {
                   setSelected(undefined);
                 }}
@@ -276,15 +288,15 @@ export default function DatePickerModal({
               </Button>
 
               <Button
+                w={"50%"}
                 colorScheme="ap"
                 className="btn-ap clicky"
-                w={"100%"}
                 isDisabled={nonNullable ? (selected ? false : true) : false}
                 onClick={confirmSelected}
               >
                 Konfirmasi
               </Button>
-            </VStack>
+            </ButtonGroup>
           </ModalFooter>
         </ModalContent>
       </Modal>

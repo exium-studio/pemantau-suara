@@ -1,12 +1,11 @@
 export default function countDateRange(fromDate: Date, toDate: Date): number {
-  // Satu hari dalam milidetik
-  const oneDay = 1000 * 60 * 60 * 24;
+  // Set the time to the start of the day for both dates
+  fromDate?.setHours(0, 0, 0, 0);
+  toDate?.setHours(0, 0, 0, 0);
 
-  // Menghitung perbedaan antara dua tanggal dalam milidetik
-  const diffInMs = toDate.getTime() - fromDate.getTime();
+  // Calculate the difference in time
+  const diffTime = Math.abs(toDate?.getTime() - fromDate?.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-  // Menghitung jumlah hari
-  const days = Math.ceil(diffInMs / oneDay);
-
-  return days + 1;
+  return diffDays + 1;
 }

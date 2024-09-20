@@ -1,4 +1,16 @@
-import { Button, Icon, Input, Text, VStack, Wrap } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  Icon,
+  Image,
+  ImageProps,
+  Input,
+  StackProps,
+  Text,
+  Tooltip,
+  VStack,
+  Wrap,
+} from "@chakra-ui/react";
 import {
   RiCloseCircleFill,
   RiEyeFill,
@@ -19,6 +31,8 @@ interface Props {
   isError?: boolean;
   placeholder?: string;
   initialFilepath?: string;
+  cProps?: StackProps;
+  iProps?: ImageProps;
 }
 
 export default function FileInputLarge({
@@ -29,6 +43,8 @@ export default function FileInputLarge({
   isError,
   placeholder,
   initialFilepath,
+  cProps,
+  iProps,
 }: Props) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -73,6 +89,9 @@ export default function FileInputLarge({
 
   const errorColor = useErrorColor();
 
+  //@ts-ignore@
+  const isImage = fileURL && /image\/.*/.test(inputValue?.type || "");
+
   return (
     <>
       <Input
@@ -92,7 +111,7 @@ export default function FileInputLarge({
         mb={4}
       />
 
-      <CContainer w={"100%"}>
+      <CContainer h={"100%"} w={"100%"}>
         <VStack
           as={Button}
           w={"100%"}
@@ -117,11 +136,27 @@ export default function FileInputLarge({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
+          {...cProps}
         >
-          <Icon
-            as={inputValue ? RiFileLine : RiUploadCloud2Line}
-            fontSize={100}
-          />
+          {isImage ? (
+            <Image
+              src={fileURL}
+              alt={fileName}
+              h="100%"
+              w="100%"
+              maxH="154px"
+              objectFit={"contain"}
+              mb={2}
+              {...iProps}
+            />
+          ) : (
+            <Center mb={2}>
+              <Icon
+                as={inputValue ? RiFileLine : RiUploadCloud2Line}
+                fontSize={100}
+              />
+            </Center>
+          )}
 
           {!fileName && (
             <>
@@ -160,7 +195,17 @@ export default function FileInputLarge({
           )}
           {inputValue && fileName && (
             <>
-              <Text fontSize={18}>{fileName}</Text>
+              <Tooltip label={fileName}>
+                <Text
+                  fontSize={18}
+                  overflow={"hidden"}
+                  textOverflow={"ellipsis"}
+                  whiteSpace={"nowrap"}
+                  w={"100%"}
+                >
+                  {fileName}
+                </Text>
+              </Tooltip>
               {typeof inputValue !== "string" && (
                 <Text opacity={0.4} fontSize={14}>
                   {formatBytes(inputValue.size)}

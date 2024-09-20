@@ -8,9 +8,14 @@ const parseNumber = (numString: string) => {
     const numCapped = numString?.substring(0, 19);
     cleanedString = numCapped?.replace(/\./g, "");
   } else {
-    cleanedString = "0";
+    cleanedString = "";
   }
-  return parseInt(cleanedString);
+
+  if (cleanedString === "") {
+    return null;
+  } else {
+    return parseInt(cleanedString);
+  }
 };
 
 export default parseNumber;

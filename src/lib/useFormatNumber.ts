@@ -1,4 +1,4 @@
-const formatNumber = (numParam: number | string | undefined | null) => {
+const useFormatNumber = (numParam: number | string) => {
   let formattedNum;
   //@ts-ignore
   let num;
@@ -19,4 +19,4 @@ const formatNumber = (numParam: number | string | undefined | null) => {
   return formattedNum;
 };
 
-export default formatNumber;
+export default useFormatNumber;

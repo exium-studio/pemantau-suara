@@ -10,6 +10,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Tooltip,
   VStack,
   Wrap,
 } from "@chakra-ui/react";
@@ -20,9 +21,11 @@ import { Interface__SelectOption } from "../../../constant/interfaces";
 import useBackOnClose from "../../../hooks/useBackOnClose";
 import useScreenHeight from "../../../hooks/useScreenHeight";
 import backOnClose from "../../../lib/backOnClose";
-import CContainer from "../../independent/wrapper/CContainer";
+import ComponentSpinner from "../../independent/ComponentSpinner";
+import NotFound from "../../independent/feedback/NotFound";
 import DisclosureHeader from "../DisclosureHeader";
 import SearchComponent from "./SearchComponent";
+import { responsiveSpacing } from "../../../constant/sizes";
 
 interface Props {
   id: string;
@@ -30,7 +33,7 @@ interface Props {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  options: Interface__SelectOption[];
+  options?: Interface__SelectOption[];
   onConfirm: (inputValue: Interface__SelectOption | undefined) => void;
   inputValue: Interface__SelectOption | undefined;
   withSearch?: boolean;
@@ -64,7 +67,7 @@ export default function SingleSelectModal({
     inputValue
   );
   const fo = search
-    ? options.filter((option) => {
+    ? options?.filter((option) => {
         const searchTerm = search.toLowerCase();
         return (
           option.value.toString().toLowerCase().includes(searchTerm) ||
@@ -100,45 +103,85 @@ export default function SingleSelectModal({
 
   return (
     <>
-      <Button
-        className="btn-clear"
-        px={"16px !important"}
-        border={"1px solid var(--divider3)"}
-        borderColor={isError ? errorColor : ""}
-        borderRadius={8}
-        gap={3}
-        _focus={{
-          border: "1px solid var(--p500)",
-          boxShadow: "none !important",
-        }}
-        cursor={"pointer"}
-        onClick={() => {
-          onOpen();
-          setSelected(inputValue);
-        }}
-        justifyContent={"space-between"}
-        w={"100%"}
-        role="group"
-        {...props}
+      <Tooltip
+        label={
+          inputValue
+            ? `${inputValue?.label || ""} ${inputValue?.label2 || ""}`
+            : placeholder
+        }
+        openDelay={500}
+        placement="bottom-start"
       >
-        <HStack>
-          <Text
-            opacity={inputValue ? 1 : 0.3}
-            fontWeight={400}
+        <Button
+          className="btn-clear"
+          border={"1px solid var(--divider3)"}
+          borderColor={isError ? errorColor : ""}
+          borderRadius={8}
+          gap={3}
+          _focus={{
+            border: "1px solid var(--p500)",
+            boxShadow: "none !important",
+          }}
+          cursor={"pointer"}
+          onClick={() => {
+            onOpen();
+            setSelected(inputValue);
+          }}
+          justifyContent={"space-between"}
+          w={"100%"}
+          role="group"
+          px={"12px !important"}
+          pl={"16px !important"}
+          {...props}
+        >
+          <HStack
+            w={"100%"}
+            flexShrink={1}
             overflow={"hidden"}
             whiteSpace={"nowrap"}
             textOverflow={"ellipsis"}
           >
-            {inputValue ? inputValue.label : placeholder || "Pilih Salah Satu"}
-          </Text>
+            {inputValue && (
+              <>
+                <Text
+                  fontWeight={400}
+                  overflow={"hidden"}
+                  whiteSpace={"nowrap"}
+                  textOverflow={"ellipsis"}
+                >
+                  {inputValue.label}
+                </Text>
 
-          <Text fontWeight={400} opacity={0.4}>
-            {inputValue && inputValue.label2}
-          </Text>
-        </HStack>
+                <Text
+                  fontWeight={400}
+                  opacity={0.4}
+                  ml={2}
+                  overflow={"hidden"}
+                  whiteSpace={"nowrap"}
+                  textOverflow={"ellipsis"}
+                >
+                  {inputValue.label2}
+                </Text>
+              </>
+            )}
 
-        <Icon as={RiArrowDownSLine} fontSize={18} />
-      </Button>
+            {!inputValue && (
+              <Text
+                //@ts-ignore
+                color={props?._placeholder?.color || "#96969691"}
+                fontWeight={400}
+                overflow={"hidden"}
+                whiteSpace={"nowrap"}
+                textOverflow={"ellipsis"}
+              >
+                {placeholder || "Pilih Salah Satu"}
+              </Text>
+            )}
+          </HStack>
+
+          <Icon as={RiArrowDownSLine} fontSize={18} />
+        </Button>
+      </Tooltip>
 
       <Modal
         isOpen={isOpen}
@@ -146,14 +189,30 @@ export default function SingleSelectModal({
         initialFocusRef={initialRef}
         isCentered={sh < 650 ? false : true}
         scrollBehavior={sh < 650 ? "outside" : "inside"}
+        blockScrollOnMount={false}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent
+          my={sh < 650 ? 0 : ""}
+          h={
+            (withSearch ||
+              (optionsDisplay === "list" && options && options?.length > 10) ||
+              (optionsDisplay === "chip" && options && options?.length > 20)) &&
+            sh >= 650
+              ? "100%"
+              : ""
+          }
+          maxH={"650px"}
+        >
           <ModalHeader ref={initialRef}>
-            <DisclosureHeader title={placeholder || "Pilih Salah Satu"} p={0} />
+            <DisclosureHeader title={placeholder || "Pilih Salah Satu"} />
 
-            {withSearch && (
-              <Box mt={4}>
+            {(withSearch ||
+              (optionsDisplay === "list" && options && options?.length > 10) ||
+              (optionsDisplay === "chip" &&
+                options &&
+                options?.length > 20)) && (
+              <Box px={6} pb={responsiveSpacing}>
                 <SearchComponent
                   name="search select options"
                   inputValue={search}
@@ -165,79 +224,111 @@ export default function SingleSelectModal({
             )}
           </ModalHeader>
 
-          <ModalBody
-            className="scrollY"
-            minH={withSearch ? "360px" : ""}
-            maxH={withSearch ? "360px" : ""}
-            overflowY={"auto"}
-          >
-            {optionsDisplay === "list" && (
-              <VStack align={"stretch"}>
-                {fo.map((option, i) => (
-                  <Button
-                    key={i}
-                    justifyContent={"space-between"}
-                    className="btn-outline"
-                    onClick={() => {
-                      setSelected(option);
-                    }}
-                    borderColor={
-                      selected && selected.value === option.value ? "p.500" : ""
-                    }
-                    bg={
-                      selected && selected.value === option.value
-                        ? "var(--p500a4) !important"
-                        : ""
-                    }
-                  >
-                    <Text>{option.label}</Text>
+          <ModalBody className="scrollY" overflowY={"auto"}>
+            {fo && (
+              <>
+                {fo.length > 0 && (
+                  <>
+                    {optionsDisplay === "list" && (
+                      <VStack align={"stretch"}>
+                        {fo.map((option, i) => (
+                          <Tooltip
+                            key={i}
+                            label={`${option?.label} ${option?.label2}`}
+                            placement="bottom-start"
+                            openDelay={500}
+                          >
+                            <Button
+                              px={4}
+                              justifyContent={"space-between"}
+                              className="btn-outline"
+                              onClick={() => {
+                                setSelected(option);
+                              }}
+                              borderColor={
+                                selected && selected.value === option.value
+                                  ? "var(--p500)"
+                                  : "transparent !important"
+                              }
+                              bg={
+                                selected && selected.value === option.value
+                                  ? "var(--p500a4) !important"
+                                  : ""
+                              }
+                            >
+                              <Text
+                                overflow={"hidden"}
+                                whiteSpace={"nowrap"}
+                                textOverflow={"ellipsis"}
+                              >
+                                {option?.label}
+                              </Text>
 
-                    <Text opacity={0.4}>{option.label2}</Text>
-                  </Button>
-                ))}
-              </VStack>
+                              <Text
+                                ml={4}
+                                opacity={0.4}
+                                maxW={"120px"}
+                                whiteSpace={"nowrap"}
+                                overflow={"hidden"}
+                                textOverflow={"ellipsis"}
+                                fontWeight={400}
+                              >
+                                {option?.label2}
+                              </Text>
+                            </Button>
+                          </Tooltip>
+                        ))}
+                      </VStack>
+                    )}
+
+                    {optionsDisplay === "chip" && (
+                      <Wrap>
+                        {fo.map((option, i) => (
+                          <Button
+                            key={i}
+                            justifyContent={"space-between"}
+                            className="btn-outline"
+                            onClick={() => {
+                              setSelected(option);
+                            }}
+                            borderRadius={"full"}
+                            borderColor={
+                              selected && selected.value === option.value
+                                ? "var(--p500)"
+                                : ""
+                            }
+                            bg={
+                              selected && selected.value === option.value
+                                ? "var(--p500a4) !important"
+                                : ""
+                            }
+                            gap={2}
+                          >
+                            <Text
+                              overflow={"hidden"}
+                              whiteSpace={"nowrap"}
+                              textOverflow={"ellipsis"}
+                            >
+                              {option.label}
+                            </Text>
+                            {/* <Text opacity={0.4}>{option.label2}</Text> */}
+                          </Button>
+                        ))}
+                      </Wrap>
+                    )}
+                  </>
+                )}
+
+                {fo.length === 0 && (
+                  <NotFound minH={"300px"} label="Opsi tidak ditemukan" />
+                )}
+              </>
             )}
 
-            {optionsDisplay === "chip" && (
-              <Wrap>
-                {fo.map((option, i) => (
-                  <Button
-                    key={i}
-                    justifyContent={"space-between"}
-                    className="btn-outline"
-                    onClick={() => {
-                      setSelected(option);
-                    }}
-                    borderRadius={"full"}
-                    borderColor={
-                      selected && selected.value === option.value
-                        ? "var(--p500a2)"
-                        : ""
-                    }
-                    bg={
-                      selected && selected.value === option.value
-                        ? "var(--p500a4) !important"
-                        : ""
-                    }
-                    gap={2}
-                  >
-                    <Text>{option.label}</Text>
-                    {/* <Text opacity={0.4}>{option.subLabel}</Text> */}
-                  </Button>
-                ))}
-              </Wrap>
-            )}
-
-            {fo.length === 0 && (
-              <HStack justify={"center"} opacity={0.4} minH={"100px"}>
-                <Text textAlign={"center"} fontWeight={600}>
-                  Opsi tidak ditemukan
-                </Text>
-              </HStack>
-            )}
+            {!fo && <ComponentSpinner my={"auto"} />}
           </ModalBody>
-          <ModalFooter>
-            <CContainer gap={2}>
+          {fo && (
+            <ModalFooter gap={2}>
               <Button
                 className="btn-solid clicky"
                 w={"100%"}
@@ -257,8 +348,8 @@ export default function SingleSelectModal({
               >
                 Konfirmasi
               </Button>
-            </CContainer>
-          </ModalFooter>
+            </ModalFooter>
+          )}
         </ModalContent>
       </Modal>
     </>

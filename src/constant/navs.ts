@@ -9,7 +9,7 @@ const navs = [
   },
   {
     allowed: [],
-    label: "Log Aktivitas",
+    label: "Aktivitas",
     link: "/dashboard/pengguna",
     icon: ClockCounterClockwise,
   },

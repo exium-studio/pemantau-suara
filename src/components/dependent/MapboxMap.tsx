@@ -1,4 +1,4 @@
-import { Box, HStack, Text, useColorMode } from "@chakra-ui/react";
+import { useColorMode } from "@chakra-ui/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
   CSSProperties,
@@ -9,9 +9,9 @@ import {
   useState,
 } from "react";
 import Map, { Layer, MapRef, Marker, Source } from "react-map-gl";
-import { useLightDarkColor } from "../../constant/colors";
+import geoJSONLayers from "../../constant/geoJSONLayers";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
-import CContainer from "../independent/wrapper/CContainer";
+import LegendComponent from "../independent/LegendComponent";
 
 interface MapProps {
   latitude: number;
@@ -22,35 +22,7 @@ interface MapProps {
   style?: CSSProperties;
 }
 
-// Define array of objects containing geojson paths, colors, and names
-const geojsonLayers = [
-  {
-    name: "Kota Semarang",
-    geojson: "/asset/geojson/id3374_kota_semarang.geojson",
-    color: "#A6CEE3",
-  },
-  {
-    name: "Mijen",
-    geojson: "/asset/geojson/id3374010_mijen.geojson",
-    color: "#B2DF8A",
-  },
-  {
-    name: "Gunung Pati",
-    geojson: "/asset/geojson/id3374020_gunung_pati.geojson",
-    color: "#FB9A99",
-  },
-  {
-    name: "Banyumanik",
-    geojson: "/asset/geojson/id3374030_banyumanik.geojson",
-    color: "#FDBF6F",
-  },
-  {
-    name: "Gajah Mungkur",
-    geojson: "/asset/geojson/id3374040_gajah_mungkur.geojson",
-    color: "#CAB2D6",
-  },
-  // Add all other regions here with their corresponding colors and geojson paths
-];
+const geojsonLayers = geoJSONLayers;
 
 const MapboxMap: FC<MapProps> = ({
   latitude,
@@ -60,37 +32,23 @@ const MapboxMap: FC<MapProps> = ({
   markerLng,
   style,
 }) => {
-  const lightDarkColor = useLightDarkColor();
   const { colorMode } = useColorMode();
-  useEffect(() => {
-    if (colorMode === "dark") {
-      setMapStyle("mapbox://styles/mapbox/dark-v11");
-    } else {
-      setMapStyle("mapbox://styles/mapbox/streets-v12");
-    }
-  }, [colorMode]);
-
-  const baseStyle = {
-    width: "100vw",
-    height: "100vh",
-  };
-
   const [mapStyle, setMapStyle] = useState(
     "mapbox://styles/mapbox/streets-v12"
   );
-
-  const [viewState, setViewState] = useState({
-    latitude,
-    longitude,
-    zoom,
-  });
-
+  const [viewState, setViewState] = useState({ latitude, longitude, zoom });
   const mapRef = useRef<MapRef>(null);
-
-  // State to store loaded GeoJSON data
   const [geojsonData, setGeojsonData] = useState<any[]>([]);
+  const [hoveredFeature, setHoveredFeature] = useState<any>(null);
 
-  // Load all GeoJSON files in parallel and store them
+  useEffect(() => {
+    setMapStyle(
+      colorMode === "dark"
+        ? "mapbox://styles/mapbox/dark-v11"
+        : "mapbox://styles/mapbox/streets-v12"
+    );
+  }, [colorMode]);
+
   useEffect(() => {
     Promise.all(
       geojsonLayers.map((layer) =>
@@ -101,12 +59,10 @@ const MapboxMap: FC<MapProps> = ({
       .catch((err) => console.error("Error loading GeoJSON files:", err));
   }, []);
 
-  // Function to handle layer clicks
   const { setDetailGeoJSONData } = useDetailGeoJSONData();
   const handleLayerClick = useCallback(
     (event: any) => {
       const clickedFeature = event.features[0];
-      console.log("clickedFeature", clickedFeature);
       if (clickedFeature) {
         setDetailGeoJSONData(clickedFeature);
       }
@@ -114,86 +70,80 @@ const MapboxMap: FC<MapProps> = ({
     [setDetailGeoJSONData]
   );
 
-  // Handle Click GeoJSON
   useEffect(() => {
     const map = mapRef.current?.getMap();
     if (!map) return;
 
-    // Loop through geojsonLayers and add click listeners for each layer
     geojsonLayers.forEach((_, index) => {
       const layerId = `geojson-layer-${index}`;
 
-      // Ensure that the layer exists before attaching the click event
-      map.on("click", layerId, handleLayerClick);
-    });
+      const onMouseMove = (event: any) => {
+        const hovered = event.features[0];
+        if (hovered) {
+          setHoveredFeature(hovered);
+        }
+      };
 
-    // Clean up the event listener
-    return () => {
-      geojsonLayers.forEach((_, index) => {
-        const layerId = `geojson-layer-${index}`;
+      const onMouseLeave = () => {
+        setHoveredFeature(null);
+      };
+
+      map.on("click", layerId, handleLayerClick);
+      map.on("mousemove", layerId, onMouseMove);
+      map.on("mouseleave", layerId, onMouseLeave);
+
+      return () => {
         map.off("click", layerId, handleLayerClick);
-      });
-    };
+        map.off("mousemove", layerId, onMouseMove);
+        map.off("mouseleave", layerId, onMouseLeave);
+      };
+    });
   }, [geojsonData, handleLayerClick]);
 
   return (
     <div style={{ position: "relative" }}>
-      {/* Map component */}
       <Map
-        ref={mapRef} // Pass the ref to the Map component
+        ref={mapRef}
         {...viewState}
-        style={{ ...baseStyle, ...style }}
+        style={{ width: "100vw", height: "100vh", ...style }}
         mapStyle={mapStyle}
         onMove={(evt) => setViewState(evt.viewState)}
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
       >
-        {/* Display marker if marker coordinates are provided */}
         {markerLat && markerLng && (
           <Marker latitude={markerLat} longitude={markerLng} color="red" />
         )}
-
-        {/* Display all loaded GeoJSON files with unique colors */}
         {geojsonData.map((geojson, index) => (
           <Source key={index} type="geojson" data={geojson}>
             <Layer
               id={`geojson-layer-${index}`}
               type="fill"
-              //@ts-ignore
-              interactive={true} // Ensure the layer is interactive
               paint={{
-                "fill-color": geojsonLayers[index].color, // Use the color from the array
-                "fill-opacity": 0.4, // Adjust opacity for elegance
-                "fill-outline-color": "#000000", // Add a thin black outline
+                "fill-color": geojsonLayers[index].color,
+                "fill-opacity": hoveredFeature ? 0.4 : 0.4,
+                "fill-outline-color": "#000000",
               }}
             />
           </Source>
         ))}
+        {hoveredFeature && (
+          <Source
+            type="geojson"
+            data={{ type: "FeatureCollection", features: [hoveredFeature] }}
+          >
+            <Layer
+              id="hovered-feature-layer"
+              type="fill"
+              paint={{
+                "fill-color": "#FFFFFF",
+                "fill-opacity": 0.6,
+                "fill-outline-color": "#000000",
+              }}
+            />
+          </Source>
+        )}
       </Map>
-
-      {/* Legend Component */}
-      <Box
-        position={"absolute"}
-        bottom={4}
-        left={4}
-        bg={lightDarkColor}
-        py={2}
-        pl={3}
-        pr={4}
-        borderRadius={12}
-      >
-        <Text fontWeight={600} mb={2}>
-          Legenda
-        </Text>
-
-        <CContainer gap={2}>
-          {geojsonLayers.map((layer, i) => (
-            <HStack key={i}>
-              <Box w={"20px"} h={"20px"} borderRadius={8} bg={layer.color} />
-              <Text>{layer.name}</Text>
-            </HStack>
-          ))}
-        </CContainer>
-      </Box>
+      <LegendComponent />
     </div>
   );
 };

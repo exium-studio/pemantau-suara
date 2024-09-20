@@ -42,10 +42,11 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
           h={"48px"}
         />
 
-        <VStack p={1} gap={1} borderRadius={12} bg={lightDarkColor}>
+        <VStack p={1} gap={1} borderRadius={8} bg={lightDarkColor}>
           {navs.map((nav, i) => (
             <Tooltip key={i} label={nav.label} placement="right">
               <IconButton
+                borderRadius={6}
                 aria-label={nav.label}
                 icon={
                   <Icon
@@ -62,8 +63,8 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
           ))}
         </VStack>
 
-        <VStack p={1} gap={2} borderRadius={12} bg={lightDarkColor}>
-          <ColorModeSwitcher mt={"auto"} className="btn" />
+        <VStack p={1} gap={2} borderRadius={8} bg={lightDarkColor}>
+          <ColorModeSwitcher mt={"auto"} className="btn" borderRadius={6} />
         </VStack>
       </VStack>
 

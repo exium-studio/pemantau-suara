@@ -75,7 +75,7 @@ export default function Login() {
       />
 
       <CContainer
-        maxW={"400px"}
+        maxW={"360px"}
         border={"1px solid var(--divider)"}
         borderRadius={8}
         p={responsiveSpacing}

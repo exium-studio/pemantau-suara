@@ -52,7 +52,7 @@ export default function Login() {
   return (
     <Center minH={"100vh"} p={responsiveSpacing}>
       <Box position={"fixed"} left={0} top={0}>
-        <MapboxMap latitude={-7.062712} longitude={110.420249} zoom={11} />
+        <MapboxMap latitude={-6.98445} longitude={110.408296} zoom={18} />
       </Box>
 
       <Box

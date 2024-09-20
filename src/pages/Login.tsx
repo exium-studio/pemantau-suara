@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   ButtonGroup,
   Center,
@@ -19,6 +20,8 @@ import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import { getCookie, removeCookie } from "typescript-cookie";
 import getUserData from "../lib/getUserData";
 import useRenderTrigger from "../hooks/useRenderTrigger";
+import MapboxMap from "../components/dependent/MapboxMap";
+import { useState } from "react";
 
 export default function Login() {
   // SX
@@ -26,21 +29,40 @@ export default function Login() {
 
   const authToken = getCookie("__auth_token");
   const userData = getUserData();
+
+  const [loading, setLoading] = useState<boolean>(false);
   const { rt, setRt } = useRenderTrigger();
 
   const formik = useFormik({
     validateOnChange: false,
-    initialValues: { username: "" as any, password: "" as any },
-    validationSchema: yup
-      .object()
-      .shape({ username: "" as any, password: "" as any }),
+    initialValues: { username: "", password: "" },
+    validationSchema: yup.object().shape({
+      username: yup.string().required("Harus diisi"),
+      password: yup.string().required("Harus diisi"),
+    }),
     onSubmit: (values, { resetForm }) => {
-      console.log(values);
+      setLoading(true);
+
+      // TODO api login
     },
   });
 
+  console.log(formik.values);
+
   return (
-    <Center minH={"100vh"} p={responsiveSpacing} bg={"p.500"}>
+    <Center minH={"100vh"} p={responsiveSpacing}>
+      <Box position={"fixed"} left={0} top={0}>
+        <MapboxMap latitude={-7.062712} longitude={110.420249} zoom={11} />
+      </Box>
+
+      <Box
+        w={"100vw"}
+        h={"100vh"}
+        position={"fixed"}
+        bg={"blackAlpha.500"}
+        pointerEvents={"none"}
+      />
+
       <CContainer
         maxW={"400px"}
         border={"1px solid var(--divider)"}
@@ -58,19 +80,21 @@ export default function Login() {
           ml={0}
         />
 
+        <CContainer align={"center"} mt={4} mb={8}>
+          <Text textAlign={"center"} fontSize={20} fontWeight={700} mb={2}>
+            Login Dulu Ga Si
+          </Text>
+
+          <Text textAlign={"center"} opacity={0.6} maxW={"300px"}>
+            {authToken
+              ? "Gunakan autentikasi yang sudah ada/login ulang"
+              : "Gunakan username dan password untuk masuk"}
+          </Text>
+        </CContainer>
+
         {!authToken && !userData && (
           <>
-            <CContainer align={"center"} mt={4} mb={8}>
-              <Text textAlign={"center"} fontSize={20} fontWeight={700} mb={2}>
-                Login Mr. Y Squad
-              </Text>
-
-              <Text textAlign={"center"} opacity={0.6} maxW={"300px"}>
-                Gunakan username dan password untuk masuk
-              </Text>
-            </CContainer>
-
-            <form>
+            <form id="loginGorm" onSubmit={formik.handleSubmit}>
               <FormControl mb={4} isInvalid={!!formik.errors.username}>
                 <StringInput
                   name="username"
@@ -96,7 +120,14 @@ export default function Login() {
               </FormControl>
             </form>
 
-            <Button colorScheme="ap" className="btn-ap clicky" mb={4}>
+            <Button
+              type="submit"
+              form="loginForm"
+              colorScheme="ap"
+              className="btn-ap clicky"
+              mb={4}
+              isLoading={loading}
+            >
               Login
             </Button>
 
@@ -108,16 +139,6 @@ export default function Login() {
 
         {authToken && userData && (
           <>
-            <CContainer align={"center"} mt={4} mb={8}>
-              <Text textAlign={"center"} fontSize={20} fontWeight={700} mb={2}>
-                Login Mr. Y Squad
-              </Text>
-
-              <Text textAlign={"center"} opacity={0.6} maxW={"300px"}>
-                Gunakan autentikasi yang sudah ada/login ulang
-              </Text>
-            </CContainer>
-
             <CContainer>
               <HStack
                 gap={2}

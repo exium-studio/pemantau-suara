@@ -40,21 +40,12 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
         left={0}
         zIndex={3}
         w={searchMode ? "100%" : ""}
-        // border={"1px solid red"}
       >
         <SearchAddress />
       </HStack>
 
       {/* Right */}
-      <HStack
-        p={4}
-        position={"absolute"}
-        top={0}
-        right={0}
-        zIndex={2}
-        // visibility={searchModeTerm ? "hidden" : "visible"}
-        // opacity={searchModeTerm ? 0 : 1}
-      >
+      <HStack p={4} position={"absolute"} top={0} right={0} zIndex={2}>
         {/* Color Mode */}
         <HStack
           shadow={"sm"}

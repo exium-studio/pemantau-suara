@@ -31,7 +31,7 @@ import {
 import { useRef, useState } from "react";
 import { useLightDarkColor } from "../../constant/colors";
 import {
-  Interface__FormattedTableData,
+  Interface__FormattedTableBody,
   Interface__FormattedTableHeader,
 } from "../../constant/interfaces";
 import { iconSize } from "../../constant/sizes";
@@ -136,7 +136,7 @@ const RowOptions = ({ rowData, rowOptions, tableRef }: RowOptionsProps) => {
 
 interface Props extends TableProps {
   formattedHeader: Interface__FormattedTableHeader[];
-  formattedData: Interface__FormattedTableData[];
+  formattedBody: Interface__FormattedTableBody[];
   onRowClick?: (rowData: any) => void;
   originalData?: any;
   columnsConfig?: number[];
@@ -149,7 +149,7 @@ interface Props extends TableProps {
 
 export default function CustomTable({
   formattedHeader,
-  formattedData,
+  formattedBody,
   onRowClick,
   originalData,
   batchActions,
@@ -165,13 +165,13 @@ export default function CustomTable({
     : formattedHeader;
 
   const tableBody = columnsConfig
-    ? formattedData.map((data) => {
+    ? formattedBody.map((data) => {
         const filteredColumns = columnsConfig.map(
           (columnIndex) => data.columnsFormat[columnIndex]
         );
         return { ...data, columnsFormat: filteredColumns };
       })
-    : formattedData;
+    : formattedBody;
 
   const [selectAllRows, setSelectAllRows] = useState<boolean>(false);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -194,7 +194,7 @@ export default function CustomTable({
   const handleSelectAllRows = (isChecked: boolean) => {
     setSelectAllRows(!selectAllRows);
     if (!isChecked) {
-      const allIds = formattedData.map((row) => row.id);
+      const allIds = formattedBody.map((row) => row.id);
       setSelectedRows(allIds);
     } else {
       setSelectedRows([]);
@@ -208,7 +208,7 @@ export default function CustomTable({
         setSelectAllRows(false);
         return prevSelected.filter((id) => id !== rowId);
       } else {
-        if (formattedData.length === selectedRows.length + 1) {
+        if (formattedBody.length === selectedRows.length + 1) {
           setSelectAllRows(true);
         }
         return [...prevSelected, rowId];
@@ -218,14 +218,22 @@ export default function CustomTable({
 
   // Sort
   const requestSort = (columnIndex: number) => {
-    setSortConfig((prevConfig) => ({
-      sortColumnIndex: columnIndex,
-      direction:
-        prevConfig.sortColumnIndex === columnIndex &&
-        prevConfig.direction === "asc"
-          ? "desc"
-          : "asc",
-    }));
+    setSortConfig((prevConfig) => {
+      if (prevConfig.sortColumnIndex === columnIndex) {
+        // Jika sudah diurutkan berdasarkan kolom ini, ubah arah sorting
+        if (prevConfig.direction === "asc") {
+          return { sortColumnIndex: columnIndex, direction: "desc" };
+        } else if (prevConfig.direction === "desc") {
+          // Jika sudah desc, hilangkan sorting (reset ke initial state)
+          return { sortColumnIndex: undefined, direction: "asc" };
+        }
+      } else {
+        // Jika kolom belum diurutkan, mulai dari ascending
+        return { sortColumnIndex: columnIndex, direction: "asc" };
+      }
+      // Pastikan selalu return objek yang valid
+      return prevConfig;
+    });
   };
   const sortedData = () => {
     if (
@@ -280,9 +288,8 @@ export default function CustomTable({
         }
       });
     }
-    return formattedData;
+    return formattedBody;
   };
-
   const renderSortIcon = (columnIndex: number) => {
     if (sortConfig.sortColumnIndex === columnIndex) {
       return (

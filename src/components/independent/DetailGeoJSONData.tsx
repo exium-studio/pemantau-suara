@@ -4,6 +4,7 @@ import { useLightDarkColor } from "../../constant/colors";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
 import useBackOnClose from "../../hooks/useBackOnClose";
 import DisclosureHeader from "../dependent/DisclosureHeader";
+import TabelUserByKelurahan from "./TabelUserByKelurahan";
 import CContainer from "./wrapper/CContainer";
 
 export default function DetailGeoJSONData() {
@@ -27,11 +28,11 @@ export default function DetailGeoJSONData() {
   return (
     <CContainer
       p={4}
-      maxW={"450px"}
+      maxW={"720px"}
       // h={"100%"}
       position={"absolute"}
-      top={"56px"}
-      left={isOpen ? 0 : "-500px"}
+      top={"58px"}
+      left={isOpen ? 0 : "-720px"}
       transition={"200ms"}
       animation={"ease in"}
       zIndex={2}
@@ -41,8 +42,6 @@ export default function DetailGeoJSONData() {
         bg={lightDarkColor}
         overflowY={"auto"}
         borderRadius={12}
-        pb={5}
-        border={"1px solid var(--divider)"}
       >
         <DisclosureHeader
           title="Detail Data"
@@ -50,14 +49,18 @@ export default function DetailGeoJSONData() {
           onClose={() => {
             setDetailGeoJSONData(undefined);
           }}
+          p={5}
+          pt={"16px !important"}
         />
 
         <CContainer
           overscrollY={"auto"}
           className="scrollY"
+          px={5}
+          pb={4}
           // border={"1px solid red"}
         >
-          <SimpleGrid columns={[2]} px={6} gap={4}>
+          <SimpleGrid columns={[2, null, 4]} gap={4} mb={4}>
             <CContainer>
               <Text opacity={0.4}>Provinsi</Text>
               <Text>{detailGeoJSONData?.properties?.province}</Text>
@@ -78,6 +81,8 @@ export default function DetailGeoJSONData() {
               <Text>{detailGeoJSONData?.properties?.village}</Text>
             </CContainer>
           </SimpleGrid>
+
+          <TabelUserByKelurahan />
         </CContainer>
       </CContainer>
     </CContainer>

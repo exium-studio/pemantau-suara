@@ -100,7 +100,6 @@ export default function SearchAddress() {
         borderRadius={12}
       >
         <HStack
-          shadow={"sm"}
           border={"1px solid var(--divider)"}
           bg={lightDarkColor}
           borderRadius={
@@ -197,17 +196,6 @@ export default function SearchAddress() {
           }
           transition={"200ms"}
         >
-          {/* <>
-            <Box
-              w={"calc(100% - 32px)"}
-              flexShrink={0}
-              h={searchMode && searchFocus ? "1px" : 0}
-              bg={"var(--divider)"}
-              mx={2}
-              zIndex={2}
-            />
-          </> */}
-
           <CContainer
             mt={-8}
             pt={8}
@@ -218,6 +206,8 @@ export default function SearchAddress() {
             overflowY="auto"
             className="scrollY"
             zIndex={1}
+            border={searchMode && searchFocus ? "1px solid var(--divider)" : ""}
+            shadow={searchMode && searchFocus ? "sm" : ""}
           >
             {searchAddress && (
               <>

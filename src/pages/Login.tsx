@@ -78,7 +78,7 @@ export default function Login() {
         maxW={"400px"}
         border={"1px solid var(--divider)"}
         borderRadius={8}
-        p={responsiveSpacing}
+        p={8}
         bg={lightDarkColor}
         position={"relative"}
       >
@@ -132,9 +132,9 @@ export default function Login() {
                 as={Link}
                 to={"/dashboard"}
               >
-                Login Dashboard
+                Login
               </Button>
-              <Button
+              {/* <Button
                 w={"100%"}
                 colorScheme="ap"
                 className="btn-ap clicky"
@@ -142,7 +142,7 @@ export default function Login() {
                 to={"/pelaksana"}
               >
                 Login Pelaksana
-              </Button>
+              </Button> */}
             </ButtonGroup>
 
             <SmallLink to="/forgot-password" mx={"auto"}>

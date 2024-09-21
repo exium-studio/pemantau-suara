@@ -1,4 +1,4 @@
-const iconSize = 18;
+const iconSize = 20;
 
 const textSize = [14, null, 16];
 

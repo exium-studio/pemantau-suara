@@ -33,9 +33,7 @@ const MapboxMap: FC<MapProps> = ({
   style,
 }) => {
   const { colorMode } = useColorMode();
-  const [mapStyle, setMapStyle] = useState(
-    "mapbox://styles/mapbox/streets-v12"
-  );
+  const [mapStyle, setMapStyle] = useState("");
   const [viewState, setViewState] = useState({ latitude, longitude, zoom });
   const mapRef = useRef<MapRef>(null);
   const [geojsonData, setGeojsonData] = useState<any[]>([]);
@@ -114,6 +112,7 @@ const MapboxMap: FC<MapProps> = ({
           <Marker latitude={markerLat} longitude={markerLng} color="red" />
         )}
 
+        {/* Render all geoJSON data */}
         {geojsonData.map((geojson, index) => (
           <Source key={index} type="geojson" data={geojson}>
             <Layer
@@ -128,6 +127,7 @@ const MapboxMap: FC<MapProps> = ({
           </Source>
         ))}
 
+        {/* Render hovered feaure */}
         {hoveredFeature && (
           <Source
             type="geojson"

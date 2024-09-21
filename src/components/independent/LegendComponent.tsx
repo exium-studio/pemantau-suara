@@ -48,11 +48,20 @@ export default function LegendComponent() {
         _active={{ bg: bg }}
         onClick={onToggle}
         pr={5}
+        shadow={"sm"}
       >
         Legenda
       </Button>
 
-      <VStack ref={containerRef} gap={2} bg={bg} py={3} px={4} borderRadius={8}>
+      <VStack
+        ref={containerRef}
+        gap={2}
+        bg={bg}
+        py={3}
+        px={4}
+        borderRadius={8}
+        shadow={"sm"}
+      >
         <SimpleGrid
           columns={[2, 3, 4, 6]}
           gap={2}

@@ -1,11 +1,14 @@
-import { Avatar, Icon, IconButton, Tooltip, VStack } from "@chakra-ui/react";
+import { HStack } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../../../ColorModeSwitcher";
 import { useLightDarkColor } from "../../../constant/colors";
-import navs from "../../../constant/navs";
-import { iconSize } from "../../../constant/sizes";
+import useSearchMode from "../../../global/useSearchMode";
 import MapboxMap from "../../dependent/MapboxMap";
 import DetailGeoJSONData from "../DetailGeoJSONData";
+import Navs from "../Navs";
+import Profile from "../Profile";
+import SearchAddress from "../SearchAddress";
 import CContainer from "./CContainer";
+import useScreenWidth from "../../../hooks/useScreenWidth";
 
 interface AppLayoutProps {
   children?: any;
@@ -16,61 +19,64 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
   // SX
   const lightDarkColor = useLightDarkColor();
 
+  const { searchMode } = useSearchMode();
+  const sw = useScreenWidth();
+  const searchModeTerm = searchMode && sw < 700;
+
   return (
     <CContainer
       position={"relative"}
       gap={0}
       align={"stretch"}
-      h={"100vh"}
       overflow={"clip"}
     >
-      <VStack
-        p={2}
+      <CContainer justify={"center"} align={"center"}>
+        <MapboxMap latitude={-7.02} longitude={110.38} zoom={11} />
+      </CContainer>
+
+      {/* Map Overlays */}
+      {/* Left */}
+      <HStack
+        p={4}
         position={"absolute"}
         top={0}
         left={0}
         zIndex={2}
-        h={"100vh"}
+        w={"100%"}
         // border={"1px solid red"}
       >
-        <Avatar
-          // src="/asset/logo.png"
-          name="Jolitos Kurniawan"
-          mb={1}
-          borderRadius={"full"}
-          w={"48px"}
-          h={"48px"}
-        />
+        <SearchAddress />
+      </HStack>
 
-        <VStack p={1} gap={1} borderRadius={8} bg={lightDarkColor}>
-          {navs.map((nav, i) => (
-            <Tooltip key={i} label={nav.label} placement="right">
-              <IconButton
-                borderRadius={6}
-                aria-label={nav.label}
-                icon={
-                  <Icon
-                    as={nav.icon}
-                    weight={"bold"}
-                    fontSize={iconSize}
-                    // color={activeIndex === i ? "p.500" : "current"}
-                  />
-                }
-                className="btn"
-                // className={activeIndex === i ? "btn-apa" : "btn"}
-              />
-            </Tooltip>
-          ))}
-        </VStack>
-
-        <VStack p={1} gap={2} borderRadius={8} bg={lightDarkColor}>
+      {/* Right */}
+      <HStack
+        p={4}
+        position={"absolute"}
+        top={0}
+        right={0}
+        zIndex={2}
+        visibility={searchModeTerm ? "hidden" : "visible"}
+        opacity={searchModeTerm ? 0 : 1}
+        // border={"1px solid red"}
+      >
+        {/* Color Mode */}
+        <HStack
+          shadow={"sm"}
+          border={"1px solid var(--divider)"}
+          p={1}
+          gap={2}
+          borderRadius={8}
+          bg={lightDarkColor}
+        >
           <ColorModeSwitcher mt={"auto"} className="btn" borderRadius={6} />
-        </VStack>
-      </VStack>
+        </HStack>
 
-      <CContainer justify={"center"} align={"center"}>
-        <MapboxMap latitude={-7.02} longitude={110.38} zoom={11} />
-      </CContainer>
+        {/* Navs */}
+        <Navs />
+
+        {/* Profile */}
+        <Profile />
+      </HStack>
 
       {/* Detail GeoJSON Data */}
       <DetailGeoJSONData />

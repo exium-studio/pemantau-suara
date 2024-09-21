@@ -93,7 +93,7 @@ export default function SearchAddress() {
   return (
     <CContainer w={"100%"} maxW={"420px"} fRef={containerRef}>
       <CContainer
-        w={searchMode ? "100%" : "100px"}
+        w={searchMode ? "100%" : "101px"}
         transition={"200ms"}
         borderRadius={8}
       >
@@ -160,7 +160,12 @@ export default function SearchAddress() {
             <IconButton
               aria-label="clear pencarian"
               icon={<Icon as={X} fontSize={iconSize} />}
-              className="btn-clear"
+              className="btn"
+              borderRadius={"full"}
+              minW="30px !important"
+              h="30px !important"
+              mt={"5px"}
+              mr={"3px"}
               onClick={() => {
                 setSearchSelected("");
                 setSearchAddress("");
@@ -188,7 +193,6 @@ export default function SearchAddress() {
               ? "200px"
               : "0px"
           }
-          // overflow={"auto"}
           transition={"200ms"}
         >
           {/* <>
@@ -213,21 +217,25 @@ export default function SearchAddress() {
             className="scrollY"
             zIndex={1}
           >
-            {searchAddress &&
-              searchResult.map((result: any, i: number) => (
-                <HStack
-                  key={i}
-                  p={3}
-                  px={4}
-                  cursor="pointer"
-                  _hover={{ bg: "var(--tg)", color: "p.500" }}
-                  transition={"200ms"}
-                  onClick={() => handleItemClick(result, true)}
-                >
-                  <Icon as={MapPin} mt={"-2px"} fontSize={iconSize} />
-                  <Text noOfLines={1}>{result.place_name}</Text>
-                </HStack>
-              ))}
+            {searchAddress && (
+              <>
+                {searchResult?.length > 0 &&
+                  searchResult.map((result: any, i: number) => (
+                    <HStack
+                      key={i}
+                      p={3}
+                      px={4}
+                      cursor="pointer"
+                      _hover={{ bg: "var(--tg)", color: "p.500" }}
+                      transition={"200ms"}
+                      onClick={() => handleItemClick(result, true)}
+                    >
+                      <Icon as={MapPin} mt={"-2px"} fontSize={iconSize} />
+                      <Text noOfLines={1}>{result.place_name}</Text>
+                    </HStack>
+                  ))}
+              </>
+            )}
 
             {!searchAddress &&
               searchAddressHistory &&

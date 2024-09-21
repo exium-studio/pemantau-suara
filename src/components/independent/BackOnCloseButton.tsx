@@ -1,5 +1,6 @@
 import { Icon, IconButton, IconButtonProps } from "@chakra-ui/react";
-import { RiCloseLine } from "@remixicon/react";
+import { X } from "@phosphor-icons/react";
+import { iconSize } from "../../constant/sizes";
 import backOnClose from "../../lib/backOnClose";
 
 interface Props extends IconButtonProps {}
@@ -7,7 +8,7 @@ interface Props extends IconButtonProps {}
 export default function BackOnCloseButton({ ...props }: Props) {
   return (
     <IconButton
-      icon={<Icon as={RiCloseLine} fontSize={24} className="custom-icon" />}
+      icon={<Icon as={X} fontSize={iconSize} className="custom-icon" />}
       minW="30px !important"
       h="30px !important"
       borderRadius={"full"}

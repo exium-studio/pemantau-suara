@@ -45,7 +45,7 @@ const MapboxMap: FC<MapProps> = ({
     setMapStyle(
       colorMode === "dark"
         ? "mapbox://styles/mapbox/dark-v11"
-        : "mapbox://styles/mapbox/streets-v12"
+        : "mapbox://styles/mapbox/light-v11"
     );
   }, [colorMode]);
 
@@ -101,8 +101,21 @@ const MapboxMap: FC<MapProps> = ({
     });
   }, [geojsonData, handleLayerClick]);
 
-  // Handle Search
-  const { searchAddress } = useSearchAddress();
+  // Handle search selected to maps
+  const { searchSelected } = useSearchAddress();
+  useEffect(() => {
+    if (searchSelected && mapRef.current) {
+      const map = mapRef.current.getMap();
+      if (map && searchSelected.center) {
+        map.easeTo({
+          center: searchSelected.center, // Use center coordinates from search data
+          zoom: 12, // adjust the zoom level as needed
+          duration: 1000, // duration of the easing in milliseconds
+          easing: (t) => t, // you can define a custom easing function if needed
+        });
+      }
+    }
+  }, [searchSelected]);
 
   return (
     <div style={{ position: "relative" }}>

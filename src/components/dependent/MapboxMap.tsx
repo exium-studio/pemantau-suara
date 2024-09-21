@@ -11,8 +11,8 @@ import {
 import Map, { Layer, MapRef, Marker, Source } from "react-map-gl";
 import geoJSONLayers from "../../constant/geoJSONLayers";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
-import LegendComponent from "../independent/LegendComponent";
 import useSearchAddress from "../../global/useSearchAddress";
+import LegendComponent from "../independent/LegendComponent";
 
 interface MapProps {
   latitude: number;
@@ -60,8 +60,8 @@ const MapboxMap: FC<MapProps> = ({
       .catch((err) => console.error("Error loading GeoJSON files:", err));
   }, []);
 
-  // Handle layer onclick, set detail data
-  const { setDetailGeoJSONData } = useDetailGeoJSONData();
+  // Handle layer hover, onclick, set detail data
+  const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
   const handleLayerClick = useCallback(
     (event: any) => {
       const clickedFeature = event.features[0];
@@ -79,9 +79,9 @@ const MapboxMap: FC<MapProps> = ({
       const layerId = `geojson-layer-${index}`;
 
       const onMouseMove = (event: any) => {
-        const hovered = event.features[0];
-        if (hovered) {
-          setHoveredFeature(hovered);
+        const hoveredFeature = event.features[0];
+        if (hoveredFeature) {
+          setHoveredFeature(hoveredFeature);
         }
       };
 
@@ -131,7 +131,7 @@ const MapboxMap: FC<MapProps> = ({
           <Marker latitude={markerLat} longitude={markerLng} color="red" />
         )}
 
-        {/* Render all geoJSON data */}
+        {/* Layer all geoJSON data */}
         {geojsonData.map((geojson, index) => (
           <Source key={index} type="geojson" data={geojson}>
             <Layer
@@ -146,7 +146,7 @@ const MapboxMap: FC<MapProps> = ({
           </Source>
         ))}
 
-        {/* Render hovered feaure */}
+        {/* Layer hovered feaure */}
         {hoveredFeature && (
           <Source
             type="geojson"
@@ -154,6 +154,24 @@ const MapboxMap: FC<MapProps> = ({
           >
             <Layer
               id="hovered-feature-layer"
+              type="fill"
+              paint={{
+                "fill-color": "#FFFFFF",
+                "fill-opacity": 0.6,
+                "fill-outline-color": "#000000",
+              }}
+            />
+          </Source>
+        )}
+
+        {/* Layer clicked feaure */}
+        {detailGeoJSONData && (
+          <Source
+            type="geojson"
+            data={{ type: "FeatureCollection", features: [detailGeoJSONData] }}
+          >
+            <Layer
+              id="clicked-feature-layer"
               type="fill"
               paint={{
                 "fill-color": "#FFFFFF",

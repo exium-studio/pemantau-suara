@@ -14,15 +14,12 @@ export default function DetailGeoJSONData() {
   useBackOnClose(`detail-data-drawer`, isOpen, onOpen, onClose);
   const { detailGeoJSONData } = useDetailGeoJSONData();
 
-  // function handleOnClose() {
-  //   backOnClose();
-  //   setDetailGeoJSONData(undefined);
-  // }
-
   useEffect(() => {
     console.log(detailGeoJSONData);
     if (detailGeoJSONData) {
       onOpen();
+    } else {
+      onClose();
     }
   }, [detailGeoJSONData, onOpen]);
 

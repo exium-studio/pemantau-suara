@@ -18,7 +18,7 @@ export default function Navs() {
       transition={"200ms"}
     >
       {navs.map((nav, i) => (
-        <Tooltip key={i} label={nav.label} placement="right">
+        <Tooltip key={i} label={nav.label} placement="bottom" mt={1}>
           <IconButton
             borderRadius={6}
             aria-label={nav.label}

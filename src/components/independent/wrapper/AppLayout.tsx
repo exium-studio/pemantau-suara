@@ -1,4 +1,4 @@
-import { HStack } from "@chakra-ui/react";
+import { Box, HStack, Tooltip } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../../../ColorModeSwitcher";
 import { useLightDarkColor } from "../../../constant/colors";
 import useSearchMode from "../../../global/useSearchMode";
@@ -8,7 +8,6 @@ import Navs from "../Navs";
 import Profile from "../Profile";
 import SearchAddress from "../SearchAddress";
 import CContainer from "./CContainer";
-import useScreenWidth from "../../../hooks/useScreenWidth";
 
 interface AppLayoutProps {
   children?: any;
@@ -20,8 +19,6 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
   const lightDarkColor = useLightDarkColor();
 
   const { searchMode } = useSearchMode();
-  const sw = useScreenWidth();
-  const searchModeTerm = searchMode && sw < 700;
 
   return (
     <CContainer
@@ -41,8 +38,8 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
         position={"absolute"}
         top={0}
         left={0}
-        zIndex={2}
-        w={"100%"}
+        zIndex={3}
+        w={searchMode ? "100%" : ""}
         // border={"1px solid red"}
       >
         <SearchAddress />
@@ -55,9 +52,8 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
         top={0}
         right={0}
         zIndex={2}
-        visibility={searchModeTerm ? "hidden" : "visible"}
-        opacity={searchModeTerm ? 0 : 1}
-        // border={"1px solid red"}
+        // visibility={searchModeTerm ? "hidden" : "visible"}
+        // opacity={searchModeTerm ? 0 : 1}
       >
         {/* Color Mode */}
         <HStack
@@ -68,7 +64,11 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
           borderRadius={8}
           bg={lightDarkColor}
         >
-          <ColorModeSwitcher mt={"auto"} className="btn" borderRadius={6} />
+          <Tooltip label={"Dark Mode"} placement="bottom" mt={1}>
+            <Box>
+              <ColorModeSwitcher mt={"auto"} className="btn" borderRadius={6} />
+            </Box>
+          </Tooltip>
         </HStack>
 
         {/* Navs */}

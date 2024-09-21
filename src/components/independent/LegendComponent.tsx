@@ -15,7 +15,7 @@ import geoJSONLayers from "../../constant/geoJSONLayers";
 
 export default function LegendComponent() {
   // SX
-  const bg = useColorModeValue("whiteAlpha.700", "blackAlpha.400");
+  const bg = useColorModeValue("whiteAlpha.800", "blackAlpha.400");
 
   const { isOpen, onToggle } = useDisclosure();
 
@@ -30,11 +30,6 @@ export default function LegendComponent() {
       }
       left={"50%"}
       gap={0}
-      // transform={
-      //   isOpen
-      //     ? "translateX(-50%) translateY(0)"
-      //     : `translateX(-50%) translateY(calc(${containerRef?.current?.offsetHeight}px + 8px))`
-      // }
       transform={"translateX(-50%)"}
       transition={"200ms"}
     >
@@ -57,8 +52,8 @@ export default function LegendComponent() {
         ref={containerRef}
         gap={2}
         bg={bg}
-        py={3}
-        px={4}
+        py={4}
+        px={5}
         borderRadius={8}
         shadow={"sm"}
       >

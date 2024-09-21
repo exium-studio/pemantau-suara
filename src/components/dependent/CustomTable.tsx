@@ -28,7 +28,7 @@ import {
   RiListCheck,
   RiMore2Fill,
 } from "@remixicon/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLightDarkColor } from "../../constant/colors";
 import {
   Interface__FormattedTableBody,
@@ -160,6 +160,9 @@ export default function CustomTable({
   trBodyProps,
   ...props
 }: Props) {
+  // SX
+  const lightDarkColor = useLightDarkColor();
+
   const tableHeader = columnsConfig
     ? columnsConfig.map((columnIndex) => formattedHeader[columnIndex])
     : formattedHeader;
@@ -171,8 +174,9 @@ export default function CustomTable({
         );
         return { ...data, columnsFormat: filteredColumns };
       })
-    : formattedBody;
+    : [...formattedBody];
 
+  const [originalDataState, setOriginalDataState] = useState(formattedBody); // Simpan data asli
   const [selectAllRows, setSelectAllRows] = useState<boolean>(false);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [sortConfig, setSortConfig] = useState<{
@@ -182,6 +186,10 @@ export default function CustomTable({
     sortColumnIndex: initialSortColumnIndex || undefined,
     direction: initialSortOrder || "asc",
   });
+
+  useEffect(() => {
+    setOriginalDataState([...formattedBody]); // Simpan data asli saat pertama kali dirender
+  }, [formattedBody]);
 
   // Row Click
   const handleRowClick = (rowData: any) => {
@@ -311,10 +319,23 @@ export default function CustomTable({
     sortConfig.sortColumnIndex !== null &&
     sortConfig.sortColumnIndex !== undefined
       ? sortedData()
-      : tableBody;
+      : originalDataState;
 
-  // SX
-  const lightDarkColor = useLightDarkColor();
+  const [tableKey, setTableKey] = useState(1);
+  useEffect(() => {
+    console.log("ori", originalDataState);
+    console.log(dataToMap);
+    if (
+      !(
+        sortConfig.sortColumnIndex !== null &&
+        sortConfig.sortColumnIndex !== undefined
+      )
+    ) {
+      setTableKey((ps) => ps + 1);
+    }
+  }, [dataToMap, sortConfig.sortColumnIndex, originalDataState]);
+
+  // console.log(tableKey);
 
   return (
     <>
@@ -415,7 +436,7 @@ export default function CustomTable({
           </Tr>
         </Thead>
 
-        <Tbody>
+        <Tbody key={tableKey}>
           {dataToMap.map((row, rowIndex) => {
             return (
               <Tr
@@ -436,6 +457,7 @@ export default function CustomTable({
                   <Td
                     minW={"2px"}
                     maxW={"2px"}
+                    w={"2px"}
                     p={0}
                     position={"sticky"}
                     left={0}

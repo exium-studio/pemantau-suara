@@ -33,7 +33,10 @@ const MapboxMap: FC<MapProps> = ({
   markerLng,
   style,
 }) => {
+  // SX
   const { colorMode } = useColorMode();
+
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [mapStyle, setMapStyle] = useState("");
   const [viewState, setViewState] = useState({ latitude, longitude, zoom });
   const mapRef = useRef<MapRef>(null);
@@ -121,6 +124,7 @@ const MapboxMap: FC<MapProps> = ({
     <div style={{ position: "relative" }}>
       <Map
         ref={mapRef}
+        onLoad={() => setIsMapLoaded(true)}
         {...viewState}
         pitch={0}
         style={{ width: "100vw", height: "100vh", ...style }}
@@ -128,59 +132,68 @@ const MapboxMap: FC<MapProps> = ({
         onMove={(evt) => setViewState(evt.viewState)}
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
       >
-        {markerLat && markerLng && (
-          <Marker latitude={markerLat} longitude={markerLng} color="red" />
-        )}
+        {isMapLoaded && (
+          <>
+            {markerLat && markerLng && (
+              <Marker latitude={markerLat} longitude={markerLng} color="red" />
+            )}
 
-        {/* Layer all geoJSON data */}
-        {geojsonData.map((geojson, index) => (
-          <Source key={index} type="geojson" data={geojson}>
-            <Layer
-              id={`geojson-layer-${index}`}
-              type="fill"
-              paint={{
-                "fill-color": geojsonLayers[index].color,
-                "fill-opacity": 0.4,
-                "fill-outline-color": "#000000",
-              }}
-            />
-          </Source>
-        ))}
+            {/* Layer all geoJSON data */}
+            {geojsonData.map((geojson, index) => (
+              <Source key={index} type="geojson" data={geojson}>
+                <Layer
+                  id={`geojson-layer-${index}`}
+                  type="fill"
+                  paint={{
+                    "fill-color": geojsonLayers[index].color,
+                    "fill-opacity": 0.4,
+                    "fill-outline-color":
+                      colorMode === "dark" ? "#aaa" : "#555",
+                  }}
+                />
+              </Source>
+            ))}
 
-        {/* Layer hovered feaure */}
-        {hoveredFeature && (
-          <Source
-            type="geojson"
-            data={{ type: "FeatureCollection", features: [hoveredFeature] }}
-          >
-            <Layer
-              id="hovered-feature-layer"
-              type="fill"
-              paint={{
-                "fill-color": "#FFFFFF",
-                "fill-opacity": 0.6,
-                "fill-outline-color": "#000000",
-              }}
-            />
-          </Source>
-        )}
+            {/* Layer hovered feaure */}
+            {hoveredFeature && (
+              <Source
+                type="geojson"
+                data={{ type: "FeatureCollection", features: [hoveredFeature] }}
+              >
+                <Layer
+                  id="hovered-feature-layer"
+                  type="fill"
+                  paint={{
+                    "fill-color": "#FFFFFF",
+                    "fill-opacity": 0.6,
+                    "fill-outline-color":
+                      colorMode === "dark" ? "#fff" : "#000",
+                  }}
+                />
+              </Source>
+            )}
 
-        {/* Layer clicked feaure */}
-        {detailGeoJSONData && (
-          <Source
-            type="geojson"
-            data={{ type: "FeatureCollection", features: [detailGeoJSONData] }}
-          >
-            <Layer
-              id="clicked-feature-layer"
-              type="fill"
-              paint={{
-                "fill-color": "#FFFFFF",
-                "fill-opacity": 1,
-                "fill-outline-color": "#000000",
-              }}
-            />
-          </Source>
+            {/* Layer clicked feaure */}
+            {detailGeoJSONData && (
+              <Source
+                type="geojson"
+                data={{
+                  type: "FeatureCollection",
+                  features: [detailGeoJSONData],
+                }}
+              >
+                <Layer
+                  id="clicked-feature-layer"
+                  type="fill"
+                  paint={{
+                    "fill-color": "#FFFFFF",
+                    "fill-opacity": 1,
+                    "fill-outline-color": "#000000",
+                  }}
+                />
+              </Source>
+            )}
+          </>
         )}
       </Map>
 

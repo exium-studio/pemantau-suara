@@ -46,6 +46,7 @@ export default function TabelUserByKelurahan() {
         position: "sticky",
         left: "2px",
         zIndex: 2,
+        w: "40px",
       },
       cProps: {
         borderRight: "1px solid var(--divider2)",
@@ -58,18 +59,18 @@ export default function TabelUserByKelurahan() {
         w: "243px",
       },
     },
-    {
-      th: "Username",
-      isSortable: true,
-    },
-    {
-      th: "Role",
-      isSortable: true,
-    },
-    {
-      th: "Area Kelurahan",
-      isSortable: true,
-    },
+    // {
+    //   th: "Username",
+    //   isSortable: true,
+    // },
+    // {
+    //   th: "Role",
+    //   isSortable: true,
+    // },
+    // {
+    //   th: "Area Kelurahan",
+    //   isSortable: true,
+    // },
   ];
   const formattedBody = data?.map((item: any, i: number) => ({
     id: item.id,
@@ -92,6 +93,7 @@ export default function TabelUserByKelurahan() {
         value: item?.nama,
         td: (
           <AvatarUserTableBody
+            w={"100%"}
             data={{
               id: item?.id,
               nama: item?.nama,
@@ -103,14 +105,14 @@ export default function TabelUserByKelurahan() {
           zIndex: 1,
         },
       },
-      {
-        value: item?.username,
-        td: item?.username,
-      },
-      {
-        value: item?.role?.name,
-        td: item?.role?.name,
-      },
+      // {
+      //   value: item?.username,
+      //   td: item?.username,
+      // },
+      // {
+      //   value: item?.role?.name,
+      //   td: item?.role?.name,
+      // },
     ],
   }));
 

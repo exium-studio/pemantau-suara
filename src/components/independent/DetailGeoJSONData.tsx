@@ -28,11 +28,11 @@ export default function DetailGeoJSONData() {
   return (
     <CContainer
       p={4}
-      maxW={"720px"}
+      maxW={"450px"}
       // h={"100%"}
       position={"absolute"}
       top={"58px"}
-      left={isOpen ? 0 : "-720px"}
+      left={isOpen ? 0 : "-450px"}
       transition={"200ms"}
       animation={"ease in"}
       zIndex={2}
@@ -60,7 +60,7 @@ export default function DetailGeoJSONData() {
           pb={4}
           // border={"1px solid red"}
         >
-          <SimpleGrid columns={[2, null, 4]} gap={4} mb={4}>
+          <SimpleGrid columns={[2, null, 2]} gap={4} mb={4}>
             <CContainer>
               <Text opacity={0.4}>Provinsi</Text>
               <Text>{detailGeoJSONData?.properties?.province}</Text>

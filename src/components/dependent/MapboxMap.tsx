@@ -175,7 +175,7 @@ const MapboxMap: FC<MapProps> = ({
               type="fill"
               paint={{
                 "fill-color": "#FFFFFF",
-                "fill-opacity": 0.6,
+                "fill-opacity": 1,
                 "fill-outline-color": "#000000",
               }}
             />

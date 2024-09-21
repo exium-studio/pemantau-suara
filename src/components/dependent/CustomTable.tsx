@@ -439,6 +439,7 @@ export default function CustomTable({
                     p={0}
                     position={"sticky"}
                     left={0}
+                    zIndex={99}
                   >
                     <Box
                       w={"2px"}

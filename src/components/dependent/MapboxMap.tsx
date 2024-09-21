@@ -122,6 +122,7 @@ const MapboxMap: FC<MapProps> = ({
       <Map
         ref={mapRef}
         {...viewState}
+        pitch={0}
         style={{ width: "100vw", height: "100vh", ...style }}
         mapStyle={mapStyle}
         onMove={(evt) => setViewState(evt.viewState)}

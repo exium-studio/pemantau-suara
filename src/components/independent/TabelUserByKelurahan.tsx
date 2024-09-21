@@ -44,7 +44,7 @@ export default function TabelUserByKelurahan() {
       isSortable: true,
       props: {
         position: "sticky",
-        left: 0,
+        left: "2px",
         zIndex: 2,
       },
       cProps: {
@@ -81,7 +81,7 @@ export default function TabelUserByKelurahan() {
         isNumeric: true,
         props: {
           position: "sticky",
-          left: 0,
+          left: "2px",
           zIndex: 2,
         },
         cProps: {
@@ -99,6 +99,9 @@ export default function TabelUserByKelurahan() {
             }}
           />
         ),
+        props: {
+          zIndex: 1,
+        },
       },
       {
         value: item?.username,

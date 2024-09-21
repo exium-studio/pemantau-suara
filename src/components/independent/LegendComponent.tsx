@@ -24,7 +24,7 @@ export default function LegendComponent() {
   return (
     <VStack
       mx={"auto"}
-      position={"absolute"}
+      position={"fixed"}
       bottom={
         isOpen ? "8px" : `calc(-${containerRef?.current?.offsetHeight}px)`
       }

@@ -11,7 +11,7 @@ export default function DetailGeoJSONData() {
   const lightDarkColor = useLightDarkColor();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  useBackOnClose(`detail-data-drawer`, isOpen, onOpen, onClose);
+  useBackOnClose(`detail-geojson-data`, isOpen, onOpen, onClose);
   const { detailGeoJSONData } = useDetailGeoJSONData();
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function DetailGeoJSONData() {
     } else {
       onClose();
     }
-  }, [detailGeoJSONData, onOpen]);
+  }, [detailGeoJSONData, onOpen, onClose]);
 
   return (
     <CContainer

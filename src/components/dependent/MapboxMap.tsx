@@ -113,6 +113,7 @@ const MapboxMap: FC<MapProps> = ({
         {markerLat && markerLng && (
           <Marker latitude={markerLat} longitude={markerLng} color="red" />
         )}
+
         {geojsonData.map((geojson, index) => (
           <Source key={index} type="geojson" data={geojson}>
             <Layer
@@ -126,6 +127,7 @@ const MapboxMap: FC<MapProps> = ({
             />
           </Source>
         ))}
+
         {hoveredFeature && (
           <Source
             type="geojson"
@@ -143,6 +145,7 @@ const MapboxMap: FC<MapProps> = ({
           </Source>
         )}
       </Map>
+
       <LegendComponent />
     </div>
   );

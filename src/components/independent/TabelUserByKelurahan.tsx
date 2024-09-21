@@ -1,6 +1,8 @@
 import useDataState from "../../hooks/useDataState";
 import AvatarUserTableBody from "../dependent/AvatarUserTableBody";
 import CustomTable from "../dependent/CustomTable";
+import Retry from "./feedback/Retry";
+import Skeleton from "./feedback/Skeleton";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 
 export default function TabelUserByKelurahan() {
@@ -29,7 +31,9 @@ export default function TabelUserByKelurahan() {
     },
   ];
 
-  const { error, loading, data, retry } = useDataState<any>({
+  const loading = false;
+  // TODO api get data user by kelurahan
+  const { error, data, retry } = useDataState<any>({
     initialData: dummy,
     url: ``,
     dependencies: [],
@@ -106,12 +110,31 @@ export default function TabelUserByKelurahan() {
     ],
   }));
 
+  // Render lateral
+  const render = {
+    loading: <Skeleton minH={"300px"} />,
+    error: <Retry retry={retry} />,
+    loaded: (
+      <CustomTableContainer>
+        <CustomTable
+          formattedHeader={formattedHeader}
+          formattedBody={formattedBody}
+        />
+      </CustomTableContainer>
+    ),
+  };
+
   return (
-    <CustomTableContainer>
-      <CustomTable
-        formattedHeader={formattedHeader}
-        formattedBody={formattedBody}
-      />
-    </CustomTableContainer>
+    <>
+      {loading && render.loading}
+
+      {!loading && (
+        <>
+          {error && render.error}
+
+          {!error && render.loaded}
+        </>
+      )}
+    </>
   );
 }

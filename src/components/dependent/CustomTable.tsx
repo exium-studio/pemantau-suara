@@ -110,7 +110,7 @@ const RowOptions = ({ rowData, rowOptions, tableRef }: RowOptionsProps) => {
     <Menu>
       <MenuButton
         as={IconButton}
-        h={"60px"}
+        h={"48px"}
         w={"52px"}
         borderRadius={0}
         className="btn"
@@ -381,7 +381,7 @@ export default function CustomTable({
                   px={4}
                   py={3}
                   gap={4}
-                  h={"52px"}
+                  h={"42px"}
                   pl={i === 0 ? 4 : ""}
                   pr={i === formattedHeader.length - 1 ? 4 : ""}
                   {...header?.cProps}
@@ -442,7 +442,7 @@ export default function CustomTable({
                   >
                     <Box
                       w={"2px"}
-                      h={"60px"}
+                      h={"48px"}
                       bg={lightDarkColor}
                       _groupHover={{ bg: "p.500" }}
                     />
@@ -451,7 +451,7 @@ export default function CustomTable({
 
                 {batchActions && (
                   <Td
-                    h={"60px"}
+                    h={"48px"}
                     w={"52px !important"}
                     minW={"0% !important"}
                     maxW={"52px !important"}
@@ -464,7 +464,7 @@ export default function CustomTable({
                   >
                     <Center
                       w={"52px"}
-                      h={"60px"}
+                      h={"48px"}
                       borderRight={"1px solid var(--divider3)"}
                       _groupHover={{
                         bg: "var(--divider)",
@@ -508,7 +508,7 @@ export default function CustomTable({
                       }
                       py={3}
                       px={4}
-                      h={"60px"}
+                      h={"48px"}
                       transition={"200ms"}
                       {...col?.cProps}
                     >
@@ -535,7 +535,7 @@ export default function CustomTable({
                     zIndex={2}
                   >
                     <Center
-                      h={"60px"}
+                      h={"48px"}
                       w={"52px"}
                       borderLeft={"1px solid var(--divider3)"}
                       _groupHover={{

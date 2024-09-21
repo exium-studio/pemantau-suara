@@ -12,6 +12,7 @@ import Map, { Layer, MapRef, Marker, Source } from "react-map-gl";
 import geoJSONLayers from "../../constant/geoJSONLayers";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
 import LegendComponent from "../independent/LegendComponent";
+import useSearchAddress from "../../global/useSearchAddress";
 
 interface MapProps {
   latitude: number;
@@ -39,6 +40,7 @@ const MapboxMap: FC<MapProps> = ({
   const [geojsonData, setGeojsonData] = useState<any[]>([]);
   const [hoveredFeature, setHoveredFeature] = useState<any>(null);
 
+  // Handle change style depend on dark mode
   useEffect(() => {
     setMapStyle(
       colorMode === "dark"
@@ -47,6 +49,7 @@ const MapboxMap: FC<MapProps> = ({
     );
   }, [colorMode]);
 
+  // Fetch all geoJSON data
   useEffect(() => {
     Promise.all(
       geojsonLayers.map((layer) =>
@@ -57,6 +60,7 @@ const MapboxMap: FC<MapProps> = ({
       .catch((err) => console.error("Error loading GeoJSON files:", err));
   }, []);
 
+  // Handle layer onclick, set detail data
   const { setDetailGeoJSONData } = useDetailGeoJSONData();
   const handleLayerClick = useCallback(
     (event: any) => {
@@ -67,7 +71,6 @@ const MapboxMap: FC<MapProps> = ({
     },
     [setDetailGeoJSONData]
   );
-
   useEffect(() => {
     const map = mapRef.current?.getMap();
     if (!map) return;
@@ -97,6 +100,9 @@ const MapboxMap: FC<MapProps> = ({
       };
     });
   }, [geojsonData, handleLayerClick]);
+
+  // Handle Search
+  const { searchAddress } = useSearchAddress();
 
   return (
     <div style={{ position: "relative" }}>

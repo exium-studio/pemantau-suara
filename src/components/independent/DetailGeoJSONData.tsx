@@ -42,11 +42,14 @@ export default function DetailGeoJSONData() {
         shadow={"sm"}
         bg={lightDarkColor}
         overflowY={"auto"}
-        borderRadius={12}
+        borderRadius={8}
         pb={5}
         border={"1px solid var(--divider)"}
       >
-        <DisclosureHeader title="Detail Data" />
+        <DisclosureHeader
+          title="Detail Data"
+          textProps={{ fontSize: [16, null, 18] }}
+        />
 
         <CContainer
           overscrollY={"auto"}

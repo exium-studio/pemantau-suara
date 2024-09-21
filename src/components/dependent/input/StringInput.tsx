@@ -73,7 +73,7 @@ export default function StringInput({
           <Text
             w={"calc(100% - 32px)"}
             position={"absolute"}
-            top={"8px"}
+            top={"10px"}
             left={props?.pl || 4}
             pr={props?.pr}
             whiteSpace={"nowrap"}

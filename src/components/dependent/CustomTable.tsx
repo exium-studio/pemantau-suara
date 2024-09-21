@@ -330,23 +330,23 @@ export default function CustomTable({
           <Tr position={"sticky"} top={0} zIndex={3}>
             {onRowClick && (
               <Td minW={"2px"} maxW={"2px"} p={0} position={"sticky"} left={0}>
-                <Box w={"2px"} h={"52px"} bg={lightDarkColor} />
+                <Box w={"2px"} h={"42px"} bg={lightDarkColor} />
               </Td>
             )}
 
             {batchActions && (
               <Td
-                h={"52px"}
-                w={"52px !important"}
+                h={"42px"}
+                w={"42px !important"}
                 minW={"0% !important"}
-                maxW={"52px !important"}
+                maxW={"42px !important"}
                 p={0}
                 position={"sticky"}
                 left={0}
               >
                 <Center
-                  h={"52px"}
-                  w={"52px"}
+                  h={"42px"}
+                  w={"42px"}
                   borderRight={"1px solid var(--divider3)"}
                   borderBottom={"1px solid var(--divider3)"}
                   bg={lightDarkColor}

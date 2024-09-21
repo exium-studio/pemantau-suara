@@ -10,8 +10,8 @@ export default function BackOnCloseButton({ onClose, ...props }: Props) {
   return (
     <IconButton
       icon={<Icon as={X} fontSize={18} className="custom-icon" />}
-      minW="24px !important"
-      h="24px !important"
+      minW="30px !important"
+      h="30px !important"
       borderRadius={"full"}
       className="btn"
       onClick={(e) => {

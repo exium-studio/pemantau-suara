@@ -73,6 +73,7 @@ export default function TabelUserByKelurahan() {
   ];
   const formattedBody = data?.map((item: any, i: number) => ({
     id: item.id,
+    originalData: item,
     columnsFormat: [
       {
         value: i + 1,
@@ -115,12 +116,18 @@ export default function TabelUserByKelurahan() {
     loading: <Skeleton minH={"300px"} />,
     error: <Retry retry={retry} />,
     loaded: (
-      <CustomTableContainer>
-        <CustomTable
-          formattedHeader={formattedHeader}
-          formattedBody={formattedBody}
-        />
-      </CustomTableContainer>
+      <>
+        <CustomTableContainer>
+          <CustomTable
+            formattedHeader={formattedHeader}
+            formattedBody={formattedBody}
+            onRowClick={(rowData) => {
+              // alert(JSON.stringify(rowData));
+              console.log(rowData);
+            }}
+          />
+        </CustomTableContainer>
+      </>
     ),
   };
 

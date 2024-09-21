@@ -30,7 +30,8 @@ export default function DisclosureHeader({
           <BackOnCloseButton
             aria-label="back on close button"
             onClose={onClose}
-            mr={"-2px"}
+            mr={"-4px"}
+            mt={"-2px"}
           />
         )}
       </HStack>

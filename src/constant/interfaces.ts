@@ -388,6 +388,7 @@ export interface Interface__FormattedTableHeader {
 
 export interface Interface__FormattedTableBody {
   id: number;
+  originalData?: any;
   columnsFormat: {
     column?: string;
     original_data?: any;

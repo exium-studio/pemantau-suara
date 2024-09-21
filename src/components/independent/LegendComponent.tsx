@@ -63,12 +63,38 @@ export default function LegendComponent() {
           spacingX={4}
           w={"max-content"}
         >
-          {geoJSONLayers.map((layer, i) => (
-            <HStack key={i}>
-              <Box w={"8px"} h={"8px"} borderRadius={8} bg={layer.color} />
-              <Text>{layer.name}</Text>
-            </HStack>
-          ))}
+          <HStack>
+            <Box
+              w={"8px"}
+              h={"8px"}
+              borderRadius={8}
+              bg={"white"}
+              border={"1px solid #aaa"}
+              shadow={"sm"}
+              // opacity={0.6}
+            />
+            <Text>Dipilih/dilihat</Text>
+          </HStack>
+
+          {geoJSONLayers.map((layer, i) => {
+            const ok = layer?.name !== "Kota Semarang";
+
+            return (
+              ok && (
+                <HStack key={i}>
+                  <Box
+                    w={"8px"}
+                    h={"8px"}
+                    borderRadius={8}
+                    bg={layer.color}
+                    opacity={0.6}
+                    // border={"1px solid var(--divider3)"}
+                  />
+                  <Text>{layer.name}</Text>
+                </HStack>
+              )
+            );
+          })}
         </SimpleGrid>
       </VStack>
     </VStack>

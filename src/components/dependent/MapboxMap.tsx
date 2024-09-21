@@ -139,7 +139,7 @@ const MapboxMap: FC<MapProps> = ({
               type="fill"
               paint={{
                 "fill-color": geojsonLayers[index].color,
-                "fill-opacity": hoveredFeature ? 0.4 : 0.4,
+                "fill-opacity": 0.4,
                 "fill-outline-color": "#000000",
               }}
             />

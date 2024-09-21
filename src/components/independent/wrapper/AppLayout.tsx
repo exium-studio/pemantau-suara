@@ -61,12 +61,12 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
           border={"1px solid var(--divider)"}
           p={1}
           gap={2}
-          borderRadius={8}
+          borderRadius={12}
           bg={lightDarkColor}
         >
           <Tooltip label={"Dark Mode"} placement="bottom" mt={1}>
             <Box>
-              <ColorModeSwitcher mt={"auto"} className="btn" borderRadius={6} />
+              <ColorModeSwitcher mt={"auto"} className="btn" />
             </Box>
           </Tooltip>
         </HStack>

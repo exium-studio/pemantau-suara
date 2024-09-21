@@ -29,14 +29,14 @@ export default function SearchAddress() {
   const searchAddressHistory = JSON.parse(
     localStorage.getItem("search_address_history") as string
   );
-  const containerRef = useRef<HTMLDivElement>(null); // Reference for the container
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  // Handle search
   useEffect(() => {
     if (searchMode && searchRef.current) {
       searchRef.current.focus();
     }
   }, [searchMode]);
-
   useEffect(() => {
     if (searchAddress.trim()) {
       fetch(
@@ -55,6 +55,7 @@ export default function SearchAddress() {
     }
   }, [searchAddress, setSearchResult]);
 
+  // Handle click outide
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -74,6 +75,7 @@ export default function SearchAddress() {
     };
   }, [searchAddress, setSearchMode]);
 
+  // Handle result item click
   const handleItemClick = (result: any, isNotHistoryitem?: boolean) => {
     setSearchSelected(result);
     setSearchAddress(result.place_name);
@@ -95,7 +97,7 @@ export default function SearchAddress() {
       <CContainer
         w={searchMode ? "100%" : "101px"}
         transition={"200ms"}
-        borderRadius={8}
+        borderRadius={12}
       >
         <HStack
           shadow={"sm"}
@@ -105,8 +107,8 @@ export default function SearchAddress() {
             searchMode &&
             searchFocus &&
             (searchAddressHistory || searchResult.length > 0)
-              ? "8px 8px 0 0"
-              : 8
+              ? "12px 12px 0 0"
+              : 12
           }
           p={1}
           gap={searchMode ? 0 : 1}
@@ -210,7 +212,7 @@ export default function SearchAddress() {
             mt={-8}
             pt={8}
             bg={lightDarkColor}
-            borderRadius={"0 0 8px 8px"}
+            borderRadius={"0 0 12px 12px"}
             w={"100%"}
             maxW={"420px"}
             overflowY="auto"

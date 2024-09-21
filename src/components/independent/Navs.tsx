@@ -11,7 +11,7 @@ export default function Navs() {
     <HStack
       p={1}
       gap={1}
-      borderRadius={8}
+      borderRadius={12}
       bg={lightDarkColor}
       border={"1px solid var(--divider)"}
       shadow={"sm"}
@@ -20,7 +20,6 @@ export default function Navs() {
       {navs.map((nav, i) => (
         <Tooltip key={i} label={nav.label} placement="bottom" mt={1}>
           <IconButton
-            borderRadius={6}
             aria-label={nav.label}
             icon={<Icon as={nav.icon} weight={"bold"} fontSize={iconSize} />}
             className="btn"

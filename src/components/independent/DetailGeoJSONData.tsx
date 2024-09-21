@@ -12,7 +12,7 @@ export default function DetailGeoJSONData() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   useBackOnClose(`detail-geojson-data`, isOpen, onOpen, onClose);
-  const { detailGeoJSONData } = useDetailGeoJSONData();
+  const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
 
   useEffect(() => {
     console.log(detailGeoJSONData);
@@ -20,8 +20,9 @@ export default function DetailGeoJSONData() {
       onOpen();
     } else {
       onClose();
+      setDetailGeoJSONData(undefined);
     }
-  }, [detailGeoJSONData, onOpen, onClose]);
+  }, [detailGeoJSONData, setDetailGeoJSONData, onOpen, onClose]);
 
   return (
     <CContainer
@@ -39,13 +40,16 @@ export default function DetailGeoJSONData() {
         shadow={"sm"}
         bg={lightDarkColor}
         overflowY={"auto"}
-        borderRadius={8}
+        borderRadius={12}
         pb={5}
         border={"1px solid var(--divider)"}
       >
         <DisclosureHeader
           title="Detail Data"
           textProps={{ fontSize: [16, null, 18] }}
+          onClose={() => {
+            setDetailGeoJSONData(undefined);
+          }}
         />
 
         <CContainer

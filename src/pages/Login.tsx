@@ -23,6 +23,7 @@ import { useLightDarkColor } from "../constant/colors";
 import { responsiveSpacing } from "../constant/sizes";
 import useRenderTrigger from "../hooks/useRenderTrigger";
 import getUserData from "../lib/getUserData";
+import { useEffect } from "react";
 
 export default function Login() {
   // SX
@@ -30,6 +31,12 @@ export default function Login() {
 
   const authToken = getCookie("__auth_token");
   const userData = getUserData();
+  useEffect(() => {
+    if (!authToken || !userData) {
+      removeCookie("__auth_token");
+      localStorage.removeItem("__user_data");
+    }
+  }, [authToken, userData]);
 
   // const [loading, setLoading] = useState<boolean>(false);
   const { rt, setRt } = useRenderTrigger();
@@ -47,8 +54,6 @@ export default function Login() {
       // TODO api login
     },
   });
-
-  console.log(formik.values);
 
   return (
     <Center minH={"100vh"} p={responsiveSpacing}>

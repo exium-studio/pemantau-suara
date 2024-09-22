@@ -31,7 +31,7 @@ export default function DetailGeoJSONData() {
     <CContainer
       px={4}
       maxW={"450px"}
-      maxH={sw < 720 ? "450px" : "calc(100vh - 72px - 8px)"}
+      maxH={sw < 720 ? "450px" : "450px"}
       position={"fixed"}
       top={"72px"}
       left={isOpen ? 0 : "-450px"}
@@ -46,7 +46,7 @@ export default function DetailGeoJSONData() {
         bg={lightDarkColor}
         borderRadius={12}
         overflowY={"auto"}
-        border={"1px solid green"}
+        // border={"1px solid green"}
       >
         <DisclosureHeader
           title="Detail Data"

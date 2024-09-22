@@ -14,7 +14,7 @@ const DetailData = () => {
   // const sw = useScreenWidth();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  useBackOnClose(`detail-geojson-data`, isOpen, onOpen, onClose);
+  // useBackOnClose(`detail-geojson-data`, isOpen, onOpen, onClose);
   const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
 
   useEffect(() => {
@@ -111,7 +111,7 @@ const DetailAktivitasUser = () => {
   // const sw = useScreenWidth();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  useBackOnClose(`detail-aktivitas-user`, isOpen, onOpen, onClose);
+  // useBackOnClose(`detail-aktivitas-user`, isOpen, onOpen, onClose);
   const { detailGeoJSONData } = useDetailGeoJSONData();
   const { detailAktivitasUser, setDetailAktivitasUser } =
     useDetailAktivitasUser();
@@ -150,13 +150,13 @@ const DetailAktivitasUser = () => {
         borderRadius={12}
         overflowY={"auto"}
         pointerEvents={"auto"}
-        // transform={isOpen ? "" : `translateX(-450px)`}
         transition={"200ms ease-out"}
         // border={"1px solid green"}
       >
         <DisclosureHeader
           title={`Aktivitas ${detailAktivitasUser?.nama}`}
           textProps={{ fontSize: [16, null, 18] }}
+          disableBackOnClose
           onClose={() => {
             setTimeout(() => {
               setDetailAktivitasUser(undefined);

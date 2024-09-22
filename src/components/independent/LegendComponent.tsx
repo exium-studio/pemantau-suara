@@ -91,6 +91,8 @@ const LegendComponent: React.FC = () => {
         >
           <DisclosureHeader
             title="Legenda"
+            disableBackOnClose
+            onClose={onClose}
             textProps={{ fontSize: [16, null, 18] }}
             p={5}
             pt={"16px !important"}

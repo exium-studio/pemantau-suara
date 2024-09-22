@@ -82,6 +82,7 @@ const LegendComponent: React.FC = () => {
       >
         <CContainer
           shadow={"sm"}
+          border={"1px solid var(--divider)"}
           bg={lightDarkColor}
           borderRadius={12}
           overflowY={"auto"}

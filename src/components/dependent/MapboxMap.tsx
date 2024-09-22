@@ -1,4 +1,4 @@
-import { useColorMode } from "@chakra-ui/react";
+import { Box, useColorMode } from "@chakra-ui/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
   CSSProperties,
@@ -36,12 +36,11 @@ const MapboxMap: FC<MapProps> = ({
   // SX
   const { colorMode } = useColorMode();
 
+  // Handle render map component
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [mapStyle, setMapStyle] = useState("");
   const [viewState, setViewState] = useState({ latitude, longitude, zoom });
   const mapRef = useRef<MapRef>(null);
-  const [geojsonData, setGeojsonData] = useState<any[]>([]);
-  const [hoveredFeature, setHoveredFeature] = useState<any>(null);
 
   // Handle change style depend on dark mode
   useEffect(() => {
@@ -53,6 +52,7 @@ const MapboxMap: FC<MapProps> = ({
   }, [colorMode]);
 
   // Fetch all geoJSON data
+  const [geojsonData, setGeojsonData] = useState<any[]>([]);
   useEffect(() => {
     Promise.all(
       geojsonLayers.map((layer) =>
@@ -64,6 +64,7 @@ const MapboxMap: FC<MapProps> = ({
   }, []);
 
   // Handle layer hover, onclick, set detail data
+  const [hoveredFeature, setHoveredFeature] = useState<any>(null);
   const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
   const handleLayerClick = useCallback(
     (event: any) => {
@@ -99,17 +100,17 @@ const MapboxMap: FC<MapProps> = ({
     });
   }, [geojsonData, handleLayerClick, onMouseMove]);
 
-  // Handle search selected to maps
+  // Handle smarker earch selected
   const { searchSelected } = useSearchAddress();
   useEffect(() => {
     if (searchSelected && mapRef.current) {
       const map = mapRef.current.getMap();
       if (map && searchSelected.center) {
         map.easeTo({
-          center: searchSelected.center, // Use center coordinates from search data
-          zoom: 12, // adjust the zoom level as needed
-          duration: 1000, // duration of the easing in milliseconds
-          easing: (t) => t, // you can define a custom easing function if needed
+          center: searchSelected.center,
+          zoom: 12,
+          duration: 1000,
+          easing: (t) => t,
         });
       }
     }
@@ -132,8 +133,25 @@ const MapboxMap: FC<MapProps> = ({
       >
         {isMapLoaded && (
           <>
+            {/* Initial marker */}
             {markerLat && markerLng && (
               <Marker latitude={markerLat} longitude={markerLng} color="red" />
+            )}
+
+            {/* Search selected marker */}
+            {searchSelected && (
+              <Marker
+                latitude={searchSelected?.center[1]}
+                longitude={searchSelected?.center[0]}
+              >
+                <Box
+                  bg={"p.500"}
+                  w={"20px"}
+                  h={"20px"}
+                  border={"2px solid white"}
+                  borderRadius={"full"}
+                ></Box>
+              </Marker>
             )}
 
             {/* Layer all geoJSON data */}

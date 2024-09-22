@@ -98,7 +98,7 @@ const LegendComponent: React.FC = () => {
             zIndex={20}
           />
 
-          <CContainer p={5} pt={0} overflowY={"auto"} className={"scrollY"}>
+          <CContainer px={5} overflowY={"auto"} className={"scrollY"}>
             <SimpleGrid columns={[2]} gap={2} spacingX={4} w={"100%"}>
               {geoJSONLayers.map((layer, i) => {
                 const ok = layer?.name !== "Kota Semarang";
@@ -132,39 +132,59 @@ const LegendComponent: React.FC = () => {
                 );
               })}
             </SimpleGrid>
-
-            <ButtonGroup mt={4}>
-              <Button
-                w={"100%"}
-                size={"sm"}
-                justifyContent={"start"}
-                className="btn noofline1"
-              >
-                <HStack>
-                  <Box
-                    w={"8px"}
-                    h={"8px"}
-                    borderRadius={8}
-                    bg={"white"}
-                    border={"1px solid #aaa"}
-                    shadow={"sm"}
-                  />
-                  <Text>Dipilih/dilihat</Text>
-                </HStack>
-              </Button>
-
-              <Button
-                w={"100%"}
-                size={"sm"}
-                className="btn-solid clicky"
-                onClick={() => {
-                  setHighlightedKecamatanIndex([]);
-                }}
-              >
-                Clear
-              </Button>
-            </ButtonGroup>
           </CContainer>
+
+          <ButtonGroup py={4} px={5}>
+            <Button
+              w={"100%"}
+              size={"sm"}
+              justifyContent={"start"}
+              className="btn-solid noofline1"
+              opacity={
+                highlightedKecamatanIndex.length > 0 &&
+                !highlightedKecamatanIndex?.includes(-1)
+                  ? 0.4
+                  : 1
+              }
+              onClick={() => {
+                toggleHighlightedKecamatanIndex(-1);
+              }}
+            >
+              <HStack w={"100%"}>
+                <Box
+                  w={"8px"}
+                  h={"8px"}
+                  borderRadius={8}
+                  bg={"white"}
+                  border={"1px solid #aaa"}
+                  shadow={"sm"}
+                />
+                <Text>Dipilih/dilihat</Text>
+
+                {highlightedKecamatanIndex.length > 0 &&
+                  highlightedKecamatanIndex?.includes(-1) && (
+                    <Icon
+                      ml={"auto"}
+                      as={Circle}
+                      weight="fill"
+                      color={"red.400"}
+                      fontSize={8}
+                    />
+                  )}
+              </HStack>
+            </Button>
+
+            <Button
+              w={"100%"}
+              size={"sm"}
+              className="btn-solid clicky"
+              onClick={() => {
+                setHighlightedKecamatanIndex([]);
+              }}
+            >
+              Reset
+            </Button>
+          </ButtonGroup>
         </CContainer>
       </CContainer>
     </>

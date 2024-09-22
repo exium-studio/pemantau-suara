@@ -13,7 +13,6 @@ const useHighlighedKecamatan = create<State & Actions>((set, get) => ({
   highlightedKecamatanIndex: [],
   setHighlightedKecamatanIndex: (newState: number[]) =>
     set({ highlightedKecamatanIndex: newState }),
-
   toggleHighlightedKecamatanIndex: (index: number) => {
     const prev = get().highlightedKecamatanIndex;
     const newState = prev.includes(index)

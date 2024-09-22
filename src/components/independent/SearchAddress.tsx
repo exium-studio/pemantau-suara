@@ -176,7 +176,7 @@ export default function SearchAddress() {
               minW="30px !important"
               h="30px !important"
               mt={"5px"}
-              mr={"3px"}
+              mr={"5px"}
               onClick={() => {
                 setSearchSelected("");
                 setSearchAddress("");

@@ -1,14 +1,13 @@
 import { Box, HStack, Tooltip } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../../../ColorModeSwitcher";
 import { useLightDarkColor } from "../../../constant/colors";
-import useSearchMode from "../../../global/useSearchMode";
 import MapboxMap from "../../dependent/MapboxMap";
 import DetailGeoJSONData from "../DetailGeoJSONData";
+import LegendComponent from "../LegendComponent";
 import Navs from "../Navs";
 import Profile from "../Profile";
 import SearchAddress from "../SearchAddress";
 import CContainer from "./CContainer";
-import LegendComponent from "../LegendComponent";
 
 interface AppLayoutProps {
   children?: any;
@@ -18,8 +17,6 @@ interface AppLayoutProps {
 export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
   // SX
   const lightDarkColor = useLightDarkColor();
-
-  const { searchMode } = useSearchMode();
 
   return (
     <CContainer
@@ -36,17 +33,17 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
       {/* Left */}
       <HStack
         p={4}
-        position={"absolute"}
+        position={"fixed"}
         top={0}
         left={0}
         zIndex={3}
-        w={searchMode ? "100%" : ""}
+        // w={searchMode ? "100%" : ""}
       >
         <SearchAddress />
       </HStack>
 
       {/* Right */}
-      <HStack p={4} position={"absolute"} top={0} right={0} zIndex={2}>
+      <HStack p={4} position={"fixed"} top={0} right={0} zIndex={2}>
         {/* Color Mode */}
         <HStack
           shadow={"sm"}

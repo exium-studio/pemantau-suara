@@ -32,7 +32,7 @@ export default function DisclosureHeader({
           <BackOnCloseButton
             aria-label="back on close button"
             onClose={onClose}
-            mr={"-4px"}
+            mr={"-6px"}
             mt={"-2px"}
             disableBackOnClose={disableBackOnClose}
           />

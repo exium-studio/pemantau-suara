@@ -3,10 +3,15 @@ import { X } from "@phosphor-icons/react";
 import backOnClose from "../../lib/backOnClose";
 
 interface Props extends IconButtonProps {
+  disableBackOnClose?: boolean;
   onClose?: () => void;
 }
 
-export default function BackOnCloseButton({ onClose, ...props }: Props) {
+export default function BackOnCloseButton({
+  disableBackOnClose,
+  onClose,
+  ...props
+}: Props) {
   return (
     <IconButton
       icon={<Icon as={X} fontSize={18} className="custom-icon" />}
@@ -16,7 +21,7 @@ export default function BackOnCloseButton({ onClose, ...props }: Props) {
       className="btn"
       onClick={(e) => {
         e.stopPropagation();
-        backOnClose();
+        !disableBackOnClose && backOnClose();
         onClose && onClose();
       }}
       {...props}

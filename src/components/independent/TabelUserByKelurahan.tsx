@@ -1,3 +1,4 @@
+import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
 import useDataState from "../../hooks/useDataState";
 import AvatarUserTableBody from "../dependent/AvatarUserTableBody";
 import CustomTable from "../dependent/CustomTable";
@@ -292,6 +293,8 @@ export default function TabelUserByKelurahan() {
     ],
   }));
 
+  const { setDetailAktivitasUser } = useDetailAktivitasUser();
+
   // Render lateral
   const render = {
     loading: <Skeleton minH={"256px"} flex={1} />,
@@ -304,7 +307,8 @@ export default function TabelUserByKelurahan() {
             formattedBody={formattedBody}
             onRowClick={(rowData) => {
               // alert(JSON.stringify(rowData));
-              console.log(rowData);
+              // console.log(rowData?.originalData);
+              setDetailAktivitasUser(rowData?.originalData);
             }}
           />
         </CustomTableContainer>

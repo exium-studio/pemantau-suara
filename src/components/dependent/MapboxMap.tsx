@@ -12,7 +12,6 @@ import Map, { Layer, MapRef, Marker, Source } from "react-map-gl";
 import geoJSONLayers from "../../constant/geoJSONLayers";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
 import useSearchAddress from "../../global/useSearchAddress";
-import LegendComponent from "../independent/LegendComponent";
 
 interface MapProps {
   latitude: number;
@@ -196,8 +195,6 @@ const MapboxMap: FC<MapProps> = ({
           </>
         )}
       </Map>
-
-      <LegendComponent />
     </div>
   );
 };

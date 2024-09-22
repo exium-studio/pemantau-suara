@@ -8,6 +8,7 @@ import Navs from "../Navs";
 import Profile from "../Profile";
 import SearchAddress from "../SearchAddress";
 import CContainer from "./CContainer";
+import LegendComponent from "../LegendComponent";
 
 interface AppLayoutProps {
   children?: any;
@@ -71,6 +72,9 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
 
       {/* Detail GeoJSON Data */}
       <DetailGeoJSONData />
+
+      {/* Legend Component */}
+      <LegendComponent />
     </CContainer>
   );
 }

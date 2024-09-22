@@ -26,7 +26,7 @@ export default function LegendComponent() {
       mx={"auto"}
       position={"fixed"}
       bottom={
-        isOpen ? "8px" : `calc(-${containerRef?.current?.offsetHeight}px)`
+        isOpen ? "16px" : `calc(-${containerRef?.current?.offsetHeight}px)`
       }
       left={"50%"}
       gap={0}
@@ -36,7 +36,7 @@ export default function LegendComponent() {
       <Button
         // size={"sm"}
         rightIcon={<Icon as={isOpen ? CaretDown : CaretUp} />}
-        mb={2}
+        mb={4}
         zIndex={2}
         bg={bg}
         _hover={{ bg: bg }}

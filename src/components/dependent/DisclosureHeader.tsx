@@ -7,6 +7,7 @@ interface Props extends BoxProps {
   onClose?: () => void;
   addition?: any;
   textProps?: TextProps;
+  disableBackOnClose?: boolean;
 }
 
 export default function DisclosureHeader({
@@ -15,6 +16,7 @@ export default function DisclosureHeader({
   onClose,
   addition,
   textProps,
+  disableBackOnClose,
   ...props
 }: Props) {
   return (
@@ -32,6 +34,7 @@ export default function DisclosureHeader({
             onClose={onClose}
             mr={"-4px"}
             mt={"-2px"}
+            disableBackOnClose={disableBackOnClose}
           />
         )}
       </HStack>

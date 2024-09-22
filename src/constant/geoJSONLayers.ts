@@ -66,7 +66,7 @@ const geoJSONLayers = [
   },
   {
     geojson: "/asset/geojson/id3374130_semarang_tengah.geojson",
-    color: "#AEC7E8", // Biru muda
+    color: "#03A9F4  ", // Biru muda
     name: "Semarang Tengah",
   },
   {
@@ -81,7 +81,7 @@ const geoJSONLayers = [
   },
   {
     geojson: "/asset/geojson/id3374160_ngaliyan.geojson",
-    color: "#66B2D5", // Cyan soft
+    color: "#00E5FF   ", // Cyan soft
     name: "Ngaliyan",
   },
 ];

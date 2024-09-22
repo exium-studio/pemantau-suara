@@ -16,6 +16,10 @@ const useLightDarkColor = () => {
   return useColorModeValue("white", "#191919");
 };
 
+const useLightDarkColorAlpha = () => {
+  return useColorModeValue("#FFFFFF70", "#19191970");
+};
+
 const useDarkLightColor = () => {
   return useColorModeValue("dark", "white");
 };
@@ -51,6 +55,7 @@ const statusKaryawanColorScheme = {
 };
 
 export {
+  useLightDarkColorAlpha,
   useContentBgColor,
   useWhiteDarkColor,
   statusKaryawanColorScheme,

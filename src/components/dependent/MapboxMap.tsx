@@ -12,6 +12,7 @@ import Map, { Layer, MapRef, Marker, Source } from "react-map-gl";
 import geoJSONLayers from "../../constant/geoJSONLayers";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
 import useSearchAddress from "../../global/useSearchAddress";
+import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
 
 interface MapProps {
   latitude: number;
@@ -119,6 +120,9 @@ const MapboxMap: FC<MapProps> = ({
     }
   }, [searchSelected]);
 
+  // Handle highlighted geoJSON kecamatan index
+  const { highlightedKecamatanIndex } = useHighlighedKecamatan();
+
   return (
     <div style={{ position: "relative" }}>
       <Map
@@ -138,20 +142,31 @@ const MapboxMap: FC<MapProps> = ({
             )}
 
             {/* Layer all geoJSON data */}
-            {geojsonData.map((geojson, index) => (
-              <Source key={index} type="geojson" data={geojson}>
-                <Layer
-                  id={`geojson-layer-${index}`}
-                  type="fill"
-                  paint={{
-                    "fill-color": geojsonLayers[index].color,
-                    "fill-opacity": 0.4,
-                    "fill-outline-color":
-                      colorMode === "dark" ? "#aaa" : "#555",
-                  }}
-                />
-              </Source>
-            ))}
+            {geojsonData.map((layer, i) => {
+              const ok = layer?.name !== "Kota Semarang";
+              const isHighlighted = highlightedKecamatanIndex.includes(i);
+
+              return (
+                ok && (
+                  <Source key={i} type="geojson" data={layer}>
+                    <Layer
+                      id={`geojson-layer-${i}`}
+                      type="fill"
+                      paint={{
+                        "fill-color": geojsonLayers[i].color,
+                        "fill-opacity":
+                          isHighlighted ||
+                          highlightedKecamatanIndex?.length === 0
+                            ? 0.6
+                            : 0.15,
+                        "fill-outline-color":
+                          colorMode === "dark" ? "#ccc" : "#555",
+                      }}
+                    />
+                  </Source>
+                )
+              );
+            })}
 
             {/* Layer hovered feaure */}
             {hoveredFeature && (

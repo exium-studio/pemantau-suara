@@ -351,6 +351,12 @@ button[aria-label="Close"] > svg {
   height: 30px;
 }
 
+.noofline1 {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
 .breadcrumbItem,
 .breadcrumbSeparator {
   font-size: 11px !important;

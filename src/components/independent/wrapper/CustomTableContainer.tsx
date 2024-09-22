@@ -25,7 +25,7 @@ export default function CustomTableContainer({
       className={"tabelContainer scrollX scrollY"}
       overflow={"auto"}
       w={"100%"}
-      minH={minH || sh < 625 ? "400px" : "max-content !important"}
+      minH={minH || (sh < 625 ? "400px" : "max-content")}
       border={"1px solid var(--divider3)"}
       borderRadius={8}
       {...props}

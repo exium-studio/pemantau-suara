@@ -235,14 +235,14 @@ export default function TabelUserByKelurahan() {
         w: "243px",
       },
     },
-    {
-      th: "Username",
-      isSortable: true,
-    },
-    {
-      th: "Role",
-      isSortable: true,
-    },
+    // {
+    //   th: "Username",
+    //   isSortable: true,
+    // },
+    // {
+    //   th: "Role",
+    //   isSortable: true,
+    // },
     // {
     //   th: "Area Kelurahan",
     //   isSortable: true,
@@ -281,24 +281,24 @@ export default function TabelUserByKelurahan() {
           zIndex: 1,
         },
       },
-      {
-        value: item?.username,
-        td: item?.username,
-      },
-      {
-        value: item?.role?.name,
-        td: item?.role?.name,
-      },
+      // {
+      //   value: item?.username,
+      //   td: item?.username,
+      // },
+      // {
+      //   value: item?.role?.name,
+      //   td: item?.role?.name,
+      // },
     ],
   }));
 
   // Render lateral
   const render = {
-    loading: <Skeleton minH={"300px"} />,
+    loading: <Skeleton minH={"256px"} flex={1} />,
     error: <Retry retry={retry} />,
     loaded: (
       <>
-        <CustomTableContainer h={"100%"} border={"1px solid yellow"}>
+        <CustomTableContainer minH={"256px !important"}>
           <CustomTable
             formattedHeader={formattedHeader}
             formattedBody={formattedBody}

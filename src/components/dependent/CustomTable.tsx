@@ -323,8 +323,8 @@ export default function CustomTable({
 
   const [tableKey, setTableKey] = useState(1);
   useEffect(() => {
-    console.log("ori", originalDataState);
-    console.log(dataToMap);
+    // console.log("ori", originalDataState);
+    // console.log(dataToMap);
     if (
       !(
         sortConfig.sortColumnIndex !== null &&
@@ -351,7 +351,7 @@ export default function CustomTable({
           <Tr position={"sticky"} top={0} zIndex={3}>
             {onRowClick && (
               <Th
-                bg={"red"}
+                bg={lightDarkColor}
                 whiteSpace={"nowrap"}
                 borderBottom={"none !important"}
                 p={0}

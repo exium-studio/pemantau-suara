@@ -17,7 +17,7 @@ export default function LegendComponent() {
   // SX
   const bg = useColorModeValue("whiteAlpha.800", "blackAlpha.400");
 
-  const { isOpen, onToggle } = useDisclosure();
+  const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true });
 
   const containerRef = useRef<HTMLDivElement>(null);
 

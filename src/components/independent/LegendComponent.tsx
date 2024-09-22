@@ -33,13 +33,13 @@ const LegendComponent: React.FC = () => {
     <>
       <HStack p={4} position={"fixed"} bottom={0} right={0} zIndex={2}>
         <HStack
-          shadow={"sm"}
-          border={"1px solid var(--divider)"}
           p={1}
           gap={2}
           borderRadius={12}
           bg={lightDarkColor}
           position={"relative"}
+          shadow={"sm"}
+          border={"1px solid var(--divider)"}
         >
           {highlightedKecamatanIndex.length > 0 && (
             <Icon
@@ -59,7 +59,6 @@ const LegendComponent: React.FC = () => {
             }
             zIndex={2}
             onClick={onToggle}
-            shadow={"sm"}
             className="btn"
           />
         </HStack>

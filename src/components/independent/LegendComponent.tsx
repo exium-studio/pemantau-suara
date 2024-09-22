@@ -140,12 +140,6 @@ const LegendComponent: React.FC = () => {
               size={"sm"}
               justifyContent={"start"}
               className="btn-solid noofline1"
-              opacity={
-                highlightedKecamatanIndex.length > 0 &&
-                !highlightedKecamatanIndex?.includes(-1)
-                  ? 0.4
-                  : 1
-              }
               onClick={() => {
                 toggleHighlightedKecamatanIndex(-1);
               }}
@@ -159,6 +153,7 @@ const LegendComponent: React.FC = () => {
                   border={"1px solid #aaa"}
                   shadow={"sm"}
                 />
+
                 <Text>Dipilih/dilihat</Text>
 
                 {highlightedKecamatanIndex.length > 0 &&

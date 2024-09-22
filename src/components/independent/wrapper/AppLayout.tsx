@@ -1,7 +1,7 @@
 import { Box, HStack, Tooltip } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../../../ColorModeSwitcher";
 import { useLightDarkColor } from "../../../constant/colors";
-import MapboxMap from "../../dependent/MapboxMap";
+import DashboardMap from "../DashboardMap";
 import DetailGeoJSONData from "../DetailGeoJSONData";
 import LegendComponent from "../LegendComponent";
 import Navs from "../Navs";
@@ -26,7 +26,7 @@ export default function AppLayout({ children, activeIndex }: AppLayoutProps) {
       overflow={"clip"}
     >
       <CContainer justify={"center"} align={"center"}>
-        <MapboxMap latitude={-7.02} longitude={110.38} zoom={11} />
+        <DashboardMap />
       </CContainer>
 
       {/* Map Overlays */}

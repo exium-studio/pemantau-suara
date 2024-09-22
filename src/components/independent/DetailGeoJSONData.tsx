@@ -18,7 +18,7 @@ export default function DetailGeoJSONData() {
   const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
 
   useEffect(() => {
-    console.log(detailGeoJSONData);
+    // console.log(detailGeoJSONData);
     if (detailGeoJSONData) {
       onOpen();
     } else {

@@ -321,22 +321,6 @@ export default function CustomTable({
       ? sortedData()
       : originalDataState;
 
-  const [tableKey, setTableKey] = useState(1);
-  useEffect(() => {
-    // console.log("ori", originalDataState);
-    // console.log(dataToMap);
-    if (
-      !(
-        sortConfig.sortColumnIndex !== null &&
-        sortConfig.sortColumnIndex !== undefined
-      )
-    ) {
-      setTableKey((ps) => ps + 1);
-    }
-  }, [dataToMap, sortConfig.sortColumnIndex, originalDataState]);
-
-  // console.log(tableKey);
-
   return (
     <>
       {/* {onRowClick && <Box w={"4px"} h={"100%"} bg={"p.500"} />} */}
@@ -444,7 +428,7 @@ export default function CustomTable({
           </Tr>
         </Thead>
 
-        <Tbody key={tableKey}>
+        <Tbody>
           {dataToMap.map((row, rowIndex) => {
             return (
               <Tr

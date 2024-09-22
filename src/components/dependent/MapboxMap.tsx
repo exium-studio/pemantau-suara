@@ -74,6 +74,12 @@ const MapboxMap: FC<MapProps> = ({
     },
     [setDetailGeoJSONData]
   );
+  const onMouseMove = useCallback((event: any) => {
+    const hoveredFeature = event.features[0];
+    if (hoveredFeature) {
+      setHoveredFeature(hoveredFeature);
+    }
+  }, []);
   useEffect(() => {
     const map = mapRef.current?.getMap();
     if (!map) return;
@@ -81,28 +87,17 @@ const MapboxMap: FC<MapProps> = ({
     geojsonLayers.forEach((_, index) => {
       const layerId = `geojson-layer-${index}`;
 
-      const onMouseMove = (event: any) => {
-        const hoveredFeature = event.features[0];
-        if (hoveredFeature) {
-          setHoveredFeature(hoveredFeature);
-        }
-      };
-
-      const onMouseLeave = () => {
-        setHoveredFeature(null);
-      };
-
       map.on("click", layerId, handleLayerClick);
       map.on("mousemove", layerId, onMouseMove);
-      map.on("mouseleave", layerId, onMouseLeave);
+      map.on("mouseleave", layerId, () => setHoveredFeature(null));
 
       return () => {
         map.off("click", layerId, handleLayerClick);
         map.off("mousemove", layerId, onMouseMove);
-        map.off("mouseleave", layerId, onMouseLeave);
+        map.off("mouseleave", layerId, () => setHoveredFeature(null));
       };
     });
-  }, [geojsonData, handleLayerClick]);
+  }, [geojsonData, handleLayerClick, onMouseMove]);
 
   // Handle search selected to maps
   const { searchSelected } = useSearchAddress();

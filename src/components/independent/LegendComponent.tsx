@@ -13,15 +13,14 @@ import { Circle, MapPinSimpleArea } from "@phosphor-icons/react";
 import { useLightDarkColor } from "../../constant/colors";
 import geoJSONLayers from "../../constant/geoJSONLayers";
 import { iconSize } from "../../constant/sizes";
-import useBackOnClose from "../../hooks/useBackOnClose";
+import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import CContainer from "./wrapper/CContainer";
-import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
 
 const LegendComponent: React.FC = () => {
   const lightDarkColor = useLightDarkColor();
 
-  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  const { isOpen, onClose, onToggle } = useDisclosure();
   // useBackOnClose("legenda", isOpen, onOpen, onClose);
 
   const {

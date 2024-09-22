@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useLightDarkColor } from "../../constant/colors";
 import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
-import useBackOnClose from "../../hooks/useBackOnClose";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import TabelUserByKelurahan from "./TabelUserByKelurahan";
 import CContainer from "./wrapper/CContainer";

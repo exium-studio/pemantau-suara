@@ -3,6 +3,7 @@ import { RefObject, useCallback, useEffect, useState } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
 import geoJSONLayers from "../../../constant/geoJSONLayers";
 import useDetailGeoJSONData from "../../../global/useDetailGeoJSONData";
+import useHighlighedKecamatan from "../../../global/useHighlighedKecamatan";
 
 interface Props {
   mapRef: RefObject<MapRef>;
@@ -16,14 +17,23 @@ export default function HoveredAndClickedLayer({ mapRef, geoJSONData }: Props) {
   // Handle layer hover, onclick, set detail data
   const [hoveredFeature, setHoveredFeature] = useState<any>(null);
   const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
+  const { highlightedKecamatanIndex, setHighlightedKecamatanIndex } =
+    useHighlighedKecamatan();
   const handleLayerClick = useCallback(
     (event: any) => {
       const clickedFeature = event.features[0];
       if (clickedFeature) {
         setDetailGeoJSONData(clickedFeature);
+        if (!highlightedKecamatanIndex?.includes(-1)) {
+          setHighlightedKecamatanIndex([...highlightedKecamatanIndex, -1]);
+        }
       }
     },
-    [setDetailGeoJSONData]
+    [
+      setDetailGeoJSONData,
+      highlightedKecamatanIndex,
+      setHighlightedKecamatanIndex,
+    ]
   );
   const onMouseMove = useCallback((event: any) => {
     const hoveredFeature = event.features[0];

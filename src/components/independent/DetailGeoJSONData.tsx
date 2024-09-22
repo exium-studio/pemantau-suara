@@ -6,6 +6,7 @@ import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import TabelUserByKelurahan from "./TabelUserByKelurahan";
 import CContainer from "./wrapper/CContainer";
+import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
 
 const DetailData = () => {
   // SX
@@ -23,6 +24,8 @@ const DetailData = () => {
       onClose();
     }
   }, [detailGeoJSONData, setDetailGeoJSONData, onOpen, onClose]);
+
+  const { removeFromHighlightedKecamatanIndex } = useHighlighedKecamatan();
 
   return (
     <CContainer
@@ -58,6 +61,7 @@ const DetailData = () => {
             onClose();
             setTimeout(() => {
               setDetailGeoJSONData(undefined);
+              removeFromHighlightedKecamatanIndex(-1);
             }, 200);
           }}
           p={5}
@@ -107,10 +111,8 @@ const DetailData = () => {
 const DetailAktivitasUser = () => {
   // SX
   const lightDarkColor = useLightDarkColor();
-  // const sw = useScreenWidth();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // useBackOnClose(`detail-aktivitas-user`, isOpen, onOpen, onClose);
   const { detailGeoJSONData } = useDetailGeoJSONData();
   const { detailAktivitasUser, setDetailAktivitasUser } =
     useDetailAktivitasUser();

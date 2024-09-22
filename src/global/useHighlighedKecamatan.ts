@@ -7,19 +7,29 @@ interface State {
 interface Actions {
   setHighlightedKecamatanIndex: (newState: number[]) => void;
   toggleHighlightedKecamatanIndex: (index: number) => void;
+  removeFromHighlightedKecamatanIndex: (index: number) => void;
 }
 
-const useHighlighedKecamatan = create<State & Actions>((set, get) => ({
+const useHighlighedKecamatan = create<State & Actions>((set) => ({
   highlightedKecamatanIndex: [],
+
   setHighlightedKecamatanIndex: (newState: number[]) =>
     set({ highlightedKecamatanIndex: newState }),
-  toggleHighlightedKecamatanIndex: (index: number) => {
-    const prev = get().highlightedKecamatanIndex;
-    const newState = prev.includes(index)
-      ? prev.filter((i) => i !== index)
-      : [...prev, index];
 
-    set({ highlightedKecamatanIndex: newState });
+  toggleHighlightedKecamatanIndex: (index: number) => {
+    set((prev) => ({
+      highlightedKecamatanIndex: prev.highlightedKecamatanIndex.includes(index)
+        ? prev.highlightedKecamatanIndex.filter((i) => i !== index)
+        : [...prev.highlightedKecamatanIndex, index],
+    }));
+  },
+
+  removeFromHighlightedKecamatanIndex: (index: number) => {
+    set((prev) => ({
+      highlightedKecamatanIndex: prev.highlightedKecamatanIndex.filter(
+        (i) => i !== index
+      ),
+    }));
   },
 }));
 

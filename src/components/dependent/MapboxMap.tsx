@@ -23,8 +23,6 @@ interface MapProps {
   style?: CSSProperties;
 }
 
-const geojsonLayers = geoJSONLayers;
-
 const MapboxMap: FC<MapProps> = ({
   latitude,
   longitude,
@@ -54,13 +52,19 @@ const MapboxMap: FC<MapProps> = ({
   // Fetch all geoJSON data
   const [geojsonData, setGeojsonData] = useState<any[]>([]);
   useEffect(() => {
-    Promise.all(
-      geojsonLayers.map((layer) =>
-        fetch(layer.geojson).then((res) => res.json())
-      )
-    )
-      .then((data) => setGeojsonData(data))
-      .catch((err) => console.error("Error loading GeoJSON files:", err));
+    const fetchGeoJSONData = async () => {
+      try {
+        const data = await Promise.all(
+          geoJSONLayers.map((layer) =>
+            fetch(layer.geojson).then((res) => res.json())
+          )
+        );
+        setGeojsonData(data);
+      } catch (err) {
+        console.error("Error loading GeoJSON files:", err);
+      }
+    };
+    fetchGeoJSONData();
   }, []);
 
   // Handle layer hover, onclick, set detail data
@@ -77,15 +81,13 @@ const MapboxMap: FC<MapProps> = ({
   );
   const onMouseMove = useCallback((event: any) => {
     const hoveredFeature = event.features[0];
-    if (hoveredFeature) {
-      setHoveredFeature(hoveredFeature);
-    }
+    setHoveredFeature(hoveredFeature || null);
   }, []);
   useEffect(() => {
     const map = mapRef.current?.getMap();
     if (!map) return;
 
-    geojsonLayers.forEach((_, index) => {
+    geoJSONLayers.forEach((_, index) => {
       const layerId = `geojson-layer-${index}`;
 
       map.on("click", layerId, handleLayerClick);
@@ -100,7 +102,7 @@ const MapboxMap: FC<MapProps> = ({
     });
   }, [geojsonData, handleLayerClick, onMouseMove]);
 
-  // Handle smarker earch selected
+  // Handle search selected marker
   const { searchSelected } = useSearchAddress();
   useEffect(() => {
     if (searchSelected && mapRef.current) {
@@ -149,27 +151,26 @@ const MapboxMap: FC<MapProps> = ({
                   w={"20px"}
                   h={"20px"}
                   border={"2px solid white"}
-                  borderRadius={"full"}
-                ></Box>
+                />
               </Marker>
             )}
 
             {/* Layer all geoJSON data */}
             {geojsonData.map((layer, i) => {
-              const ok = layer?.name !== "Kota Semarang";
               const isHighlighted = highlightedKecamatanIndex.includes(i);
+              const shouldRenderLayer = layer?.name !== "Kota Semarang";
 
               return (
-                ok && (
+                shouldRenderLayer && (
                   <Source key={i} type="geojson" data={layer}>
                     <Layer
                       id={`geojson-layer-${i}`}
                       type="fill"
                       paint={{
-                        "fill-color": geojsonLayers[i].color,
+                        "fill-color": geoJSONLayers[i].color,
                         "fill-opacity":
                           isHighlighted ||
-                          highlightedKecamatanIndex?.length === 0
+                          highlightedKecamatanIndex.length === 0
                             ? 0.6
                             : 0.1,
                         "fill-outline-color":
@@ -181,7 +182,7 @@ const MapboxMap: FC<MapProps> = ({
               );
             })}
 
-            {/* Layer hovered feaure */}
+            {/* Layer hovered feature */}
             {hoveredFeature && (
               <Source
                 type="geojson"
@@ -200,7 +201,7 @@ const MapboxMap: FC<MapProps> = ({
               </Source>
             )}
 
-            {/* Layer clicked feaure */}
+            {/* Layer clicked feature */}
             {detailGeoJSONData && (
               <Source
                 type="geojson"

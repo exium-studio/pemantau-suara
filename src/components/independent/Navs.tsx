@@ -21,7 +21,7 @@ export default function Navs() {
         <Tooltip key={i} label={nav.label} placement="bottom" mt={1}>
           <IconButton
             aria-label={nav.label}
-            icon={<Icon as={nav.icon} weight={"bold"} fontSize={iconSize} />}
+            icon={<Icon as={nav.icon} fontSize={iconSize} />}
             className="btn"
           />
         </Tooltip>

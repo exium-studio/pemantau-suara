@@ -158,9 +158,9 @@ const MapboxMap: FC<MapProps> = ({
                           isHighlighted ||
                           highlightedKecamatanIndex?.length === 0
                             ? 0.6
-                            : 0.15,
+                            : 0.1,
                         "fill-outline-color":
-                          colorMode === "dark" ? "#ccc" : "#555",
+                          colorMode === "dark" ? "#333" : "#555",
                       }}
                     />
                   </Source>

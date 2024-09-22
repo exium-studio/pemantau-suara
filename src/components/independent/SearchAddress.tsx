@@ -144,9 +144,7 @@ export default function SearchAddress() {
           >
             <IconButton
               aria-label="pencarian"
-              icon={
-                <Icon as={MagnifyingGlass} weight="bold" fontSize={iconSize} />
-              }
+              icon={<Icon as={MagnifyingGlass} fontSize={iconSize} />}
               className="btn"
               borderRadius={6}
               onClick={toggleSearchMode}

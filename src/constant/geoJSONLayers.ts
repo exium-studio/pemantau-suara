@@ -51,7 +51,7 @@ const geoJSONLayers = [
   },
   {
     geojson: "/asset/geojson/id3374100_gayamsari.geojson",
-    color: "#005B96", // Biru tua
+    color: "#1515FF", // Biru tua
     name: "Gayamsari",
   },
   {

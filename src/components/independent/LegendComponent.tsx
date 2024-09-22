@@ -54,9 +54,7 @@ const LegendComponent: React.FC = () => {
           )}
           <IconButton
             aria-label="legend button"
-            icon={
-              <Icon as={MapPinSimpleArea} fontSize={iconSize} weight="bold" />
-            }
+            icon={<Icon as={MapPinSimpleArea} fontSize={iconSize} />}
             zIndex={2}
             onClick={onToggle}
             className="btn"

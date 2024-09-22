@@ -22,7 +22,7 @@ const LegendComponent: React.FC = () => {
   const lightDarkColor = useLightDarkColor();
 
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
-  useBackOnClose("legenda", isOpen, onOpen, onClose);
+  // useBackOnClose("legenda", isOpen, onOpen, onClose);
 
   const {
     highlightedKecamatanIndex,

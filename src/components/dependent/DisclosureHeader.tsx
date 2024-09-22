@@ -18,7 +18,7 @@ export default function DisclosureHeader({
   ...props
 }: Props) {
   return (
-    <Box p={5} pt={"16px !important"} {...props}>
+    <Box p={5} pb={4} pt={"16px !important"} {...props}>
       <HStack justify={"space-between"}>
         <Text fontSize={[18, 20]} fontWeight={600} {...textProps}>
           {title}

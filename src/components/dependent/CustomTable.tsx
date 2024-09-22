@@ -350,9 +350,17 @@ export default function CustomTable({
         <Thead>
           <Tr position={"sticky"} top={0} zIndex={3}>
             {onRowClick && (
-              <Td minW={"2px"} maxW={"2px"} p={0} position={"sticky"} left={0}>
+              <Th
+                bg={"red"}
+                whiteSpace={"nowrap"}
+                borderBottom={"none !important"}
+                p={0}
+                zIndex={15}
+                position={"sticky"}
+                left={0}
+              >
                 <Box w={"2px"} h={"42px"} bg={lightDarkColor} />
-              </Td>
+              </Th>
             )}
 
             {batchActions && (
@@ -461,7 +469,7 @@ export default function CustomTable({
                     p={0}
                     position={"sticky"}
                     left={0}
-                    zIndex={99}
+                    zIndex={1}
                   >
                     <Box
                       w={"2px"}

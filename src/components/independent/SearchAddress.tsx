@@ -1,4 +1,11 @@
-import { HStack, Icon, IconButton, Image, Text } from "@chakra-ui/react";
+import {
+  HStack,
+  Icon,
+  IconButton,
+  Image,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
 import { Clock, MagnifyingGlass, MapPin, X } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import { useLightDarkColor } from "../../constant/colors";
@@ -130,16 +137,21 @@ export default function SearchAddress() {
             w={searchMode ? "0" : "2px"}
             visibility={searchMode ? "hidden" : "visible"}
           />
-
-          <IconButton
-            aria-label="pencarian"
-            icon={
-              <Icon as={MagnifyingGlass} weight="bold" fontSize={iconSize} />
-            }
-            className="btn"
-            borderRadius={6}
-            onClick={toggleSearchMode}
-          />
+          <Tooltip
+            label={"Toggle Search Mode"}
+            placement="right"
+            openDelay={500}
+          >
+            <IconButton
+              aria-label="pencarian"
+              icon={
+                <Icon as={MagnifyingGlass} weight="bold" fontSize={iconSize} />
+              }
+              className="btn"
+              borderRadius={6}
+              onClick={toggleSearchMode}
+            />
+          </Tooltip>
 
           <StringInput
             w={"100%"}

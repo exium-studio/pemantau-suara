@@ -29,6 +29,182 @@ export default function TabelUserByKelurahan() {
         name: "Pelaksana",
       },
     },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
   ];
 
   const loading = false;
@@ -59,14 +235,14 @@ export default function TabelUserByKelurahan() {
         w: "243px",
       },
     },
-    // {
-    //   th: "Username",
-    //   isSortable: true,
-    // },
-    // {
-    //   th: "Role",
-    //   isSortable: true,
-    // },
+    {
+      th: "Username",
+      isSortable: true,
+    },
+    {
+      th: "Role",
+      isSortable: true,
+    },
     // {
     //   th: "Area Kelurahan",
     //   isSortable: true,
@@ -105,14 +281,14 @@ export default function TabelUserByKelurahan() {
           zIndex: 1,
         },
       },
-      // {
-      //   value: item?.username,
-      //   td: item?.username,
-      // },
-      // {
-      //   value: item?.role?.name,
-      //   td: item?.role?.name,
-      // },
+      {
+        value: item?.username,
+        td: item?.username,
+      },
+      {
+        value: item?.role?.name,
+        td: item?.role?.name,
+      },
     ],
   }));
 
@@ -122,7 +298,7 @@ export default function TabelUserByKelurahan() {
     error: <Retry retry={retry} />,
     loaded: (
       <>
-        <CustomTableContainer>
+        <CustomTableContainer h={"100%"} border={"1px solid yellow"}>
           <CustomTable
             formattedHeader={formattedHeader}
             formattedBody={formattedBody}

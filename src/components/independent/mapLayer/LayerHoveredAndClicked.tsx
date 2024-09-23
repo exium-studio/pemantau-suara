@@ -20,11 +20,13 @@ export default function LayerHoveredAndClicked({ mapRef, geoJSONData }: Props) {
   const { highlightedKecamatanIndex, setHighlightedKecamatanIndex } =
     useHighlighedKecamatan();
   const handleLayerClick = useCallback(
-    (event: any) => {
+    (layer: any) => (event: any) => {
       const clickedFeature = event.features[0];
       if (clickedFeature) {
-        setDetailGeoJSONData(clickedFeature);
+        setDetailGeoJSONData({ layer: layer, geoJSONData: clickedFeature });
+
         if (!highlightedKecamatanIndex?.includes(-1)) {
+          console.log([...highlightedKecamatanIndex, -1]);
           setHighlightedKecamatanIndex([...highlightedKecamatanIndex, -1]);
         }
       }
@@ -36,22 +38,22 @@ export default function LayerHoveredAndClicked({ mapRef, geoJSONData }: Props) {
     ]
   );
   const onMouseMove = useCallback((event: any) => {
-    const hoveredFeature = event.features[0];
-    setHoveredFeature(hoveredFeature || null);
+    const currentHoveredFeature = event.features[0];
+    setHoveredFeature(currentHoveredFeature || null);
   }, []);
   useEffect(() => {
     const map = mapRef.current?.getMap();
     if (!map) return;
 
-    geoJSONLayers.forEach((_, index) => {
+    geoJSONLayers.forEach((layer, index) => {
       const layerId = `geojson-layer-${index}`;
 
-      map.on("click", layerId, handleLayerClick);
+      map.on("click", layerId, handleLayerClick(layer));
       map.on("mousemove", layerId, onMouseMove);
       map.on("mouseleave", layerId, () => setHoveredFeature(null));
 
       return () => {
-        map.off("click", layerId, handleLayerClick);
+        map.off("click", layerId, handleLayerClick(layer));
         map.off("mousemove", layerId, onMouseMove);
         map.off("mouseleave", layerId, () => setHoveredFeature(null));
       };
@@ -84,14 +86,14 @@ export default function LayerHoveredAndClicked({ mapRef, geoJSONData }: Props) {
           type="geojson"
           data={{
             type: "FeatureCollection",
-            features: [detailGeoJSONData],
+            features: [detailGeoJSONData?.geoJSONData],
           }}
         >
           <Layer
             id="clicked-feature-layer"
             type="fill"
             paint={{
-              "fill-color": "#FFFFFF",
+              "fill-color": detailGeoJSONData?.layer?.color,
               "fill-opacity": 1,
               "fill-outline-color": "#000000",
             }}

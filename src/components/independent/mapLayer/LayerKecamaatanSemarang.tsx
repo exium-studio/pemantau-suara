@@ -13,6 +13,7 @@ export default function LayerKecamaatanSemarang({ geoJSONData }: Props) {
 
   // Handle highlighted geoJSON kecamatan index
   const { highlightedKecamatanIndex } = useHighlighedKecamatan();
+  console.log("highlight", highlightedKecamatanIndex);
 
   return (
     <>

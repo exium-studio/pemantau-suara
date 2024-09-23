@@ -1,4 +1,4 @@
-import { SimpleGrid, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, HStack, SimpleGrid, Text, useDisclosure } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useLightDarkColor } from "../../constant/colors";
 import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
@@ -54,7 +54,7 @@ const DetailData = () => {
         // border={"1px solid green"}
       >
         <DisclosureHeader
-          title={`Kelurahan ${detailGeoJSONData?.properties?.village}`}
+          title={`Kelurahan ${detailGeoJSONData?.geoJSONData?.properties?.village}`}
           textProps={{ fontSize: [16, null, 18] }}
           disableBackOnClose
           onClose={() => {
@@ -82,7 +82,17 @@ const DetailData = () => {
           <SimpleGrid columns={[2]} gap={3} mb={4}>
             <CContainer>
               <Text opacity={0.4}>Kecamatan</Text>
-              <Text>{detailGeoJSONData?.properties?.district}</Text>
+              <HStack>
+                <Box
+                  w={"8px"}
+                  h={"8px"}
+                  borderRadius={8}
+                  bg={detailGeoJSONData?.layer.color}
+                />
+                <Text>
+                  {detailGeoJSONData?.geoJSONData?.properties?.district}
+                </Text>
+              </HStack>
             </CContainer>
 
             <CContainer>

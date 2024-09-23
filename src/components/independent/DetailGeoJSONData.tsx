@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { useLightDarkColor } from "../../constant/colors";
 import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
+import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import TabelUserByKelurahan from "./TabelUserByKelurahan";
 import CContainer from "./wrapper/CContainer";
-import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
 
 const DetailData = () => {
   // SX
@@ -54,7 +54,7 @@ const DetailData = () => {
         // border={"1px solid green"}
       >
         <DisclosureHeader
-          title="Detail Data"
+          title={`Kelurahan ${detailGeoJSONData?.properties?.village}`}
           textProps={{ fontSize: [16, null, 18] }}
           disableBackOnClose
           onClose={() => {
@@ -79,25 +79,15 @@ const DetailData = () => {
           className={"scrollY"}
           // border={"1px solid red"}
         >
-          <SimpleGrid flex={1} columns={[2, null, 2]} gap={3} mb={4}>
-            <CContainer>
-              <Text opacity={0.4}>Provinsi</Text>
-              <Text>{detailGeoJSONData?.properties?.province}</Text>
-            </CContainer>
-
-            <CContainer>
-              <Text opacity={0.4}>Kota/Kabupaten</Text>
-              <Text>{detailGeoJSONData?.properties?.regency}</Text>
-            </CContainer>
-
+          <SimpleGrid columns={[2]} gap={3} mb={4}>
             <CContainer>
               <Text opacity={0.4}>Kecamatan</Text>
               <Text>{detailGeoJSONData?.properties?.district}</Text>
             </CContainer>
 
             <CContainer>
-              <Text opacity={0.4}>Kelurahan</Text>
-              <Text>{detailGeoJSONData?.properties?.village}</Text>
+              <Text opacity={0.4}>Total RW</Text>
+              <Text>{8}</Text>
             </CContainer>
           </SimpleGrid>
 

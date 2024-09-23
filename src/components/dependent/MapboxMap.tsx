@@ -1,9 +1,9 @@
 import { Box, useColorMode } from "@chakra-ui/react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { Map, MapRef, Marker } from "react-map-gl";
-import KecamaatanSemarangLayer from "../independent/mapLayer/KecamaatanSemarangLayer";
-import HoveredAndClickedLayer from "../independent/mapLayer/HoveredAndClickedLayer";
 import useSearchAddress from "../../global/useSearchAddress";
+import LayerHoveredAndClicked from "../independent/mapLayer/LayerHoveredAndClicked";
+import LayerKecamaatanSemarang from "../independent/mapLayer/LayerKecamaatanSemarang";
 
 interface Props {
   geoJSONData: any;
@@ -93,10 +93,10 @@ export default function MapboxMap({
           )}
 
           {/* Layer all geoJSON data */}
-          <KecamaatanSemarangLayer geoJSONData={geoJSONData} />
+          <LayerKecamaatanSemarang geoJSONData={geoJSONData} />
 
           {/* Hovered & clicked layers */}
-          <HoveredAndClickedLayer mapRef={mapRef} geoJSONData={geoJSONData} />
+          <LayerHoveredAndClicked mapRef={mapRef} geoJSONData={geoJSONData} />
         </>
       )}
     </Map>

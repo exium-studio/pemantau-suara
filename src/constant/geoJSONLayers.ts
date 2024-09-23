@@ -1,9 +1,9 @@
 const geoJSONLayers = [
-  {
-    geojson: "/asset/geojson/id3374_kota_semarang.geojson",
-    color: "#1F77B4", // Biru
-    name: "Kota Semarang",
-  },
+  // {
+  //   geojson: "/asset/geojson/id3374_kota_semarang.geojson",
+  //   color: "#1F77B4", // Biru
+  //   name: "Kota Semarang",
+  // },
   {
     geojson: "/asset/geojson/id3374010_mijen.geojson",
     color: "#2CA02C", // Hijau terang

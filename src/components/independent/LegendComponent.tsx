@@ -101,34 +101,31 @@ const LegendComponent: React.FC = () => {
           <CContainer px={5} overflowY={"auto"} className={"scrollY"}>
             <SimpleGrid columns={[2]} gap={2} spacingX={4} w={"100%"}>
               {geoJSONLayers.map((layer, i) => {
-                const ok = layer?.name !== "Kota Semarang";
                 const isHighlighted = highlightedKecamatanIndex.includes(i);
 
                 return (
-                  ok && (
-                    <Button
-                      key={i}
-                      size={"sm"}
-                      justifyContent={"start"}
-                      className="btn noofline1 legend-btn"
-                      onClick={() => toggleHighlightedKecamatanIndex(i)}
-                      opacity={
-                        highlightedKecamatanIndex.length > 0 && !isHighlighted
-                          ? 0.4
-                          : 1
-                      }
-                    >
-                      <HStack w={"100%"}>
-                        <Box
-                          w={"8px"}
-                          h={"8px"}
-                          borderRadius={8}
-                          bg={layer.color}
-                        />
-                        <Text className="noofline1">{layer.name}</Text>
-                      </HStack>
-                    </Button>
-                  )
+                  <Button
+                    key={i}
+                    size={"sm"}
+                    justifyContent={"start"}
+                    className="btn noofline1 legend-btn"
+                    onClick={() => toggleHighlightedKecamatanIndex(i)}
+                    opacity={
+                      highlightedKecamatanIndex.length > 0 && !isHighlighted
+                        ? 0.4
+                        : 1
+                    }
+                  >
+                    <HStack w={"100%"}>
+                      <Box
+                        w={"8px"}
+                        h={"8px"}
+                        borderRadius={8}
+                        bg={layer.color}
+                      />
+                      <Text className="noofline1">{layer.name}</Text>
+                    </HStack>
+                  </Button>
                 );
               })}
             </SimpleGrid>

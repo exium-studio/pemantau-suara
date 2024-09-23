@@ -10,7 +10,7 @@ interface Props {
   geoJSONData: any;
 }
 
-export default function HoveredAndClickedLayer({ mapRef, geoJSONData }: Props) {
+export default function LayerHoveredAndClicked({ mapRef, geoJSONData }: Props) {
   // SX
   const { colorMode } = useColorMode();
 

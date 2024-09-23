@@ -301,7 +301,7 @@ export default function TabelUserByKelurahan() {
     error: <Retry retry={retry} />,
     loaded: (
       <>
-        <CustomTableContainer minH={"256px !important"}>
+        <CustomTableContainer minH={"200px !important"}>
           <CustomTable
             formattedHeader={formattedHeader}
             formattedBody={formattedBody}

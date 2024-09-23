@@ -65,7 +65,7 @@ const LegendComponent: React.FC = () => {
       <CContainer
         px={4}
         maxW={"450px"}
-        maxH={"calc((100vh - 72px - 48px - 16px)/2)"}
+        maxH={"calc(((100vh - 72px - 56px - 16px)/2) - 12px)"}
         position={"fixed"}
         bottom={"72px"}
         right={isOpen ? 0 : "-450px"}

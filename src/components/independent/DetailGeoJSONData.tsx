@@ -31,9 +31,9 @@ const DetailData = () => {
     <CContainer
       px={4}
       maxW={"450px"}
-      maxH={"calc((100vh - 72px - 56px - 16px)/2)"}
+      maxH={"calc((100vh - 74px - 56px - 16px)/2)"}
       position={"fixed"}
-      top={"72px"}
+      top={"74px"}
       left={isOpen ? 0 : "-450px"}
       transition={"200ms"}
       animation={"ease in"}
@@ -129,12 +129,12 @@ const DetailAktivitasUser = () => {
     <CContainer
       px={4}
       maxW={"450px"}
-      maxH={"calc(((100vh - 72px - 56px - 16px)/2) - 8px)"}
+      maxH={"calc(((100vh - 72px - 56px - 16px)/2) - 12px)"}
       position={"fixed"}
       top={
         detailGeoJSONData
-          ? "calc(((100vh - 72px - 56px - 16px)/2) + 72px + 8px)"
-          : "72px"
+          ? "calc(((100vh - 72px - 56px - 16px)/2) + 72px + 12px)"
+          : "74px"
       }
       left={isOpen ? 0 : "-450px"}
       transition={"200ms"}

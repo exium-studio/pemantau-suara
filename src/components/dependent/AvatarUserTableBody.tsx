@@ -15,9 +15,10 @@ export default function AvatarUserTableBody({ data, ...props }: Props) {
   return (
     <HStack w={"243px"} gap={3} {...props}>
       <Avatar
+        // cursor={"pointer"}
         src={data.foto_profil || ""}
         name={data.nama}
-        size={data.avatarSize || "md"}
+        size={data.avatarSize || "sm"}
       />
 
       <CContainer gap={2} overflow={"hidden"}>

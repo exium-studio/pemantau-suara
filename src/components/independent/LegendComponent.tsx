@@ -17,6 +17,7 @@ import { iconSize } from "../../constant/sizes";
 import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import CContainer from "./wrapper/CContainer";
+import FloatingContainer from "./wrapper/FloatingContainer";
 
 const LegendComponent: React.FC = () => {
   const lightDarkColor = useLightDarkColor();
@@ -65,123 +66,104 @@ const LegendComponent: React.FC = () => {
         </Box>
       </Box>
 
-      <CContainer
-        px={4}
+      <FloatingContainer
         maxW={"450px"}
-        maxH={"calc(((100vh - 74px - 56px - 16px)/2) - 12px)"}
-        position={"fixed"}
         bottom={"74px"}
-        right={isOpen ? 0 : "-450px"}
-        transition={"200ms"}
-        animation={"ease in"}
-        zIndex={2}
-        overflowY={"auto"}
-        gap={2}
-        pointerEvents={"none"}
+        right={isOpen ? "16px" : "-480px"}
       >
-        <CContainer
-          shadow={"sm"}
-          border={"1px solid var(--divider)"}
+        <DisclosureHeader
+          title="Legenda"
+          disableBackOnClose
+          onClose={onClose}
+          textProps={{ fontSize: [16, null, 18] }}
+          p={5}
+          pt={"16px !important"}
+          position={"sticky"}
+          top={0}
           bg={lightDarkColor}
-          borderRadius={12}
-          overflowY={"auto"}
-          pointerEvents={"auto"}
-          transition={"200ms ease-out"}
-        >
-          <DisclosureHeader
-            title="Legenda"
-            disableBackOnClose
-            onClose={onClose}
-            textProps={{ fontSize: [16, null, 18] }}
-            p={5}
-            pt={"16px !important"}
-            position={"sticky"}
-            top={0}
-            bg={lightDarkColor}
-            zIndex={20}
-          />
+          zIndex={20}
+        />
 
-          <CContainer px={5} overflowY={"auto"} className={"scrollY"}>
-            <SimpleGrid columns={[2]} gap={2} spacingX={4} w={"100%"}>
-              {geoJSONLayers.map((layer, i) => {
-                const isHighlighted = highlightedKecamatanIndex.includes(i);
+        <CContainer flex={1} px={5} overflowY={"auto"} className={"scrollY"}>
+          <SimpleGrid columns={[2]} gap={2} spacingX={4} w={"100%"}>
+            {geoJSONLayers.map((layer, i) => {
+              const isHighlighted = highlightedKecamatanIndex.includes(i);
 
-                return (
-                  <Button
-                    key={i}
-                    size={"sm"}
-                    justifyContent={"start"}
-                    className="btn noofline1 legend-btn"
-                    onClick={() => toggleHighlightedKecamatanIndex(i)}
-                    opacity={
-                      highlightedKecamatanIndex.length > 0 && !isHighlighted
-                        ? 0.4
-                        : 1
-                    }
-                  >
-                    <HStack w={"100%"}>
-                      <Box
-                        w={"8px"}
-                        h={"8px"}
-                        borderRadius={8}
-                        bg={layer.color}
-                      />
-                      <Text className="noofline1">{layer.name}</Text>
-                    </HStack>
-                  </Button>
-                );
-              })}
-            </SimpleGrid>
-          </CContainer>
-
-          <ButtonGroup py={4} px={5}>
-            <Button
-              w={"100%"}
-              size={"sm"}
-              justifyContent={"start"}
-              className="btn-solid noofline1"
-              onClick={() => {
-                toggleHighlightedKecamatanIndex(-1);
-              }}
-            >
-              <HStack w={"100%"}>
-                <Box
-                  w={"8px"}
-                  h={"8px"}
-                  borderRadius={8}
-                  bg={"white"}
-                  border={"1px solid #aaa"}
-                  shadow={"sm"}
-                />
-
-                <Text>Dipilih/dilihat</Text>
-
-                {highlightedKecamatanIndex.length > 0 &&
-                  highlightedKecamatanIndex?.includes(-1) && (
-                    <Icon
-                      ml={"auto"}
-                      as={Circle}
-                      weight="fill"
-                      color={"red.400"}
-                      fontSize={8}
+              return (
+                <Button
+                  key={i}
+                  size={"sm"}
+                  justifyContent={"start"}
+                  className="btn noofline1 legend-btn"
+                  onClick={() => toggleHighlightedKecamatanIndex(i)}
+                  opacity={
+                    highlightedKecamatanIndex.length > 0 && !isHighlighted
+                      ? 0.4
+                      : 1
+                  }
+                >
+                  <HStack w={"100%"}>
+                    <Box
+                      w={"8px"}
+                      h={"8px"}
+                      borderRadius={8}
+                      bg={layer.color}
                     />
-                  )}
-              </HStack>
-            </Button>
-
-            <Button
-              w={"100%"}
-              size={"sm"}
-              className="btn-solid clicky"
-              onClick={() => {
-                setHighlightedKecamatanIndex([]);
-              }}
-            >
-              Reset
-            </Button>
-          </ButtonGroup>
+                    <Text className="noofline1">{layer.name}</Text>
+                  </HStack>
+                </Button>
+              );
+            })}
+          </SimpleGrid>
         </CContainer>
-      </CContainer>
+
+        <ButtonGroup py={4} px={5}>
+          <Button
+            w={"100%"}
+            size={"sm"}
+            justifyContent={"start"}
+            className="btn-solid noofline1"
+            onClick={() => {
+              toggleHighlightedKecamatanIndex(-1);
+            }}
+          >
+            <HStack w={"100%"}>
+              <Box
+                w={"8px"}
+                h={"8px"}
+                borderRadius={8}
+                bg={"white"}
+                border={"1px solid #aaa"}
+                shadow={"sm"}
+              />
+
+              <Text>Dipilih/dilihat</Text>
+
+              {highlightedKecamatanIndex.length > 0 &&
+                highlightedKecamatanIndex?.includes(-1) && (
+                  <Icon
+                    ml={"auto"}
+                    as={Circle}
+                    weight="fill"
+                    color={"red.400"}
+                    fontSize={8}
+                  />
+                )}
+            </HStack>
+          </Button>
+
+          <Button
+            w={"100%"}
+            size={"sm"}
+            className="btn-solid clicky"
+            onClick={() => {
+              setHighlightedKecamatanIndex([]);
+            }}
+          >
+            Reset
+          </Button>
+        </ButtonGroup>
+      </FloatingContainer>
     </>
   );
 };

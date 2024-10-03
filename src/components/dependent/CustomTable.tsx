@@ -56,8 +56,8 @@ const BatchActions = ({
     <Menu>
       <MenuButton
         as={IconButton}
-        h={"52px"}
-        w={"52px"}
+        h={"48px"}
+        w={"48px"}
         borderRadius={0}
         className="btn"
         aria-label="batch actions options"
@@ -112,7 +112,7 @@ const RowOptions = ({ rowData, rowOptions, tableRef }: RowOptionsProps) => {
       <MenuButton
         as={IconButton}
         h={"48px"}
-        w={"52px"}
+        w={"48px"}
         borderRadius={0}
         className="btn"
         aria-label="row options"
@@ -322,6 +322,8 @@ export default function CustomTable({
       ? sortedData()
       : originalDataState;
 
+  // console.log(dataToMap);
+
   return (
     <>
       {/* {onRowClick && <Box w={"4px"} h={"100%"} bg={"p.500"} />} */}
@@ -344,23 +346,23 @@ export default function CustomTable({
                 position={"sticky"}
                 left={0}
               >
-                <Box w={"2px"} h={"42px"} bg={lightDarkColor} />
+                <Box w={"2px"} h={"48px"} bg={lightDarkColor} />
               </Th>
             )}
 
             {batchActions && (
               <Td
-                h={"42px"}
-                w={"42px !important"}
+                h={"48px"}
+                w={"48px !important"}
                 minW={"0% !important"}
-                maxW={"42px !important"}
+                maxW={"48px !important"}
                 p={0}
                 position={"sticky"}
                 left={0}
               >
                 <Center
-                  h={"42px"}
-                  w={"42px"}
+                  h={"48px"}
+                  w={"48px"}
                   borderRight={"1px solid var(--divider3)"}
                   borderBottom={"1px solid var(--divider3)"}
                   bg={lightDarkColor}
@@ -395,7 +397,7 @@ export default function CustomTable({
                   px={4}
                   py={3}
                   gap={4}
-                  h={"42px"}
+                  h={"48px"}
                   pl={i === 0 ? 4 : ""}
                   pr={i === formattedHeader.length - 1 ? 4 : ""}
                   {...header?.cProps}
@@ -409,17 +411,17 @@ export default function CustomTable({
 
             {rowOptions && (
               <Td
-                h={"52px"}
-                w={"52px !important"}
+                h={"48px"}
+                w={"48px !important"}
                 minW={"0% !important"}
-                maxW={"52px !important"}
+                maxW={"48px !important"}
                 p={0}
                 position={"sticky"}
                 right={0}
               >
                 <Center
-                  h={"52px"}
-                  w={"52px"}
+                  h={"48px"}
+                  w={"48px"}
                   borderLeft={"1px solid var(--divider3)"}
                   borderBottom={"1px solid var(--divider3)"}
                   bg={lightDarkColor}
@@ -430,7 +432,7 @@ export default function CustomTable({
         </Thead>
 
         <Tbody>
-          {dataToMap.map((row, rowIndex) => {
+          {dataToMap?.map((row, rowIndex) => {
             return (
               <Tr
                 key={rowIndex}
@@ -468,9 +470,9 @@ export default function CustomTable({
                 {batchActions && (
                   <Td
                     h={"48px"}
-                    w={"52px !important"}
+                    w={"48px !important"}
                     minW={"0% !important"}
-                    maxW={"52px !important"}
+                    maxW={"48px !important"}
                     p={0}
                     position={"sticky"}
                     left={0}
@@ -479,7 +481,7 @@ export default function CustomTable({
                     className="btn"
                   >
                     <Center
-                      w={"52px"}
+                      w={"48px"}
                       h={"48px"}
                       borderRight={"1px solid var(--divider3)"}
                       _groupHover={{
@@ -540,10 +542,10 @@ export default function CustomTable({
 
                 {rowOptions && (
                   <Td
-                    h={"52px"}
-                    w={"52px !important"}
+                    h={"48px"}
+                    w={"48px !important"}
                     minW={"0% !important"}
-                    maxW={"52px !important"}
+                    maxW={"48px !important"}
                     p={0}
                     position={"sticky"}
                     right={0}
@@ -552,7 +554,7 @@ export default function CustomTable({
                   >
                     <Center
                       h={"48px"}
-                      w={"52px"}
+                      w={"48px"}
                       borderLeft={"1px solid var(--divider3)"}
                       _groupHover={{
                         bg: "var(--divider)",

@@ -1,7 +1,6 @@
-import { HStack, Icon, IconButton, Tooltip } from "@chakra-ui/react";
+import { HStack } from "@chakra-ui/react";
 import { useLightDarkColor } from "../../constant/colors";
-import navs from "../../constant/navs";
-import { iconSize } from "../../constant/sizes";
+import ManageUsers from "./ManageUsers";
 
 export default function Navs() {
   // SX
@@ -17,15 +16,7 @@ export default function Navs() {
       shadow={"sm"}
       transition={"200ms"}
     >
-      {navs.map((nav, i) => (
-        <Tooltip key={i} label={nav.label} placement="bottom" mt={1}>
-          <IconButton
-            aria-label={nav.label}
-            icon={<Icon as={nav.icon} fontSize={iconSize} />}
-            className="btn"
-          />
-        </Tooltip>
-      ))}
+      <ManageUsers />
     </HStack>
   );
 }

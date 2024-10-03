@@ -2,7 +2,7 @@ import { Box, HStack, Tooltip } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import DashboardMap from "../components/independent/DashboardMap";
 import DetailGeoJSONData from "../components/independent/DetailGeoJSONData";
-import LegendComponent from "../components/independent/LegendComponent";
+import Legend from "../components/independent/Legend";
 import Navs from "../components/independent/Navs";
 import Profile from "../components/independent/Profile";
 import SearchAddress from "../components/independent/SearchAddress";
@@ -71,7 +71,7 @@ export default function Dashboard() {
       <DetailGeoJSONData />
 
       {/* Legend Component */}
-      <LegendComponent />
+      <Legend />
     </CContainer>
   );
 }

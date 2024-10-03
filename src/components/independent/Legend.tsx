@@ -20,6 +20,7 @@ import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
 
 const LegendComponent: React.FC = () => {
+  // SX
   const lightDarkColor = useLightDarkColor();
 
   const { isOpen, onClose, onToggle } = useDisclosure();

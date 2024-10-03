@@ -110,14 +110,13 @@ const useDataState = <T>({
     //TODO http request dan append ke data
   }
 
-  const dataState = {
+  const tableState = {
     loading: loading,
     error: error,
     notFound: notFound,
     retry: retry,
     data: data,
     paginationData: paginationData,
-    loadingLoadMore: loadingLoadMore,
   };
 
   return {
@@ -134,7 +133,7 @@ const useDataState = <T>({
     loadingLoadMore,
     setLoadingLoadMore,
     paginationData,
-    dataState,
+    tableState,
   };
 };
 

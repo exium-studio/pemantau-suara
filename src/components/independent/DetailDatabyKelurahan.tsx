@@ -12,10 +12,8 @@ import { useLightDarkColor } from "../../constant/colors";
 import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
 import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
-import useDataState from "../../hooks/useDataState";
 import ChartDoughnut from "../dependent/chart/ChartDoughnut";
 import DisclosureHeader from "../dependent/DisclosureHeader";
-import TabelUserByKelurahan from "./TabelUserByKelurahan";
 import CContainer from "./wrapper/CContainer";
 
 const Chart = ({ data }: any) => {
@@ -62,219 +60,6 @@ const DetailData = ({ openLeft, ...props }: DetailDataProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
-  const dummyChartData = {
-    demokrat: 100,
-    pdi: 32,
-  };
-  const dummyUsersList = [
-    {
-      id: 1,
-      nama: "Reza Himalaya",
-      username: "reza.himz",
-      foto_profil: "/reza.jpg",
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-  ];
-  const dummy = {
-    chartData: dummyChartData,
-    usersList: dummyUsersList,
-  };
-  const { dataState } = useDataState<any>({
-    initialData: dummy,
-    url: ``,
-    dependencies: [],
-  });
 
   useEffect(() => {
     if (detailGeoJSONData) {
@@ -364,7 +149,7 @@ const DetailData = ({ openLeft, ...props }: DetailDataProps) => {
 
           <Chart />
 
-          <TabelUserByKelurahan dataState={dataState} />
+          {/* <TabelUserByKelurahan dataState={dataState} /> */}
         </CContainer>
       </CContainer>
     </CContainer>
@@ -448,7 +233,7 @@ const DetailAktivitasUser = () => {
   );
 };
 
-export default function DetailGeoJSONData() {
+export default function DetailDatabyKelurahan() {
   return (
     <>
       <DetailData />

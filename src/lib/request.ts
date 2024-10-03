@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCookie } from "typescript-cookie";
+import getAuthToken from "./getAuthToken";
 
 const request = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
@@ -13,7 +13,8 @@ const request = axios.create({
 
 request.interceptors.request.use(
   (config) => {
-    const token = getCookie("__auth_token");
+    const token = getAuthToken();
+    console.log(token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

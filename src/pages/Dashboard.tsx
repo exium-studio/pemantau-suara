@@ -1,7 +1,7 @@
 import { Box, HStack, Tooltip } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import DashboardMap from "../components/independent/DashboardMap";
-import DetailGeoJSONData from "../components/independent/DetailGeoJSONData";
+import DetailGeoJSONData from "../components/independent/DetailDatabyKelurahan";
 import Legend from "../components/independent/Legend";
 import Navs from "../components/independent/Navs";
 import Profile from "../components/independent/Profile";

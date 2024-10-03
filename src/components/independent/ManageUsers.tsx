@@ -13,6 +13,7 @@ import { useLightDarkColor } from "../../constant/colors";
 import CContainer from "./wrapper/CContainer";
 import SearchComponent from "../dependent/input/SearchComponent";
 import { useState } from "react";
+import UsersTable from "./UsersTable";
 
 export default function ManageUsers() {
   // SX
@@ -68,6 +69,8 @@ export default function ManageUsers() {
               inputValue={search}
             />
           </Box>
+
+          <UsersTable />
         </CContainer>
       </FloatingContainer>
     </>

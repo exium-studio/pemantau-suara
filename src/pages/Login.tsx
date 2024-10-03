@@ -12,7 +12,6 @@ import {
 import { useFormik } from "formik";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { removeCookie } from "typescript-cookie";
 import * as yup from "yup";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import PasswordInput from "../components/dependent/input/PasswordInput";
@@ -119,7 +118,7 @@ export default function Login() {
           </Text>
         </CContainer>
 
-        {!authToken && !userData && (
+        {(!authToken || !userData) && (
           <>
             <form id="loginForm" onSubmit={formik.handleSubmit}>
               <FormControl mb={4} isInvalid={!!formik.errors.username}>
@@ -200,7 +199,7 @@ export default function Login() {
                 variant={"ghost"}
                 className="clicky"
                 onClick={() => {
-                  removeCookie("__auth_token");
+                  localStorage.removeItem("__auth_token");
                   localStorage.removeItem("__user_data");
                   setRt(!rt);
                 }}

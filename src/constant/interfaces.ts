@@ -2,25 +2,25 @@ import { StackProps } from "@chakra-ui/react";
 
 // Base Interfaces
 
-export interface FireToast__Interface {
+export interface Interface__FireToast {
   status?: "success" | "loading" | "info" | "warning" | "error";
   title: string;
   description?: string;
 }
 
-export interface Credentials__Interface {
+export interface Interface__Credentials {
   id: string;
   password: string;
 }
 
-export interface Interface__DataState {
+export interface Interface__TableState {
   loading: boolean;
   error: boolean;
-  notFound: boolean;
-  retry: () => void;
   data: any;
-  paginationData: any;
-  loadingLoadMore: boolean;
+  retry: () => void;
+  paginationData?: any;
+  notFound?: boolean;
+  loadingLoadMore?: boolean;
 }
 
 export interface Interface__SelectOption {

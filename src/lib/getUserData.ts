@@ -1,3 +1,7 @@
 export default function getUserData() {
-  return JSON.parse(localStorage.getItem("__user_data") as string);
+  const ls = localStorage.getItem("__user_data");
+  if (ls && ls !== "undefined") {
+    return JSON.parse(ls);
+  }
+  return null;
 }

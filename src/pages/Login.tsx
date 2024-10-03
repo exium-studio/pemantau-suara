@@ -43,10 +43,7 @@ export default function Login() {
   // Utils
   const { rt, setRt } = useRenderTrigger();
   const navigate = useNavigate();
-  const { login, loading } = useAuth();
-  function onSuccess() {
-    navigate("/dashboard");
-  }
+  const { login, loading, response } = useAuth();
 
   const formik = useFormik({
     validateOnChange: false,
@@ -62,9 +59,21 @@ export default function Login() {
         password: values.password,
       };
 
-      login({ url, payload, onSuccess });
+      login({ url, payload });
     },
   });
+
+  // Handle login response
+  useEffect(() => {
+    if (response) {
+      localStorage.setItem(
+        "__auth_token",
+        JSON.stringify(response.data?.token)
+      );
+      localStorage.setItem("__user_data", JSON.stringify(response.data?.user));
+      navigate("/dashboard");
+    }
+  }, [response, navigate]);
 
   return (
     <Center minH={"100vh"} p={responsiveSpacing}>

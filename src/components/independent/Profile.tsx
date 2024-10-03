@@ -4,7 +4,7 @@ import getUserData from "../../lib/getUserData";
 export default function Profile() {
   const userData = getUserData();
 
-  //TODO ganti fallback srv avatarnya
+  //TODO ganti fallback src avatarnya
 
   return (
     <Avatar

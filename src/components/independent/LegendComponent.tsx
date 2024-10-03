@@ -43,15 +43,6 @@ const LegendComponent: React.FC = () => {
           border={"1px solid var(--divider)"}
         >
           {highlightedKecamatanIndex.length > 0 && (
-            // <Icon
-            //   as={Circle}
-            //   weight="fill"
-            //   color={"red.400"}
-            //   fontSize={8}
-            //   position={"absolute"}
-            //   top={"6px"}
-            //   right={"6px"}
-            // />
             <Center
               position={"absolute"}
               top={"-4px"}

@@ -4,7 +4,6 @@ import { useLightDarkColor } from "../../constant/colors";
 import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
 import useBackOnClose from "../../hooks/useBackOnClose";
 import DisclosureHeader from "../dependent/DisclosureHeader";
-import TabelUserByKelurahan from "./TabelUserByKelurahan";
 import CContainer from "./wrapper/CContainer";
 
 export default function DetailAktivitasUser() {
@@ -55,7 +54,7 @@ export default function DetailAktivitasUser() {
         className={"scrollY"}
         // border={"1px solid red"}
       >
-        <TabelUserByKelurahan />
+        {/* <TabelUserByKelurahan /> */}
       </CContainer>
     </CContainer>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import req from "../lib/req";
+import req from "../lib/request";
 import useRenderTrigger from "./useRenderTrigger";
 
 interface Props<T> {
@@ -28,9 +28,7 @@ const useDataState = <T>({
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingLoadMore, setLoadingLoadMore] = useState<boolean>(false);
   const [data, setData] = useState<T | undefined>(initialData);
-  const [paginationData, setPaginationData] = useState<T | undefined>(
-    initialData
-  );
+  const [paginationData, setPaginationData] = useState<any>(undefined);
   // const [offset, setOffset] = useState<number>((page - 1) * (limit || 0));
   const { rt } = useRenderTrigger();
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -65,13 +63,15 @@ const useDataState = <T>({
       // offset: offset,
     };
 
-    req({
+    const config = {
       method,
       url,
       data: method === "POST" ? data : undefined,
       // params: method === "GET" ? data : undefined,
       signal: abortController.signal,
-    })
+    };
+
+    req(config)
       .then((response) => {
         setLoading(false);
         setError(false);
@@ -110,6 +110,16 @@ const useDataState = <T>({
     //TODO http request dan append ke data
   }
 
+  const dataState = {
+    loading: loading,
+    error: error,
+    notFound: notFound,
+    retry: retry,
+    data: data,
+    paginationData: paginationData,
+    loadingLoadMore: loadingLoadMore,
+  };
+
   return {
     data,
     setData,
@@ -124,6 +134,7 @@ const useDataState = <T>({
     loadingLoadMore,
     setLoadingLoadMore,
     paginationData,
+    dataState,
   };
 };
 

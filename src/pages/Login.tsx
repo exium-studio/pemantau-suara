@@ -91,7 +91,7 @@ export default function Login() {
 
         <CContainer align={"center"} mt={4} mb={8}>
           <Text textAlign={"center"} fontSize={20} fontWeight={700} mb={2}>
-            Login Dulu Ga Si
+            Selamat Datang
           </Text>
 
           <Text textAlign={"center"} opacity={0.6} maxW={"300px"}>

@@ -35,6 +35,7 @@ import {
   Interface__FormattedTableHeader,
 } from "../../constant/interfaces";
 import { iconSize } from "../../constant/sizes";
+import formatDate from "../../lib/formatDate";
 
 interface BatchActionsProps {
   selectedRows: number[];
@@ -269,8 +270,8 @@ export default function CustomTable({
           //@ts-ignore
           b.columnsFormat[sortConfig.sortColumnIndex].isDate
         ) {
-          const dateA = new Date(aValue as string);
-          const dateB = new Date(bValue as string);
+          const dateA = new Date(formatDate(aValue, "iso") as string);
+          const dateB = new Date(formatDate(bValue, "iso") as string);
           return sortConfig.direction === "asc"
             ? dateA.getTime() - dateB.getTime()
             : dateB.getTime() - dateA.getTime();

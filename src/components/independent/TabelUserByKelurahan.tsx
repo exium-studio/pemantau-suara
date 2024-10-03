@@ -1,220 +1,16 @@
+import { Interface__DataState } from "../../constant/interfaces";
 import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
-import useDataState from "../../hooks/useDataState";
 import AvatarUserTableBody from "../dependent/AvatarUserTableBody";
 import CustomTable from "../dependent/CustomTable";
 import Retry from "./feedback/Retry";
 import Skeleton from "./feedback/Skeleton";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 
-export default function TabelUserByKelurahan() {
-  const dummy = [
-    {
-      id: 1,
-      nama: "Reza Himalaya",
-      username: "reza.himz",
-      foto_profil: "/reza.jpg",
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-    {
-      id: 2,
-      nama: "Jolitos Kurniawan",
-      username: "jolitos.kurniawan",
-      foto_profil: null,
-      // password: "jolitos123",
-      role: {
-        id: 3,
-        name: "Pelaksana",
-      },
-    },
-  ];
+interface Props {
+  dataState: Interface__DataState;
+}
 
-  const loading = false;
-  // TODO api get data user by kelurahan
-  const { error, data, retry } = useDataState<any>({
-    initialData: dummy,
-    url: ``,
-    dependencies: [],
-  });
+export default function TabelUserByKelurahan({ dataState }: Props) {
   const formattedHeader = [
     {
       th: "#",
@@ -249,56 +45,58 @@ export default function TabelUserByKelurahan() {
     //   isSortable: true,
     // },
   ];
-  const formattedBody = data?.map((item: any, i: number) => ({
-    id: item.id,
-    originalData: item,
-    columnsFormat: [
-      {
-        value: i + 1,
-        td: i + 1,
-        isNumeric: true,
-        props: {
-          position: "sticky",
-          left: "2px",
-          zIndex: 2,
+  const formattedBody = dataState?.data?.usersList?.map(
+    (item: any, i: number) => ({
+      id: item.id,
+      originalData: item,
+      columnsFormat: [
+        {
+          value: i + 1,
+          td: i + 1,
+          isNumeric: true,
+          props: {
+            position: "sticky",
+            left: "2px",
+            zIndex: 2,
+          },
+          cProps: {
+            borderRight: "1px solid var(--divider2)",
+          },
         },
-        cProps: {
-          borderRight: "1px solid var(--divider2)",
+        {
+          value: item?.nama,
+          td: (
+            <AvatarUserTableBody
+              w={"100%"}
+              data={{
+                id: item?.id,
+                nama: item?.nama,
+                foto_profil: item?.foto_profil,
+              }}
+            />
+          ),
+          props: {
+            zIndex: 1,
+          },
         },
-      },
-      {
-        value: item?.nama,
-        td: (
-          <AvatarUserTableBody
-            w={"100%"}
-            data={{
-              id: item?.id,
-              nama: item?.nama,
-              foto_profil: item?.foto_profil,
-            }}
-          />
-        ),
-        props: {
-          zIndex: 1,
-        },
-      },
-      // {
-      //   value: item?.username,
-      //   td: item?.username,
-      // },
-      // {
-      //   value: item?.role?.name,
-      //   td: item?.role?.name,
-      // },
-    ],
-  }));
+        // {
+        //   value: item?.username,
+        //   td: item?.username,
+        // },
+        // {
+        //   value: item?.role?.name,
+        //   td: item?.role?.name,
+        // },
+      ],
+    })
+  );
 
   const { setDetailAktivitasUser } = useDetailAktivitasUser();
 
   // Render lateral
   const render = {
     loading: <Skeleton minH={"256px"} flex={1} />,
-    error: <Retry retry={retry} />,
+    error: <Retry retry={dataState.retry} />,
     loaded: (
       <>
         <CustomTableContainer minH={"200px !important"}>
@@ -318,13 +116,13 @@ export default function TabelUserByKelurahan() {
 
   return (
     <>
-      {loading && render.loading}
+      {dataState.loading && render.loading}
 
-      {!loading && (
+      {!dataState.loading && (
         <>
-          {error && render.error}
+          {dataState.error && render.error}
 
-          {!error && render.loaded}
+          {!dataState.error && render.loaded}
         </>
       )}
     </>

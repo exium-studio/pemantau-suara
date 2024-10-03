@@ -1,21 +1,280 @@
-import { Box, HStack, SimpleGrid, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  SimpleGrid,
+  StackProps,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useLightDarkColor } from "../../constant/colors";
 import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
 import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
+import useDataState from "../../hooks/useDataState";
+import ChartDoughnut from "../dependent/chart/ChartDoughnut";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import TabelUserByKelurahan from "./TabelUserByKelurahan";
 import CContainer from "./wrapper/CContainer";
 
-const DetailData = () => {
+const Chart = ({ data }: any) => {
+  const labels = ["Demokrat", "PDI"];
+  const datasets = [
+    {
+      customTooltipLabels: [data?.demokrat, data?.pdi],
+      label: "Nominal (%)",
+      data: [data?.demokrat, data?.pdi],
+      backgroundColor: ["#FBD38D", "#805AD5"],
+      borderWidth: 0,
+    },
+  ];
+
+  return (
+    <VStack flex={"1 1 0"} position={"relative"} my={6}>
+      <VStack w={"100%"} className="doughnutChartContainer">
+        <ChartDoughnut labels={labels} datasets={datasets} />
+      </VStack>
+
+      <Text
+        position={"absolute"}
+        left={"50%"}
+        top={"50%"}
+        transform={"translate(-50%, -50%)"}
+        fontSize={48}
+        opacity={0.6}
+      >
+        N
+      </Text>
+    </VStack>
+  );
+};
+
+interface DetailDataProps extends StackProps {
+  openLeft?: string;
+}
+
+const DetailData = ({ openLeft, ...props }: DetailDataProps) => {
   // SX
   const lightDarkColor = useLightDarkColor();
   // const sw = useScreenWidth();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // useBackOnClose(`detail-geojson-data`, isOpen, onOpen, onClose);
+
   const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
+  const dummyChartData = {
+    demokrat: 100,
+    pdi: 32,
+  };
+  const dummyUsersList = [
+    {
+      id: 1,
+      nama: "Reza Himalaya",
+      username: "reza.himz",
+      foto_profil: "/reza.jpg",
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+    {
+      id: 2,
+      nama: "Jolitos Kurniawan",
+      username: "jolitos.kurniawan",
+      foto_profil: null,
+      // password: "jolitos123",
+      role: {
+        id: 3,
+        name: "Pelaksana",
+      },
+    },
+  ];
+  const dummy = {
+    chartData: dummyChartData,
+    usersList: dummyUsersList,
+  };
+  const { dataState } = useDataState<any>({
+    initialData: dummy,
+    url: ``,
+    dependencies: [],
+  });
 
   useEffect(() => {
     if (detailGeoJSONData) {
@@ -31,16 +290,18 @@ const DetailData = () => {
     <CContainer
       px={4}
       maxW={"450px"}
-      maxH={"calc((100vh - 74px - 56px - 16px)/2)"}
+      // maxH={"calc((100vh - 74px - 56px - 16px)/2)"}
+      maxH={`calc(100vh - (74px * 2))`}
       position={"fixed"}
       top={"74px"}
-      left={isOpen ? 0 : "-450px"}
+      left={isOpen ? openLeft || 0 : "-450px"}
       transition={"200ms"}
       animation={"ease in"}
       zIndex={2}
       overflowY={"auto"}
       gap={2}
       pointerEvents={"none"}
+      {...props}
       // border={"1px solid red"}
     >
       <CContainer
@@ -79,7 +340,7 @@ const DetailData = () => {
           className={"scrollY"}
           // border={"1px solid red"}
         >
-          <SimpleGrid columns={[2]} gap={3} mb={4}>
+          <SimpleGrid columns={[2]} gap={3}>
             <CContainer>
               <Text opacity={0.4}>Kecamatan</Text>
               <HStack>
@@ -101,7 +362,9 @@ const DetailData = () => {
             </CContainer>
           </SimpleGrid>
 
-          <TabelUserByKelurahan />
+          <Chart />
+
+          <TabelUserByKelurahan dataState={dataState} />
         </CContainer>
       </CContainer>
     </CContainer>
@@ -178,7 +441,7 @@ const DetailAktivitasUser = () => {
           className={"scrollY"}
           // border={"1px solid red"}
         >
-          <TabelUserByKelurahan />
+          {/* <TabelUserByKelurahan /> */}
         </CContainer>
       </CContainer>
     </CContainer>

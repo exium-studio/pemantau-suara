@@ -1,5 +1,4 @@
 import { Avatar, HStack, StackProps, Text, Tooltip } from "@chakra-ui/react";
-import { Interface__UnitKerja } from "../../constant/interfaces";
 import CContainer from "../independent/wrapper/CContainer";
 
 interface Props extends StackProps {
@@ -8,7 +7,7 @@ interface Props extends StackProps {
     nama: string;
     fullName?: string;
     foto_profil: string | null;
-    unit_kerja?: Interface__UnitKerja;
+    avatarSize?: "sm" | "md";
   };
 }
 
@@ -19,7 +18,7 @@ export default function AvatarUserTableBody({ data, ...props }: Props) {
         cursor={"pointer"}
         src={data.foto_profil || ""}
         name={data.nama}
-        size={data.unit_kerja ? "md" : "sm"}
+        size={data.avatarSize || "md"}
       />
 
       <CContainer gap={2} overflow={"hidden"}>

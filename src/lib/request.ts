@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getCookie, removeCookie } from "typescript-cookie";
 
-const req = axios.create({
+const request = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
   withCredentials: true,
   xsrfCookieName: "XSRF-TOKEN",
@@ -12,7 +12,7 @@ const req = axios.create({
 });
 
 // Add a request interceptor
-req.interceptors.request.use(
+request.interceptors.request.use(
   (config) => {
     const token = getCookie("__auth_token");
     if (token) {
@@ -25,7 +25,7 @@ req.interceptors.request.use(
   }
 );
 
-req.interceptors.response.use(
+request.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
@@ -49,4 +49,4 @@ req.interceptors.response.use(
   }
 );
 
-export default req;
+export default request;

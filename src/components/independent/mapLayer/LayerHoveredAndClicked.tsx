@@ -26,7 +26,7 @@ export default function LayerHoveredAndClicked({ mapRef, geoJSONData }: Props) {
         setDetailGeoJSONData({ layer: layer, geoJSONData: clickedFeature });
 
         if (!highlightedKecamatanIndex?.includes(-1)) {
-          console.log([...highlightedKecamatanIndex, -1]);
+          // console.log([...highlightedKecamatanIndex, -1]);
           setHighlightedKecamatanIndex([...highlightedKecamatanIndex, -1]);
         }
       }

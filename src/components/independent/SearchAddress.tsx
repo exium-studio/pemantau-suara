@@ -30,7 +30,7 @@ export default function SearchAddress() {
     setSearchSelected,
   } = useSearchAddress();
 
-  const { searchMode, toggleSearchMode, setSearchMode } = useSearchMode();
+  const { searchMode, setSearchMode, toggleSearchMode } = useSearchMode();
   const [searchFocus, setSearchFocus] = useState<boolean>(false);
   const searchRef = useRef<HTMLInputElement>(null);
   const searchAddressHistory = JSON.parse(
@@ -102,7 +102,7 @@ export default function SearchAddress() {
   return (
     <CContainer w={"100%"} maxW={"420px"} fRef={containerRef}>
       <CContainer
-        w={searchMode ? "100%" : "101px"}
+        w={searchMode ? "100% !important" : "101px"}
         transition={"200ms"}
         borderRadius={12}
       >
@@ -137,6 +137,8 @@ export default function SearchAddress() {
             w={searchMode ? "0" : "2px"}
             visibility={searchMode ? "hidden" : "visible"}
           />
+
+          {/* Toggle Search Mode */}
           <Tooltip
             label={"Toggle Search Mode"}
             placement="right"
@@ -151,6 +153,7 @@ export default function SearchAddress() {
             />
           </Tooltip>
 
+          {/* Input Search */}
           <StringInput
             w={"100%"}
             fRef={searchRef}
@@ -167,6 +170,7 @@ export default function SearchAddress() {
             placeholderprops={{ visibility: searchMode ? "visible" : "hidden" }}
           />
 
+          {/* Clear Search */}
           {searchMode && searchSelected && (
             <IconButton
               aria-label="clear pencarian"
@@ -219,6 +223,7 @@ export default function SearchAddress() {
             border={searchMode && searchFocus ? "1px solid var(--divider)" : ""}
             shadow={searchMode && searchFocus ? "sm" : ""}
           >
+            {/* Render Search Result */}
             {searchAddress && (
               <>
                 {searchResult?.length > 0 &&
@@ -239,25 +244,29 @@ export default function SearchAddress() {
               </>
             )}
 
-            {!searchAddress &&
-              searchAddressHistory &&
-              searchAddressHistory
-                .reverse()
-                ?.slice(0, 8)
-                .map((history: any, i: number) => (
-                  <HStack
-                    key={i}
-                    p={3}
-                    px={4}
-                    cursor="pointer"
-                    _hover={{ bg: "var(--tg)", color: "p.500" }}
-                    transition={"200ms"}
-                    onClick={() => handleItemClick(history)}
-                  >
-                    <Icon as={Clock} fontSize={iconSize} />
-                    <Text noOfLines={1}>{history.place_name}</Text>
-                  </HStack>
-                ))}
+            {/* Render History */}
+            {!searchAddress && (
+              <>
+                {searchAddressHistory &&
+                  searchAddressHistory
+                    .reverse()
+                    ?.slice(0, 8)
+                    .map((history: any, i: number) => (
+                      <HStack
+                        key={i}
+                        p={3}
+                        px={4}
+                        cursor="pointer"
+                        _hover={{ bg: "var(--tg)", color: "p.500" }}
+                        transition={"200ms"}
+                        onClick={() => handleItemClick(history)}
+                      >
+                        <Icon as={Clock} fontSize={iconSize} />
+                        <Text noOfLines={1}>{history.place_name}</Text>
+                      </HStack>
+                    ))}
+              </>
+            )}
           </CContainer>
         </CContainer>
       </CContainer>

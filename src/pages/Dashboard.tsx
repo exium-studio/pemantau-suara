@@ -1,6 +1,5 @@
 import { Box, HStack, Tooltip } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
-import { useLightDarkColor } from "../constant/colors";
 import DashboardMap from "../components/independent/DashboardMap";
 import DetailGeoJSONData from "../components/independent/DetailGeoJSONData";
 import LegendComponent from "../components/independent/LegendComponent";
@@ -8,10 +7,15 @@ import Navs from "../components/independent/Navs";
 import Profile from "../components/independent/Profile";
 import SearchAddress from "../components/independent/SearchAddress";
 import CContainer from "../components/independent/wrapper/CContainer";
+import { useLightDarkColor } from "../constant/colors";
+import useSearchMode from "../global/useSearchMode";
 
 export default function Dashboard() {
   // SX
   const lightDarkColor = useLightDarkColor();
+
+  // Utils
+  const { searchMode } = useSearchMode();
 
   return (
     <CContainer
@@ -32,7 +36,7 @@ export default function Dashboard() {
         top={0}
         left={0}
         zIndex={3}
-        // w={searchMode ? "100%" : ""}
+        w={searchMode ? "100%" : ""}
       >
         <SearchAddress />
       </HStack>

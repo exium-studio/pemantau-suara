@@ -12,6 +12,11 @@
   opacity: 0;
 }
 
+td {
+  font-weight: 500 !important;
+  opacity: 0.8;
+}
+
 /* COLORS */
 :root {
   --p50: #d7f3ff;

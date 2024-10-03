@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Center,
   HStack,
   Icon,
   IconButton,
@@ -31,8 +32,8 @@ const LegendComponent: React.FC = () => {
 
   return (
     <>
-      <HStack p={4} position={"fixed"} bottom={0} right={0} zIndex={2}>
-        <HStack
+      <Box p={4} position={"fixed"} bottom={0} right={0} zIndex={2}>
+        <Box
           p={1}
           gap={2}
           borderRadius={12}
@@ -42,15 +43,26 @@ const LegendComponent: React.FC = () => {
           border={"1px solid var(--divider)"}
         >
           {highlightedKecamatanIndex.length > 0 && (
-            <Icon
-              as={Circle}
-              weight="fill"
-              color={"red.400"}
-              fontSize={8}
+            // <Icon
+            //   as={Circle}
+            //   weight="fill"
+            //   color={"red.400"}
+            //   fontSize={8}
+            //   position={"absolute"}
+            //   top={"6px"}
+            //   right={"6px"}
+            // />
+            <Center
               position={"absolute"}
-              top={"6px"}
-              right={"6px"}
-            />
+              top={"-4px"}
+              right={"0px"}
+              bg={"red.400"}
+              borderRadius={"full"}
+              w={"16px"}
+              h={"16px"}
+            >
+              <Text fontSize={12}>{highlightedKecamatanIndex?.length}</Text>
+            </Center>
           )}
           <IconButton
             aria-label="legend button"
@@ -59,8 +71,8 @@ const LegendComponent: React.FC = () => {
             onClick={onToggle}
             className="btn"
           />
-        </HStack>
-      </HStack>
+        </Box>
+      </Box>
 
       <CContainer
         px={4}

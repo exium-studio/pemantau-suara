@@ -11,8 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getCookie, removeCookie } from "typescript-cookie";
+import { Link, useNavigate } from "react-router-dom";
+import { removeCookie } from "typescript-cookie";
 import * as yup from "yup";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import PasswordInput from "../components/dependent/input/PasswordInput";
@@ -24,6 +24,7 @@ import { useLightDarkColor } from "../constant/colors";
 import { responsiveSpacing } from "../constant/sizes";
 import useAuth from "../hooks/useAuth";
 import useRenderTrigger from "../hooks/useRenderTrigger";
+import getAuthToken from "../lib/getAuthToken";
 import getUserData from "../lib/getUserData";
 
 export default function Login() {
@@ -31,14 +32,8 @@ export default function Login() {
   const lightDarkColor = useLightDarkColor();
 
   // Auth
-  const authToken = getCookie("__auth_token");
+  const authToken = getAuthToken();
   const userData = getUserData();
-  useEffect(() => {
-    if (!authToken || !userData) {
-      removeCookie("__auth_token");
-      localStorage.removeItem("__user_data");
-    }
-  }, [authToken, userData]);
 
   // Utils
   const { rt, setRt } = useRenderTrigger();
@@ -68,9 +63,12 @@ export default function Login() {
     if (response) {
       localStorage.setItem(
         "__auth_token",
-        JSON.stringify(response.data?.token)
+        JSON.stringify(response.data?.data?.token)
       );
-      localStorage.setItem("__user_data", JSON.stringify(response.data?.user));
+      localStorage.setItem(
+        "__user_data",
+        JSON.stringify(response.data?.data?.user)
+      );
       navigate("/dashboard");
     }
   }, [response, navigate]);
@@ -173,7 +171,7 @@ export default function Login() {
             <CContainer>
               <HStack
                 gap={2}
-                mb={4}
+                mb={2}
                 borderRadius={8}
                 p={responsiveSpacing}
                 bg={"var(--divider)"}
@@ -185,24 +183,30 @@ export default function Login() {
                 </CContainer>
               </HStack>
 
-              <ButtonGroup>
-                <Button
-                  w={"100%"}
-                  colorScheme="ap"
-                  variant={"outline"}
-                  className="clicky"
-                  onClick={() => {
-                    removeCookie("__auth_token");
-                    localStorage.removeItem("__user_data");
-                    setRt(!rt);
-                  }}
-                >
-                  Login Ulang
-                </Button>
-                <Button w={"100%"} colorScheme="ap" className="btn-ap clicky">
-                  Klik untuk masuk
-                </Button>
-              </ButtonGroup>
+              <Button
+                w={"100%"}
+                colorScheme="ap"
+                className="btn-ap clicky"
+                mb={2}
+                as={Link}
+                to={userData?.is_admin ? "/dashboard" : "/pelaksana"}
+              >
+                Klik untuk masuk
+              </Button>
+
+              <Button
+                w={"100%"}
+                colorScheme="ap"
+                variant={"ghost"}
+                className="clicky"
+                onClick={() => {
+                  removeCookie("__auth_token");
+                  localStorage.removeItem("__user_data");
+                  setRt(!rt);
+                }}
+              >
+                Login Ulang
+              </Button>
             </CContainer>
           </>
         )}

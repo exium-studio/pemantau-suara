@@ -18,33 +18,38 @@ const Table = ({ tableState }: TableProps) => {
       isSortable: true,
       props: {
         position: "sticky",
-        left: "2px",
+        left: 0,
         zIndex: 2,
-        w: "40px",
+        w: "50px",
       },
       cProps: {
         borderRight: "1px solid var(--divider2)",
+        w: "50px",
       },
     },
     {
       th: "Nama",
       isSortable: true,
       props: {
-        w: "243px",
+        // w: "243px",
       },
     },
-    // {
-    //   th: "Username",
-    //   isSortable: true,
-    // },
-    // {
-    //   th: "Role",
-    //   isSortable: true,
-    // },
-    // {
-    //   th: "Area Kelurahan",
-    //   isSortable: true,
-    // },
+    {
+      th: "Username",
+      isSortable: true,
+    },
+    {
+      th: "Role",
+      isSortable: true,
+    },
+    {
+      th: "No.Telp",
+      isSortable: true,
+    },
+    {
+      th: "NIK",
+      isSortable: true,
+    },
   ];
   const formattedBody = tableState?.data?.map((item: any, i: number) => ({
     id: item.id,
@@ -56,11 +61,13 @@ const Table = ({ tableState }: TableProps) => {
         isNumeric: true,
         props: {
           position: "sticky",
-          left: "2px",
+          left: 0,
           zIndex: 2,
+          w: "50px",
         },
         cProps: {
           borderRight: "1px solid var(--divider2)",
+          w: "50px",
         },
       },
       {
@@ -79,14 +86,22 @@ const Table = ({ tableState }: TableProps) => {
           zIndex: 1,
         },
       },
-      // {
-      //   value: item?.username,
-      //   td: item?.username,
-      // },
-      // {
-      //   value: item?.role?.name,
-      //   td: item?.role?.name,
-      // },
+      {
+        value: item?.username,
+        td: item?.username,
+      },
+      {
+        value: item?.role?.name,
+        td: item?.role?.name,
+      },
+      {
+        value: item?.no_hp,
+        td: item?.no_hp,
+      },
+      {
+        value: item?.nik_ktp,
+        td: item?.nik_ktp,
+      },
     ],
   }));
 
@@ -128,13 +143,15 @@ const Table = ({ tableState }: TableProps) => {
 };
 
 interface Props {
+  conditions?: boolean;
   filterConfig?: any;
 }
 
-export default function UsersTable({ filterConfig }: Props) {
+export default function UsersTable({ conditions, filterConfig }: Props) {
   const { tableState } = useDataState<any>({
     url: `/api/pemantau-suara/dashboard/management/get-pengguna`,
     payload: {},
+    conditions: conditions,
     dependencies: [],
   });
 

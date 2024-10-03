@@ -22,8 +22,10 @@ export default function ManageUsers() {
   // Utils
   const { isOpen, onToggle, onClose } = useDisclosure();
 
-  // Search Config
-  const [search, setSearch] = useState<string>("");
+  // Filter Config
+  const [filterConfig, setFilterConfig] = useState<any>({
+    search: "",
+  });
 
   return (
     <>
@@ -37,9 +39,9 @@ export default function ManageUsers() {
       </Tooltip>
 
       <FloatingContainer
-        maxW={"450px"}
+        maxW={"550px"}
         top={"74px"}
-        right={isOpen ? "16px" : "-480px"}
+        right={isOpen ? "16px" : "-580px"}
       >
         <DisclosureHeader
           title="Kelola Pengguna"
@@ -53,7 +55,13 @@ export default function ManageUsers() {
           bg={lightDarkColor}
           zIndex={20}
         />
-        <CContainer flex={1} px={5} overflowY={"auto"} className={"scrollY"}>
+        <CContainer
+          flex={1}
+          px={5}
+          pb={5}
+          overflowY={"auto"}
+          className={"scrollY"}
+        >
           <Box
             position={"sticky"}
             top={0}
@@ -64,13 +72,16 @@ export default function ManageUsers() {
             <SearchComponent
               name="search"
               onChangeSetter={(input) => {
-                setSearch(input);
+                setFilterConfig((ps: any) => ({
+                  ...ps,
+                  search: input,
+                }));
               }}
-              inputValue={search}
+              inputValue={filterConfig.search}
             />
           </Box>
 
-          <UsersTable />
+          <UsersTable conditions={isOpen} filterConfig={filterConfig} />
         </CContainer>
       </FloatingContainer>
     </>

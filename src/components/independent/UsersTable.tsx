@@ -108,6 +108,7 @@ const Table = ({ tableState }: TableProps) => {
   const render = {
     loading: <Skeleton minH={"256px"} flex={1} />,
     error: <Retry retry={tableState.retry} />,
+    empty: <NoData />,
     loaded: (
       <>
         <CustomTableContainer minH={"200px !important"}>
@@ -130,7 +131,7 @@ const Table = ({ tableState }: TableProps) => {
 
           {!tableState.error && (
             <>
-              {tableState?.data?.length === 0 && <NoData />}
+              {tableState?.data?.length === 0 && render.empty}
 
               {tableState?.data?.length > 0 && render.loaded}
             </>

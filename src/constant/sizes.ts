@@ -1,4 +1,4 @@
-const iconSize = 20;
+const iconSize = 18;
 const textSize = [14, null, 16];
 const checkBoxTextMt = ["-2px", null, "-2px"];
 const dashboardItemHeight = "600px";

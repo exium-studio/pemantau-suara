@@ -1,19 +1,19 @@
 import {
-  Box,
+  HStack,
   Icon,
   IconButton,
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import { User } from "@phosphor-icons/react";
-import { iconSize } from "../../constant/sizes";
-import FloatingContainer from "./wrapper/FloatingContainer";
-import DisclosureHeader from "../dependent/DisclosureHeader";
-import { useLightDarkColor } from "../../constant/colors";
-import CContainer from "./wrapper/CContainer";
-import SearchComponent from "../dependent/input/SearchComponent";
 import { useState } from "react";
+import { useLightDarkColor } from "../../constant/colors";
+import { iconSize } from "../../constant/sizes";
+import DisclosureHeader from "../dependent/DisclosureHeader";
+import SearchComponent from "../dependent/input/SearchComponent";
 import UsersTable from "./UsersTable";
+import CContainer from "./wrapper/CContainer";
+import FloatingContainer from "./wrapper/FloatingContainer";
 
 export default function ManageUsers() {
   // SX
@@ -62,12 +62,14 @@ export default function ManageUsers() {
           overflowY={"auto"}
           className={"scrollY"}
         >
-          <Box
+          <HStack
             position={"sticky"}
             top={0}
             bg={lightDarkColor}
             zIndex={20}
-            pb={5}
+            pb={4}
+            overflowX={"auto"}
+            className="scrollX"
           >
             <SearchComponent
               name="search"
@@ -79,7 +81,7 @@ export default function ManageUsers() {
               }}
               inputValue={filterConfig.search}
             />
-          </Box>
+          </HStack>
 
           <UsersTable conditions={isOpen} filterConfig={filterConfig} />
         </CContainer>

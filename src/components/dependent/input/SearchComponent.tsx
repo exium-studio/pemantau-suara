@@ -7,7 +7,8 @@ import {
   InputLeftElement,
   Tooltip,
 } from "@chakra-ui/react";
-import { RiCloseLine, RiSearchLine } from "@remixicon/react";
+import { X } from "@phosphor-icons/react";
+import { RiSearchLine } from "@remixicon/react";
 import { Dispatch } from "react";
 import { iconSize } from "../../../constant/sizes";
 import StringInput from "./StringInput";
@@ -64,9 +65,7 @@ export default function SearchComponent({
           >
             <IconButton
               aria-label="Clear Search"
-              icon={
-                <Icon as={RiCloseLine} fontSize={props.fontSize || iconSize} />
-              }
+              icon={<Icon as={X} fontSize={props.fontSize || iconSize} />}
               onClick={() => {
                 onChangeSetter("");
               }}

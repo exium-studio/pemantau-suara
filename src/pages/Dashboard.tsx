@@ -1,3 +1,72 @@
+import { Box, HStack, Tooltip } from "@chakra-ui/react";
+import { ColorModeSwitcher } from "../ColorModeSwitcher";
+import { useLightDarkColor } from "../constant/colors";
+import DashboardMap from "../components/independent/DashboardMap";
+import DetailGeoJSONData from "../components/independent/DetailGeoJSONData";
+import LegendComponent from "../components/independent/LegendComponent";
+import Navs from "../components/independent/Navs";
+import Profile from "../components/independent/Profile";
+import SearchAddress from "../components/independent/SearchAddress";
+import CContainer from "../components/independent/wrapper/CContainer";
+
 export default function Dashboard() {
-  return <div>Dashboard</div>;
+  // SX
+  const lightDarkColor = useLightDarkColor();
+
+  return (
+    <CContainer
+      position={"relative"}
+      gap={0}
+      align={"stretch"}
+      overflow={"clip"}
+    >
+      <CContainer justify={"center"} align={"center"}>
+        <DashboardMap />
+      </CContainer>
+
+      {/* Map Overlays */}
+      {/* Left */}
+      <HStack
+        p={4}
+        position={"fixed"}
+        top={0}
+        left={0}
+        zIndex={3}
+        // w={searchMode ? "100%" : ""}
+      >
+        <SearchAddress />
+      </HStack>
+
+      {/* Right */}
+      <HStack p={4} position={"fixed"} top={0} right={0} zIndex={2}>
+        {/* Color Mode */}
+        <HStack
+          shadow={"sm"}
+          border={"1px solid var(--divider)"}
+          p={1}
+          gap={2}
+          borderRadius={12}
+          bg={lightDarkColor}
+        >
+          <Tooltip label={"Dark Mode"} placement="bottom" mt={1}>
+            <Box>
+              <ColorModeSwitcher mt={"auto"} className="btn" />
+            </Box>
+          </Tooltip>
+        </HStack>
+
+        {/* Navs */}
+        <Navs />
+
+        {/* Profile */}
+        <Profile />
+      </HStack>
+
+      {/* Detail GeoJSON Data */}
+      <DetailGeoJSONData />
+
+      {/* Legend Component */}
+      <LegendComponent />
+    </CContainer>
+  );
 }

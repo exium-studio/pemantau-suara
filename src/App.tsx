@@ -5,21 +5,13 @@ import Login from "./pages/Login";
 import MissingPage from "./pages/MissingPage";
 import { globalTheme } from "./theme/globalTheme";
 import Dashboard from "./pages/Dashboard";
-import AppLayout from "./components/independent/wrapper/AppLayout";
 
 export const App = () => (
   <ChakraProvider theme={globalTheme}>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route
-          path="/dashboard"
-          element={
-            <AppLayout>
-              <Dashboard />
-            </AppLayout>
-          }
-        />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/pelaksana" element={<Dashboard />} />
         <Route path="*" element={<MissingPage />} />
       </Routes>

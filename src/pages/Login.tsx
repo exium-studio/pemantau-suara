@@ -10,7 +10,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getCookie, removeCookie } from "typescript-cookie";
 import * as yup from "yup";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
@@ -21,14 +22,15 @@ import SmallLink from "../components/independent/SmallLink";
 import CContainer from "../components/independent/wrapper/CContainer";
 import { useLightDarkColor } from "../constant/colors";
 import { responsiveSpacing } from "../constant/sizes";
+import useAuth from "../hooks/useAuth";
 import useRenderTrigger from "../hooks/useRenderTrigger";
 import getUserData from "../lib/getUserData";
-import { useEffect } from "react";
 
 export default function Login() {
   // SX
   const lightDarkColor = useLightDarkColor();
 
+  // Auth
   const authToken = getCookie("__auth_token");
   const userData = getUserData();
   useEffect(() => {
@@ -38,9 +40,13 @@ export default function Login() {
     }
   }, [authToken, userData]);
 
-  // const [loading, setLoading] = useState<boolean>(false);
+  // Utils
   const { rt, setRt } = useRenderTrigger();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { login, loading } = useAuth();
+  function onSuccess() {
+    navigate("/dashboard");
+  }
 
   const formik = useFormik({
     validateOnChange: false,
@@ -50,8 +56,13 @@ export default function Login() {
       password: yup.string().required("Harus diisi"),
     }),
     onSubmit: (values, { resetForm }) => {
-      // setLoading(true);
-      // TODO api login
+      const url = `api/login`;
+      const payload = {
+        username: values.username,
+        password: values.password,
+      };
+
+      login({ url, payload, onSuccess });
     },
   });
 
@@ -103,7 +114,7 @@ export default function Login() {
 
         {!authToken && !userData && (
           <>
-            <form id="loginGorm" onSubmit={formik.handleSubmit}>
+            <form id="loginForm" onSubmit={formik.handleSubmit}>
               <FormControl mb={4} isInvalid={!!formik.errors.username}>
                 <StringInput
                   name="username"
@@ -131,23 +142,15 @@ export default function Login() {
 
             <ButtonGroup mb={4}>
               <Button
+                type="submit"
+                form="loginForm"
                 w={"100%"}
                 colorScheme="ap"
                 className="btn-ap clicky"
-                as={Link}
-                to={"/dashboard"}
+                isLoading={loading}
               >
                 Login
               </Button>
-              {/* <Button
-                w={"100%"}
-                colorScheme="ap"
-                className="btn-ap clicky"
-                as={Link}
-                to={"/pelaksana"}
-              >
-                Login Pelaksana
-              </Button> */}
             </ButtonGroup>
 
             <SmallLink to="/forgot-password" mx={"auto"}>

@@ -15,7 +15,6 @@ const Table = ({ tableState }: TableProps) => {
   const formattedHeader = [
     {
       th: "#",
-      isSortable: true,
       props: {
         position: "sticky",
         left: 0,

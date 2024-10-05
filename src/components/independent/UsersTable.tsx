@@ -11,7 +11,7 @@ interface TableProps {
   tableState: Interface__TableState;
 }
 
-const Table = ({ tableState }: TableProps) => {
+const TableComponent = ({ tableState }: TableProps) => {
   const formattedHeader = [
     {
       th: "#",
@@ -121,6 +121,8 @@ const Table = ({ tableState }: TableProps) => {
     ),
   };
 
+  // console.log(tableState);
+
   return (
     <>
       {tableState.loading && render.loading}
@@ -155,5 +157,5 @@ export default function UsersTable({ conditions, filterConfig }: Props) {
     dependencies: [],
   });
 
-  return <Table tableState={tableState} />;
+  return <TableComponent tableState={tableState} />;
 }

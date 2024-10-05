@@ -19,6 +19,8 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
   const [response, setResponse] = useState<any>(undefined);
   const [error, setError] = useState<boolean>(false);
 
+  // console.log(response);
+
   // Utils
   const { fireToast } = useFireToast();
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -37,6 +39,7 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
     // Start request
     request(config)
       .then((r) => {
+        setError(false);
         setStatus(r.status);
         if (r.status === 200) {
           setResponse(r);

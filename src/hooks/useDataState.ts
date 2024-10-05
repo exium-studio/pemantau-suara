@@ -24,14 +24,16 @@ const useDataState = <T>({
   noRt = false,
 }: Props<T>) => {
   // States
-  const [error, setError] = useState<boolean>(false);
-  const [notFound, setNotFound] = useState<boolean>(false);
   const [loadingLoadMore, setLoadingLoadMore] = useState<boolean>(false);
   const [data, setData] = useState<T | undefined>(initialData);
   const [paginationData, setPaginationData] = useState<any>(undefined);
   const { rt } = useRenderTrigger();
   const abortControllerRef = useRef<AbortController | null>(null);
-  const { req, response, loading } = useRequest({ successToast: false });
+  const { req, response, loading, error, status } = useRequest({
+    successToast: false,
+  });
+
+  console.log(error);
 
   // Request Func
   const makeRequest = () => {
@@ -61,7 +63,6 @@ const useDataState = <T>({
 
   // Handle Request
   useEffect(() => {
-    setError(false);
     if (conditions && url) {
       makeRequestRef?.current();
     }
@@ -90,15 +91,11 @@ const useDataState = <T>({
   }, [response]);
 
   function retry() {
-    setError(false);
     makeRequest();
   }
 
   function loadMore() {
     setLoadingLoadMore(true);
-    // if (limit) {
-    //   setOffset((ps) => ps + limit);
-    // }
 
     //TODO http request dan append ke data
   }
@@ -106,7 +103,7 @@ const useDataState = <T>({
   const tableState = {
     loading: loading,
     error: error,
-    notFound: notFound,
+    status: status,
     retry: retry,
     data: data,
     paginationData: paginationData,
@@ -116,10 +113,7 @@ const useDataState = <T>({
     data,
     setData,
     loading,
-    notFound,
-    setNotFound,
     error,
-    setError,
     retry,
     loadMore,
     loadingLoadMore,

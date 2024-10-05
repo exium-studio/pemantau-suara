@@ -1,4 +1,5 @@
 import {
+  Box,
   HStack,
   Icon,
   IconButton,
@@ -62,26 +63,28 @@ export default function ManageUsers() {
           overflowY={"auto"}
           className={"scrollY"}
         >
-          <HStack
+          <Box
+            overflowX={"auto"}
+            className="scrollX"
             position={"sticky"}
             top={0}
             bg={lightDarkColor}
             zIndex={20}
             pb={4}
-            overflowX={"auto"}
-            className="scrollX"
           >
-            <SearchComponent
-              name="search"
-              onChangeSetter={(input) => {
-                setFilterConfig((ps: any) => ({
-                  ...ps,
-                  search: input,
-                }));
-              }}
-              inputValue={filterConfig.search}
-            />
-          </HStack>
+            <HStack>
+              <SearchComponent
+                name="search"
+                onChangeSetter={(input) => {
+                  setFilterConfig((ps: any) => ({
+                    ...ps,
+                    search: input,
+                  }));
+                }}
+                inputValue={filterConfig.search}
+              />
+            </HStack>
+          </Box>
 
           <UsersTable conditions={isOpen} filterConfig={filterConfig} />
         </CContainer>

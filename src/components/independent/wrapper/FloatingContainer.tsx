@@ -13,6 +13,7 @@ export default function FloatingContainer({ children, ...props }: Props) {
   return (
     <CContainer
       className="floatingContainer"
+      w={"calc(100vw - 32px)"}
       maxW={"calc(50% - 32px)"}
       maxH={fcMaxHeight}
       position={"fixed"}

@@ -15,6 +15,7 @@ import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
 import ChartDoughnut from "../dependent/chart/ChartDoughnut";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import CContainer from "./wrapper/CContainer";
+import { fcMaxHeight } from "../../constant/sizes";
 
 const Chart = ({ data }: any) => {
   const labels = ["Demokrat", "PDI"];
@@ -75,8 +76,7 @@ const DetailData = ({ openLeft, ...props }: DetailDataProps) => {
     <CContainer
       px={4}
       maxW={"450px"}
-      // maxH={"calc((100vh - 74px - 56px - 16px)/2)"}
-      maxH={`calc(100vh - (74px * 2))`}
+      maxH={fcMaxHeight}
       position={"fixed"}
       top={"74px"}
       left={isOpen ? openLeft || 0 : "-450px"}

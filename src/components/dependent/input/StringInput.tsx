@@ -38,6 +38,9 @@ export default function StringInput({
   const { colorMode } = useColorMode();
   const darkLightColorManual = colorMode === "light" ? "white" : "var(--dark)";
 
+  const pl =
+    typeof props?.pl === "string" ? props?.pl.replace(/\D/g, "") : props?.pl;
+
   return (
     <>
       <Global
@@ -71,7 +74,13 @@ export default function StringInput({
         />
         {!inputValue && (
           <Text
-            w={"calc(100% - 32px)"}
+            w={`calc(100% - ${
+              pl
+                ? `${
+                    typeof pl === "string" ? parseInt(pl) : (pl as number) * 4
+                  }px`
+                : "32px"
+            })`}
             position={"absolute"}
             top={"10px"}
             left={props?.pl || 4}

@@ -5,7 +5,7 @@ const dashboardItemHeight = "600px";
 const dashboardItemMinWidth = "350px";
 const responsiveSpacing = [4, null, 5];
 const responsiveSpacing2 = [6, null, 8];
-const fcMaxHeight = `calc(((100vh - 74px - 56px - 16px)) - 2px)`;
+const fcMaxHeight = `calc(100vh - (74px * 2))`;
 
 export {
   iconSize,

@@ -68,16 +68,17 @@ export default function ManageUsers() {
           overflowY={"auto"}
           className={"scrollY"}
         >
-          <Box
-            overflowX={"auto"}
-            className="scrollX"
-            position={"sticky"}
-            top={0}
-            bg={lightDarkColor}
-            zIndex={20}
-            pb={4}
-          >
-            <HStack>
+          <Box>
+            <HStack
+              border={"1px solid red"}
+              overflowX={"auto"}
+              className="scrollX"
+              position={"sticky"}
+              top={0}
+              bg={lightDarkColor}
+              zIndex={20}
+              pb={4}
+            >
               <SearchComponent
                 name="search"
                 onChangeSetter={(input) => {

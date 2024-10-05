@@ -33,8 +33,6 @@ const useDataState = <T>({
     successToast: false,
   });
 
-  console.log(error);
-
   // Request Func
   const makeRequest = () => {
     if (abortControllerRef.current) {

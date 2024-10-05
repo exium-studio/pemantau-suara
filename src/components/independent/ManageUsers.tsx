@@ -15,6 +15,7 @@ import SearchComponent from "../dependent/input/SearchComponent";
 import UsersTable from "./UsersTable";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
+import AddUser from "./AddUser";
 
 export default function ManageUsers() {
   // SX
@@ -70,7 +71,6 @@ export default function ManageUsers() {
         >
           <Box>
             <HStack
-              border={"1px solid red"}
               overflowX={"auto"}
               className="scrollX"
               position={"sticky"}
@@ -89,6 +89,8 @@ export default function ManageUsers() {
                 }}
                 inputValue={filterConfig.search}
               />
+
+              <AddUser />
             </HStack>
           </Box>
 

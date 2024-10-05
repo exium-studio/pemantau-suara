@@ -33,7 +33,7 @@ const useDataState = <T>({
     successToast: false,
   });
 
-  // Request Func
+  // Request func
   const makeRequest = () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
@@ -59,7 +59,7 @@ const useDataState = <T>({
   };
   const makeRequestRef = useRef(makeRequest);
 
-  // Handle Request
+  // Handle request
   useEffect(() => {
     if (conditions && url) {
       makeRequestRef?.current();
@@ -80,7 +80,7 @@ const useDataState = <T>({
     ...dependencies,
   ]);
 
-  // Handle Response
+  // Handle response
   useEffect(() => {
     if (response) {
       setData(response?.data?.data);

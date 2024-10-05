@@ -174,7 +174,13 @@ const optionsGoldar = [
   { value: 4, label: "O" },
 ];
 
+const optionsRole = [
+  { value: 2, label: "Penanggung Jawab" },
+  { value: 3, label: "Pelaksana" },
+];
+
 export {
+  optionsRole,
   optionsGoldar,
   optionsStatusAktif,
   optionsPendidikan,

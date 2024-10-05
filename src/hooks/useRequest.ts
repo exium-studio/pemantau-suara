@@ -1,7 +1,7 @@
+import { AxiosRequestConfig } from "axios";
 import { useEffect, useRef, useState } from "react";
 import request from "../lib/request";
 import useFireToast from "./useFireToast";
-import { AxiosRequestConfig } from "axios";
 
 interface Request__Interface {
   config: AxiosRequestConfig;
@@ -19,13 +19,11 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
   const [response, setResponse] = useState<any>(undefined);
   const [error, setError] = useState<boolean>(false);
 
-  // console.log(response);
-
   // Utils
   const { fireToast } = useFireToast();
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Make Request Func
+  // Make request func
   function req({ config }: Request__Interface) {
     setLoading(true);
 
@@ -57,7 +55,7 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
       });
   }
 
-  // Handle Toast by Response Status
+  // Handle toast by response status
   useEffect(() => {
     if (!loading && status) {
       switch (status) {

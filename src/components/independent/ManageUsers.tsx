@@ -15,7 +15,7 @@ import SearchComponent from "../dependent/input/SearchComponent";
 import UsersTable from "./UsersTable";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
-import AddUser from "./AddUser";
+import AddUserModal from "./AddUserModal";
 
 export default function ManageUsers() {
   // SX
@@ -90,7 +90,7 @@ export default function ManageUsers() {
                 inputValue={filterConfig.search}
               />
 
-              <AddUser />
+              <AddUserModal />
             </HStack>
           </Box>
 

@@ -1,15 +1,15 @@
-import { useEffect, useState, useRef } from "react";
-import req from "../lib/request";
+import { useEffect, useRef, useState } from "react";
 import useRenderTrigger from "./useRenderTrigger";
+import useRequest from "./useRequest";
 
 interface Props<T> {
   initialData?: T;
   url?: string;
   payload?: any;
-  limit?: number;
   dependencies?: any[];
   conditions?: boolean;
   page?: number;
+  limit?: number;
   noRt?: boolean;
 }
 
@@ -17,39 +17,24 @@ const useDataState = <T>({
   initialData,
   payload,
   url,
-  limit,
   dependencies = [],
   conditions = true,
   page = 1,
+  limit,
   noRt = false,
 }: Props<T>) => {
+  // States
   const [error, setError] = useState<boolean>(false);
   const [notFound, setNotFound] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
   const [loadingLoadMore, setLoadingLoadMore] = useState<boolean>(false);
   const [data, setData] = useState<T | undefined>(initialData);
   const [paginationData, setPaginationData] = useState<any>(undefined);
-  // const [offset, setOffset] = useState<number>((page - 1) * (limit || 0));
   const { rt } = useRenderTrigger();
   const abortControllerRef = useRef<AbortController | null>(null);
+  const { req, response, loading } = useRequest({ successToast: false });
 
-  useEffect(() => {
-    setError(false);
-    setLoading(true);
-    if (conditions && url) {
-      makeRequest();
-    }
-
-    return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conditions, url, page, ...(noRt ? [] : [rt]), ...dependencies]);
-
+  // Request Func
   const makeRequest = () => {
-    // console.log(abortControllerRef.current);
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -60,7 +45,6 @@ const useDataState = <T>({
     const data = {
       ...payload,
       limit: limit,
-      // offset: offset,
     };
 
     const config = {
@@ -71,33 +55,42 @@ const useDataState = <T>({
       signal: abortController.signal,
     };
 
-    req(config)
-      .then((response) => {
-        setLoading(false);
-        setError(false);
-        if (response.status === 200) {
-          setData(response.data.data);
-          setPaginationData(response.data?.pagination);
-        }
-      })
-      .catch((error) => {
-        if (error.name === "CanceledError") {
-          return;
-        } else {
-          setLoading(false);
-
-          if (error?.response?.status === 404) {
-            setNotFound(true);
-          }
-          setError(true);
-          console.log(error);
-        }
-      });
+    req({ config });
   };
+  const makeRequestRef = useRef(makeRequest);
+
+  // Handle Request
+  useEffect(() => {
+    setError(false);
+    if (conditions && url) {
+      makeRequestRef?.current();
+    }
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, [
+    conditions,
+    url,
+    page,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...(noRt ? [] : [rt]),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...dependencies,
+  ]);
+
+  // Handle Response
+  useEffect(() => {
+    if (response) {
+      setData(response?.data?.data);
+      setPaginationData(response?.data?.pagination);
+    }
+  }, [response]);
 
   function retry() {
     setError(false);
-    setLoading(true);
     makeRequest();
   }
 
@@ -123,7 +116,6 @@ const useDataState = <T>({
     data,
     setData,
     loading,
-    setLoading,
     notFound,
     setNotFound,
     error,

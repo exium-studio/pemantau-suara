@@ -21,7 +21,7 @@ const useAuth = () => {
     const config = {
       url: url,
     };
-    req({ config: config });
+    req({ config });
   }
 
   return { login, logout, loading, response };

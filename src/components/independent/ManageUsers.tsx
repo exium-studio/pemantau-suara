@@ -30,7 +30,12 @@ export default function ManageUsers() {
 
   return (
     <>
-      <Tooltip label={"Kelola Pengguna"} placement="bottom" mt={1}>
+      <Tooltip
+        label={"Kelola Pengguna"}
+        openDelay={500}
+        placement="bottom"
+        mt={1}
+      >
         <IconButton
           aria-label={"Kelola Pengguna"}
           icon={<Icon as={User} fontSize={iconSize} />}

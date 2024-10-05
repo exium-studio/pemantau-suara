@@ -7,7 +7,12 @@ interface Request__Interface {
   config: AxiosRequestConfig;
 }
 
-const useRequest = () => {
+interface Props {
+  successToast?: boolean;
+  errorToast?: boolean;
+}
+
+const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
   // States
   const [loading, setLoading] = useState<boolean>(false);
   const [status, setStatus] = useState<number | undefined>(undefined);
@@ -54,23 +59,28 @@ const useRequest = () => {
     if (!loading && status) {
       switch (status) {
         case 200:
-          fireToast({ status: "success", title: response?.data?.message });
+          successToast &&
+            fireToast({ status: "success", title: response?.data?.message });
           break;
         case 400:
-          fireToast({ status: "error", title: response?.data?.message });
+          errorToast &&
+            fireToast({ status: "error", title: response?.data?.message });
           break;
         case 403:
-          fireToast({ status: "error", title: response?.data?.message });
+          errorToast &&
+            fireToast({ status: "error", title: response?.data?.message });
           break;
         case 404:
-          fireToast({ status: "error", title: response?.data?.message });
+          errorToast &&
+            fireToast({ status: "error", title: response?.data?.message });
           break;
         case 500:
-          fireToast({ status: "error", title: response?.data?.message });
+          errorToast &&
+            fireToast({ status: "error", title: response?.data?.message });
           break;
       }
     }
-  }, [loading, status, response, error, fireToast]);
+  }, [loading, status, response, error, fireToast, successToast, errorToast]);
 
   return { req, loading, status, response, error };
 };

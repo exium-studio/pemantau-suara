@@ -12,6 +12,8 @@ interface TableProps {
 }
 
 const TableComponent = ({ tableState }: TableProps) => {
+  // Row options
+
   const formattedHeader = [
     {
       th: "#",
@@ -120,8 +122,6 @@ const TableComponent = ({ tableState }: TableProps) => {
       </>
     ),
   };
-
-  // console.log(tableState);
 
   return (
     <>

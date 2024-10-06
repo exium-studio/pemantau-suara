@@ -25,8 +25,8 @@ type Type__InitialValues = {
   tgl_diangkat?: Date;
   no_hp?: string;
   role?: Interface__SelectOption;
-  username?: string;
-  password?: string;
+  newusername?: string;
+  newpassword?: string;
 };
 
 const defaultValues = {
@@ -37,8 +37,8 @@ const defaultValues = {
   tgl_diangkat: undefined,
   no_hp: "",
   role: undefined,
-  username: "",
-  password: "",
+  newusername: "",
+  newpassword: "",
 };
 
 interface Props {
@@ -61,8 +61,8 @@ export default function UserForm({
       tgl_diangkat: yup.mixed().required("Harus diisi"),
       no_hp: yup.string().required("Harus diisi"),
       role: yup.object().required("Harus diisi"),
-      username: yup.string().required("Harus diisi"),
-      password: yup.string().required("Harus diisi"),
+      newusername: yup.string().required("Harus diisi"),
+      newpassword: yup.string().required("Harus diisi"),
     }),
     onSubmit: (values, { resetForm }) => {
       const url = `/api/pemantau-suara/dashboard/management/pengguna`;
@@ -74,8 +74,8 @@ export default function UserForm({
         tgl_diangkat: values?.tgl_diangkat,
         no_hp: values?.no_hp,
         role_id: values?.role?.value,
-        username: values?.username,
-        password: values?.password,
+        username: values?.newusername,
+        password: values?.newpassword,
       };
       const config = {
         url,
@@ -116,7 +116,7 @@ export default function UserForm({
           <FormErrorMessage>{formik.errors.nama as string}</FormErrorMessage>
         </FormControl>
 
-        {/* Jenis Kelamin */}
+        {/* Jenis kelamin */}
         <FormControl mb={4} isInvalid={!!formik.errors?.jenis_kelamin}>
           <FormLabel>
             Jenis Kelamin
@@ -147,12 +147,12 @@ export default function UserForm({
               formik.setFieldValue("nik_ktp", input);
             }}
             inputValue={formik.values.nik_ktp}
-            placeholder="jolitos.kurniawan"
+            placeholder="331**************"
           />
           <FormErrorMessage>{formik.errors.nik_ktp as string}</FormErrorMessage>
         </FormControl>
 
-        {/* Tanggal Diangkat */}
+        {/* Tanggal diangkat */}
         <FormControl mb={4} isInvalid={!!formik.errors?.tgl_diangkat}>
           <FormLabel>
             Tanggal Diangkat
@@ -185,7 +185,7 @@ export default function UserForm({
               formik.setFieldValue("no_hp", input);
             }}
             inputValue={formik.values.no_hp}
-            placeholder="jolitos.kurniawan"
+            placeholder="08**********"
           />
           <FormErrorMessage>{formik.errors.no_hp as string}</FormErrorMessage>
         </FormControl>
@@ -207,43 +207,47 @@ export default function UserForm({
           <FormErrorMessage>{formik.errors.role as string}</FormErrorMessage>
         </FormControl>
 
+        {/* Area kelurahan */}
+
         {/* Username */}
-        <FormControl mb={4} isInvalid={!!formik.errors?.username}>
+        <FormControl mb={4} isInvalid={!!formik.errors?.newusername}>
           <FormLabel>
             Username
             <RequiredForm />
           </FormLabel>
           <StringInput
-            name="username"
+            name="newusername"
             onChangeSetter={(input) => {
-              formik.setFieldValue("username", input);
+              formik.setFieldValue("newusername", input);
             }}
-            inputValue={formik.values.username}
+            inputValue={formik.values.newusername}
             placeholder="jolitos.kurniawan"
           />
           <FormErrorMessage>
-            {formik.errors.username as string}
+            {formik.errors.newusername as string}
           </FormErrorMessage>
         </FormControl>
 
         {/* Password */}
-        <FormControl mb={8} isInvalid={!!formik.errors?.password}>
-          <FormLabel>
-            Password
-            <RequiredForm />
-          </FormLabel>
-          <PasswordInput
-            name="password"
-            onChangeSetter={(input) => {
-              formik.setFieldValue("password", input);
-            }}
-            inputValue={formik.values.password}
-            placeholder="jolitos.kurniawan"
-          />
-          <FormErrorMessage>
-            {formik.errors.password as string}
-          </FormErrorMessage>
-        </FormControl>
+        {!excludeFields?.includes("password") && (
+          <FormControl mb={8} isInvalid={!!formik.errors?.newpassword}>
+            <FormLabel>
+              Password
+              <RequiredForm />
+            </FormLabel>
+            <PasswordInput
+              name="newpassword"
+              onChangeSetter={(input) => {
+                formik.setFieldValue("newpassword", input);
+              }}
+              inputValue={formik.values.newpassword}
+              placeholder="newpassword"
+            />
+            <FormErrorMessage>
+              {formik.errors.newpassword as string}
+            </FormErrorMessage>
+          </FormControl>
+        )}
       </form>
 
       <Button

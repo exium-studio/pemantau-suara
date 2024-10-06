@@ -1,9 +1,9 @@
-import { Box, Icon, IconButton } from "@chakra-ui/react";
+import { Box, Icon, IconButton, InputProps } from "@chakra-ui/react";
 import { RiEyeLine, RiEyeOffLine } from "@remixicon/react";
 import { useState } from "react";
 import StringInput from "./StringInput";
 
-interface Props {
+interface Props extends InputProps {
   name: string;
   onChangeSetter: (inputValue: string | undefined) => void;
   inputValue: string | undefined;

@@ -70,6 +70,7 @@ export default function StringInput({
           onChange={handleChange}
           value={inputValue}
           placeholder=" "
+          autoComplete="off"
           {...props}
         />
         {!inputValue && (

@@ -36,11 +36,18 @@ export default function Maps({
   const isSuperAdmin = userData?.role?.id === 1;
   const filteredGeoJSON = isSuperAdmin
     ? geoJSONData
-    : geoJSONData?.flatMap((kecamatan: any) =>
-        kecamatan?.features?.filter((kelurahan: any) =>
+    : geoJSONData?.map((kecamatan: any) => {
+        // Filter kelurahan berdasarkan allowedKelurahan
+        const filteredFeatures = kecamatan?.features?.filter((kelurahan: any) =>
           allowedKelurahan?.includes(kelurahan?.properties?.village_code)
-        )
-      ) || []; // Kembali ke array kosong jika geoJSONData undefined
+        );
+
+        // Kembalikan objek kecamatan dengan fitur yang terfilter
+        return {
+          ...kecamatan,
+          features: filteredFeatures, // Ganti features dengan yang sudah difilter
+        };
+      }) || [];
 
   // Handle render map component
   const [isMapLoaded, setIsMapLoaded] = useState(false);

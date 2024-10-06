@@ -85,7 +85,7 @@ export default function SearchComponent({
     >
       <InputGroup {...props}>
         <InputLeftElement>
-          <Icon as={RiSearchLine} fontSize={iconSize} mb={"1px"} />
+          <Icon as={RiSearchLine} fontSize={iconSize} />
         </InputLeftElement>
 
         <StringInput

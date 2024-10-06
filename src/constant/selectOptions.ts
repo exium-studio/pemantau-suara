@@ -176,7 +176,7 @@ const optionsGoldar = [
 
 const optionsRole = [
   { value: 2, label: "Penanggung Jawab" },
-  { value: 3, label: "Pelaksana" },
+  { value: 3, label: "Penggerak" },
 ];
 
 export {

@@ -15,7 +15,7 @@ interface Props {
   style?: CSSProperties;
 }
 
-export default function MapboxMap({
+export default function Maps({
   geoJSONData,
   latitude,
   longitude,

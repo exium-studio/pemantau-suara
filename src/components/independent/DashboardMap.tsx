@@ -1,12 +1,13 @@
 import { Box } from "@chakra-ui/react";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import geoJSONLayers from "../../constant/geoJSONLayers";
-import MapboxMap from "../dependent/MapboxMap";
+import useGeoJSONKecamatan from "../../global/useGeoJSONKecamatan";
+import Maps from "../dependent/Maps";
 
 export default function DashboardMap() {
   // Fetch all geoJSON data
-  const [geoJSONData, setGeojsonData] = useState<any[]>([]);
+  const { geoJSONKecamatan, setGeoJSONKecamatan } = useGeoJSONKecamatan();
   useEffect(() => {
     const fetchGeoJSONData = async () => {
       try {
@@ -15,18 +16,20 @@ export default function DashboardMap() {
             fetch(layer.geojson).then((res) => res.json())
           )
         );
-        setGeojsonData(data);
+        setGeoJSONKecamatan(data);
       } catch (err) {
         console.error("Error loading GeoJSON files:", err);
       }
     };
-    fetchGeoJSONData();
+    if (!geoJSONKecamatan) {
+      fetchGeoJSONData();
+    }
   }, []);
 
   return (
     <Box position={"relative"}>
-      <MapboxMap
-        geoJSONData={geoJSONData}
+      <Maps
+        geoJSONData={geoJSONKecamatan}
         latitude={-7.02}
         longitude={110.38}
         zoom={11}

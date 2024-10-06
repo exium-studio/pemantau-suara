@@ -1,17 +1,17 @@
 import { Icon, MenuItem, Text } from "@chakra-ui/react";
+import { Pencil } from "@phosphor-icons/react";
 import { Interface__TableState } from "../../constant/interfaces";
+import { iconSize } from "../../constant/sizes";
 import useDataState from "../../hooks/useDataState";
+import getUserData from "../../lib/getUserData";
 import AvatarUserTableBody from "../dependent/AvatarUserTableBody";
 import CustomTable from "../dependent/CustomTable";
 import NoData from "./feedback/NoData";
 import Retry from "./feedback/Retry";
 import Skeleton from "./feedback/Skeleton";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
-import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
-import { Pencil } from "@phosphor-icons/react";
-import { iconSize } from "../../constant/sizes";
-import getUserData from "../../lib/getUserData";
 import PermissionTooltip from "./wrapper/PermissionTooltip";
+import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
 
 interface TableProps {
   tableState: Interface__TableState;
@@ -62,6 +62,8 @@ const TableComponent = ({ tableState }: TableProps) => {
       return (
         <UserFormModalDisclosure
           id={`edit-user-modal-${rowData?.id}`}
+          submitUrl={`/api/pemantau-suara/dashboard/management/pengguna/${rowData?.id}`}
+          submitLabel="Simpan"
           initialValues={initialValues}
           excludeFields={["tgl_diangkat", "username", "password"]}
         >

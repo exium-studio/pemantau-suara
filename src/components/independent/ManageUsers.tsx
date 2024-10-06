@@ -1,5 +1,5 @@
 import { Box, HStack, Icon, IconButton, Tooltip } from "@chakra-ui/react";
-import { User } from "@phosphor-icons/react";
+import { Plus, User } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useLightDarkColor } from "../../constant/colors";
 import { iconSize } from "../../constant/sizes";
@@ -7,10 +7,10 @@ import useManageActivities from "../../global/useManageActivities";
 import useManageUsers from "../../global/useManageUsers";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import SearchComponent from "../dependent/input/SearchComponent";
-import AddUserModal from "./AddUserModal";
 import UsersTable from "./UsersTable";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
+import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
 
 export default function ManageUsers() {
   // SX
@@ -97,7 +97,20 @@ export default function ManageUsers() {
                 inputValue={filterConfig.search}
               />
 
-              <AddUserModal />
+              <UserFormModalDisclosure
+                id="tambah-pengguna"
+                submitUrl="/api/pemantau-suara/dashboard/management/pengguna"
+                submitLabel="Tambahkan"
+              >
+                <Tooltip label="Tambah Pengguna" openDelay={500} mr={9}>
+                  <IconButton
+                    aria-label="add-user"
+                    icon={<Icon as={Plus} fontSize={iconSize} />}
+                    colorScheme="ap"
+                    className="btn-ap clicky"
+                  />
+                </Tooltip>
+              </UserFormModalDisclosure>
             </HStack>
           </Box>
 

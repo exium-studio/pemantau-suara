@@ -41,12 +41,14 @@ const defaultValues = {
 
 interface Props {
   submitUrl: string;
+  submitLabel: string;
   initialValues?: Type__UserInitialValues;
   excludeFields?: string[];
 }
 
 export default function UserForm({
   submitUrl,
+  submitLabel,
   initialValues = defaultValues,
   excludeFields,
 }: Props) {
@@ -96,8 +98,12 @@ export default function UserForm({
           }
           return true; // If role.value is 2, skip the required check
         }),
-      newusername: yup.string().required("Harus diisi"),
-      newpassword: yup.string().required("Harus diisi"),
+      newusername: !excludeFields?.includes("username")
+        ? yup.string().required("Harus diisi")
+        : yup.mixed(),
+      newpassword: !excludeFields?.includes("password")
+        ? yup.string().required("Harus diisi")
+        : yup.mixed(),
     }),
     onSubmit: (values, { resetForm }) => {
       // const url = `/api/pemantau-suara/dashboard/management/pengguna`;
@@ -364,7 +370,7 @@ export default function UserForm({
         form="userForm"
         isLoading={loading}
       >
-        Tambahkan
+        {submitLabel}
       </Button>
     </>
   );

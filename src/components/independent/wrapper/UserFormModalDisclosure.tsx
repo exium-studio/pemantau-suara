@@ -16,6 +16,8 @@ import { Type__UserInitialValues } from "../../../constant/interfaces";
 
 interface Props extends BoxProps {
   id: string;
+  submitUrl: string;
+  submitLabel: string;
   children?: any;
   initialValues?: Type__UserInitialValues;
   excludeFields?: string[];
@@ -23,6 +25,8 @@ interface Props extends BoxProps {
 
 export default function UserFormModalDisclosure({
   id,
+  submitUrl,
+  submitLabel,
   children,
   initialValues,
   excludeFields,
@@ -50,7 +54,8 @@ export default function UserFormModalDisclosure({
           </ModalHeader>
           <ModalBody pb={6}>
             <UserForm
-              submitUrl={`/api/pemantau-suara/dashboard/management/pengguna`}
+              submitUrl={submitUrl}
+              submitLabel={submitLabel}
               initialValues={initialValues}
               excludeFields={excludeFields}
             />

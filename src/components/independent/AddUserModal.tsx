@@ -14,7 +14,6 @@ import { iconSize } from "../../constant/sizes";
 import useBackOnClose from "../../hooks/useBackOnClose";
 import backOnClose from "../../lib/backOnClose";
 import DisclosureHeader from "../dependent/DisclosureHeader";
-import UserForm from "../form/UserForm";
 
 export default function AddUser() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -44,9 +43,9 @@ export default function AddUser() {
             <DisclosureHeader title={"Tambah Pengguna"} />
           </ModalHeader>
           <ModalBody pb={6}>
-            <UserForm
+            {/* <UserForm
               submitUrl={`/api/pemantau-suara/dashboard/management/pengguna`}
-            />
+            /> */}
           </ModalBody>
         </ModalContent>
       </Modal>

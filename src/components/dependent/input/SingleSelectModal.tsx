@@ -234,7 +234,9 @@ export default function SingleSelectModal({
                         {fo.map((option, i) => (
                           <Tooltip
                             key={i}
-                            label={`${option?.label} ${option?.label2}`}
+                            label={`${option?.label || ""} ${
+                              option?.label2 || ""
+                            }`}
                             placement="bottom-start"
                             openDelay={500}
                           >
@@ -284,35 +286,41 @@ export default function SingleSelectModal({
                     {optionsDisplay === "chip" && (
                       <Wrap>
                         {fo.map((option, i) => (
-                          <Button
+                          <Tooltip
                             key={i}
-                            justifyContent={"space-between"}
-                            className="btn-outline"
-                            onClick={() => {
-                              setSelected(option);
-                            }}
-                            borderRadius={"full"}
-                            borderColor={
-                              selected && selected.value === option.value
-                                ? "var(--p500)"
-                                : ""
-                            }
-                            bg={
-                              selected && selected.value === option.value
-                                ? "var(--p500a4) !important"
-                                : ""
-                            }
-                            gap={2}
+                            label={`${option?.label || ""}`}
+                            placement="bottom-start"
+                            openDelay={500}
                           >
-                            <Text
-                              overflow={"hidden"}
-                              whiteSpace={"nowrap"}
-                              textOverflow={"ellipsis"}
+                            <Button
+                              justifyContent={"space-between"}
+                              className="btn-outline"
+                              onClick={() => {
+                                setSelected(option);
+                              }}
+                              borderRadius={"full"}
+                              borderColor={
+                                selected && selected.value === option.value
+                                  ? "var(--p500)"
+                                  : ""
+                              }
+                              bg={
+                                selected && selected.value === option.value
+                                  ? "var(--p500a4) !important"
+                                  : ""
+                              }
+                              gap={2}
                             >
-                              {option.label}
-                            </Text>
-                            {/* <Text opacity={0.4}>{option.label2}</Text> */}
-                          </Button>
+                              <Text
+                                overflow={"hidden"}
+                                whiteSpace={"nowrap"}
+                                textOverflow={"ellipsis"}
+                              >
+                                {option.label}
+                              </Text>
+                              {/* <Text opacity={0.4}>{option.label2}</Text> */}
+                            </Button>
+                          </Tooltip>
                         ))}
                       </Wrap>
                     )}

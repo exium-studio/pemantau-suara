@@ -5,7 +5,7 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as yup from "yup";
 import { Interface__SelectOption } from "../../constant/interfaces";
 import useRequest from "../../hooks/useRequest";
@@ -17,6 +17,8 @@ import DatePickerModal from "../dependent/input/DatePickerModal";
 import PasswordInput from "../dependent/input/PasswordInput";
 import StringInput from "../dependent/input/StringInput";
 import RequiredForm from "./RequiredForm";
+import createNumberArraybyGivenMaxNumber from "../../lib/createNumberArraybyGivenMaxNumber";
+import MultiSelectRW from "../dependent/dedicated/MultiSelectRW";
 
 type Type__InitialValues = {
   foto_profil?: string;
@@ -27,6 +29,7 @@ type Type__InitialValues = {
   no_hp?: string;
   role?: Interface__SelectOption;
   kelurahan?: any[];
+  rw?: Interface__SelectOption[];
   newusername?: string;
   newpassword?: string;
 };
@@ -40,6 +43,7 @@ const defaultValues = {
   no_hp: "",
   role: undefined,
   kelurahan: undefined,
+  rw: undefined,
   newusername: "",
   newpassword: "",
 };
@@ -52,6 +56,12 @@ export default function UserForm({
   initialValues = defaultValues,
   excludeFields,
 }: Props) {
+  // States
+  const [RWOptions, setRWOptions] = useState<
+    Interface__SelectOption[] | undefined
+  >(undefined);
+
+  // Utils
   const { req, loading } = useRequest();
 
   const formik = useFormik({
@@ -65,6 +75,7 @@ export default function UserForm({
       no_hp: yup.string().required("Harus diisi"),
       role: yup.object().required("Harus diisi"),
       kelurahan: yup.mixed().required("Harus diisi"),
+      rw: yup.mixed().required("Harus diisi"),
       newusername: yup.string().required("Harus diisi"),
       newpassword: yup.string().required("Harus diisi"),
     }),
@@ -79,6 +90,7 @@ export default function UserForm({
         no_hp: values?.no_hp,
         role_id: values?.role?.value,
         kelurahan: values?.kelurahan?.map((kelurahan: any) => kelurahan.value),
+        rw: values?.rw,
         username: values?.newusername,
         password: values?.newpassword,
       };
@@ -100,6 +112,17 @@ export default function UserForm({
       generateUsernameByName(formik.values.nama)
     );
   }, [formik.values.nama]);
+
+  // Handle RWOptions by kelurahan
+  useEffect(() => {
+    const RWOptions = createNumberArraybyGivenMaxNumber(
+      formik.values.kelurahan?.[0]?.label2
+    )?.map((rw) => ({
+      value: rw,
+      label: rw.toString(),
+    }));
+    setRWOptions(RWOptions);
+  }, [formik.values.kelurahan]);
 
   return (
     <>
@@ -227,8 +250,31 @@ export default function UserForm({
             inputValue={formik.values.kelurahan}
             optionsDisplay="chip"
           />
-          <FormErrorMessage>{formik.errors.role as string}</FormErrorMessage>
+          <FormErrorMessage>
+            {formik.errors.kelurahan as string}
+          </FormErrorMessage>
         </FormControl>
+
+        {/* Pilih RW */}
+        {formik.values?.role?.value === 3 && formik.values.kelurahan && (
+          <FormControl mb={4} isInvalid={!!formik.errors?.rw}>
+            <FormLabel>
+              Area RW
+              <RequiredForm />
+            </FormLabel>
+            <MultiSelectRW
+              name="rw"
+              onConfirm={(input) => {
+                formik.setFieldValue("rw", input);
+              }}
+              isError={!!formik.errors.rw}
+              inputValue={formik.values.rw}
+              optionsDisplay="chip"
+              options={RWOptions}
+            />
+            <FormErrorMessage>{formik.errors.rw as string}</FormErrorMessage>
+          </FormControl>
+        )}
 
         {/* Username */}
         <FormControl mb={4} isInvalid={!!formik.errors?.newusername}>

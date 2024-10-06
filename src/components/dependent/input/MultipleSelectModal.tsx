@@ -122,7 +122,7 @@ export default function MultipleSelectModal({
       <Tooltip
         label={
           inputValue && inputValue.length > 0
-            ? `${inputValue && inputValue.map((item) => ` ${item.label}`)}`
+            ? `${inputValue && inputValue.map((item) => ` ${item?.label}`)}`
             : placeholder
         }
         placement="bottom-start"
@@ -285,73 +285,84 @@ export default function MultipleSelectModal({
                     {optionsDisplay === "list" && (
                       <CContainer gap={2}>
                         {fo.map((option, i) => (
-                          <Button
+                          <Tooltip
                             key={i}
-                            px={4}
-                            justifyContent={"space-between"}
-                            className="btn-outline"
-                            onClick={() => {
-                              const isSelected =
+                            label={`${option?.label || ""} ${
+                              option?.label2 || ""
+                            }`}
+                            placement="bottom-start"
+                            openDelay={500}
+                          >
+                            <Button
+                              px={4}
+                              justifyContent={"space-between"}
+                              className="btn-outline"
+                              onClick={() => {
+                                const isSelected =
+                                  selected &&
+                                  selected.some(
+                                    (item) => item.value === option.value
+                                  );
+                                let newSelected = selected || [];
+
+                                if (isSelected) {
+                                  // Filter out the option if it's already selected
+                                  newSelected = newSelected.filter(
+                                    (item) => item.value !== option.value
+                                  );
+                                  setSelectAll(false);
+                                } else {
+                                  // Add the option to the selected array
+                                  //@ts-ignore
+                                  if (
+                                    (selected?.length || 0) + 1 ===
+                                    options?.length
+                                  ) {
+                                    setSelectAll(true);
+                                  }
+                                  newSelected = [...newSelected, option];
+                                }
+
+                                setSelected(newSelected);
+                              }}
+                              borderColor={
                                 selected &&
                                 selected.some(
                                   (item) => item.value === option.value
-                                );
-                              let newSelected = selected || [];
-
-                              if (isSelected) {
-                                // Filter out the option if it's already selected
-                                newSelected = newSelected.filter(
-                                  (item) => item.value !== option.value
-                                );
-                                setSelectAll(false);
-                              } else {
-                                // Add the option to the selected array
-                                //@ts-ignore
-                                if (selected?.length + 1 === options?.length) {
-                                  setSelectAll(true);
-                                }
-                                newSelected = [...newSelected, option];
+                                )
+                                  ? "var(--p500)"
+                                  : "transparent !important"
                               }
-
-                              setSelected(newSelected);
-                            }}
-                            borderColor={
-                              selected &&
-                              selected.some(
-                                (item) => item.value === option.value
-                              )
-                                ? "var(--p500)"
-                                : "transparent !important"
-                            }
-                            bg={
-                              selected &&
-                              selected.some(
-                                (item) => item.value === option.value
-                              )
-                                ? "var(--p500a5) !important"
-                                : ""
-                            }
-                          >
-                            <Text
-                              overflow={"hidden"}
-                              whiteSpace={"nowrap"}
-                              textOverflow={"ellipsis"}
+                              bg={
+                                selected &&
+                                selected.some(
+                                  (item) => item.value === option.value
+                                )
+                                  ? "var(--p500a5) !important"
+                                  : ""
+                              }
                             >
-                              {option.label}
-                            </Text>
+                              <Text
+                                overflow={"hidden"}
+                                whiteSpace={"nowrap"}
+                                textOverflow={"ellipsis"}
+                              >
+                                {option.label}
+                              </Text>
 
-                            <Text
-                              ml={4}
-                              opacity={0.4}
-                              maxW={"120px"}
-                              whiteSpace={"nowrap"}
-                              overflow={"hidden"}
-                              textOverflow={"ellipsis"}
-                              fontWeight={400}
-                            >
-                              {option.label2}
-                            </Text>
-                          </Button>
+                              <Text
+                                ml={4}
+                                opacity={0.4}
+                                maxW={"120px"}
+                                whiteSpace={"nowrap"}
+                                overflow={"hidden"}
+                                textOverflow={"ellipsis"}
+                                fontWeight={400}
+                              >
+                                {option.label2}
+                              </Text>
+                            </Button>
+                          </Tooltip>
                         ))}
                       </CContainer>
                     )}
@@ -359,63 +370,72 @@ export default function MultipleSelectModal({
                     {optionsDisplay === "chip" && (
                       <Wrap pb={"1px"}>
                         {fo.map((option, i) => (
-                          <Button
+                          <Tooltip
                             key={i}
-                            justifyContent={"space-between"}
-                            className="btn-outline"
-                            borderRadius={"full"}
-                            borderColor={
-                              selected &&
-                              selected.some(
-                                (item) => item.value === option.value
-                              )
-                                ? "var(--p500)"
-                                : ""
-                            }
-                            bg={
-                              selected &&
-                              selected.some(
-                                (item) => item.value === option.value
-                              )
-                                ? "var(--p500a5) !important"
-                                : ""
-                            }
-                            onClick={() => {
-                              const isSelected =
+                            label={`${option?.label || ""}`}
+                            placement="bottom-start"
+                            openDelay={500}
+                          >
+                            <Button
+                              justifyContent={"space-between"}
+                              className="btn-outline"
+                              borderRadius={"full"}
+                              borderColor={
                                 selected &&
                                 selected.some(
                                   (item) => item.value === option.value
-                                );
-                              let newSelected = selected || [];
-
-                              if (isSelected) {
-                                // Filter out the option if it's already selected
-                                newSelected = newSelected.filter(
-                                  (item) => item.value !== option.value
-                                );
-                                setSelectAll(false);
-                              } else {
-                                //@ts-ignore
-                                if (selected?.length + 1 === options?.length) {
-                                  setSelectAll(true);
-                                }
-                                // Add the option to the selected array
-                                newSelected = [...newSelected, option];
+                                )
+                                  ? "var(--p500)"
+                                  : ""
                               }
+                              bg={
+                                selected &&
+                                selected.some(
+                                  (item) => item.value === option.value
+                                )
+                                  ? "var(--p500a5) !important"
+                                  : ""
+                              }
+                              onClick={() => {
+                                const isSelected =
+                                  selected &&
+                                  selected.some(
+                                    (item) => item.value === option.value
+                                  );
+                                let newSelected = selected || [];
 
-                              setSelected(newSelected);
-                            }}
-                            gap={2}
-                          >
-                            <Text
-                              overflow={"hidden"}
-                              whiteSpace={"nowrap"}
-                              textOverflow={"ellipsis"}
+                                if (isSelected) {
+                                  // Filter out the option if it's already selected
+                                  newSelected = newSelected.filter(
+                                    (item) => item.value !== option.value
+                                  );
+                                  setSelectAll(false);
+                                } else {
+                                  //@ts-ignore
+                                  if (
+                                    (selected?.length || 0) + 1 ===
+                                    options?.length
+                                  ) {
+                                    setSelectAll(true);
+                                  }
+                                  // Add the option to the selected array
+                                  newSelected = [...newSelected, option];
+                                }
+
+                                setSelected(newSelected);
+                              }}
+                              gap={2}
                             >
-                              {option.label}
-                            </Text>
-                            {/* <Text opacity={0.4}>{option.label2}</Text> */}
-                          </Button>
+                              <Text
+                                overflow={"hidden"}
+                                whiteSpace={"nowrap"}
+                                textOverflow={"ellipsis"}
+                              >
+                                {option.label}
+                              </Text>
+                              {/* <Text opacity={0.4}>{option.label2}</Text> */}
+                            </Button>
+                          </Tooltip>
                         ))}
                       </Wrap>
                     )}

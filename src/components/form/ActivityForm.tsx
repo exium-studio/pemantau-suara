@@ -108,6 +108,16 @@ export default function ActivityForm({
             ];
             return validateFileExtension(value, allowedExtensions);
           }
+        )
+        .test(
+          "fileSize",
+          "Ukuran file tidak boleh lebih dari 10MB",
+          function (value) {
+            if (value && value instanceof File) {
+              return value.size <= 10 * 1024 * 1024; // Memeriksa ukuran file
+            }
+            return true; // Lewati validasi jika tidak ada file
+          }
         ),
     }),
     onSubmit: (values, { resetForm }) => {

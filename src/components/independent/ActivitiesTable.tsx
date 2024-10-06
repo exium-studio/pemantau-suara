@@ -1,23 +1,62 @@
-import { Button } from "@chakra-ui/react";
+import { Button, Icon, MenuItem, Text } from "@chakra-ui/react";
+import { Pencil } from "@phosphor-icons/react";
 import { Interface__TableState } from "../../constant/interfaces";
+import { iconSize } from "../../constant/sizes";
 import useDataState from "../../hooks/useDataState";
 import formatDate from "../../lib/formatDate";
+import formatNumber from "../../lib/formatNumber";
+import getUserData from "../../lib/getUserData";
 import AvatarUserTableBody from "../dependent/AvatarUserTableBody";
 import CustomTable from "../dependent/CustomTable";
+import EditActivityModalDisclosure from "../dependent/EditActivityModalDisclosure";
 import ImageViewModalDisclosure from "../dependent/ImageViewModalDisclosure";
 import NooflineText from "../dependent/NooflineText";
-import StatusAktivitasBadge from "../dependent/StatusAktivitasBadge";
 import NoData from "./feedback/NoData";
 import Retry from "./feedback/Retry";
 import Skeleton from "./feedback/Skeleton";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
+import PermissionTooltip from "./wrapper/PermissionTooltip";
 
 interface TableProps {
   tableState: Interface__TableState;
 }
 
 const TableComponent = ({ tableState }: TableProps) => {
+  // States
+  const userData = getUserData();
+
+  const isUserPenggerak = userData?.role?.id === 3;
+  const editPermission = isUserPenggerak;
+
   // Row options
+  const rowOptions = [
+    (rowData: any) => {
+      const item = rowData?.originalData;
+
+      const initialValues = {
+        potensi_suara: item?.potensi_suara,
+        deskripsi: item?.deskripsi,
+        tgl_mulai: new Date(formatDate(item?.tgl_mulai, "iso")),
+        tgl_selesai: new Date(formatDate(item?.tgl_selesai, "iso")),
+        tempat_aktivitas: item?.tempat_aktivitas,
+        foto_aktivitas: item?.foto_aktivitas,
+      };
+
+      return (
+        <EditActivityModalDisclosure
+          id={`${rowData?.id}`}
+          initialValues={initialValues}
+        >
+          <PermissionTooltip permission={editPermission} placement="left">
+            <MenuItem isDisabled={!editPermission}>
+              <Text>Edit</Text>
+              <Icon as={Pencil} fontSize={iconSize} opacity={0.4} />
+            </MenuItem>
+          </PermissionTooltip>
+        </EditActivityModalDisclosure>
+      );
+    },
+  ];
 
   const formattedHeader = [
     {
@@ -25,7 +64,7 @@ const TableComponent = ({ tableState }: TableProps) => {
       props: {
         position: "sticky",
         left: 0,
-        zIndex: 2,
+        zIndex: 3,
         w: "50px",
       },
       cProps: {
@@ -41,12 +80,19 @@ const TableComponent = ({ tableState }: TableProps) => {
       },
     },
     {
-      th: "Status Aktivitas",
+      th: "Potensi Suara",
       isSortable: true,
       cProps: {
         justify: "center",
       },
     },
+    // {
+    //   th: "Status Aktivitas",
+    //   isSortable: true,
+    //   cProps: {
+    //     justify: "center",
+    //   },
+    // },
     {
       th: "Deskripsi",
       isSortable: true,
@@ -89,7 +135,7 @@ const TableComponent = ({ tableState }: TableProps) => {
         props: {
           position: "sticky",
           left: 0,
-          zIndex: 3,
+          zIndex: 2,
           w: "50px",
         },
         cProps: {
@@ -114,13 +160,21 @@ const TableComponent = ({ tableState }: TableProps) => {
         },
       },
       {
-        value: item?.status_aktivitas,
-        td: <StatusAktivitasBadge data={item?.status_aktivitas} w={"200px"} />,
+        value: item?.potensi_suara,
+        td: formatNumber(item?.potensi_suara),
         cProps: {
           justify: "center",
         },
         isNumeric: true,
       },
+      // {
+      //   value: item?.status_aktivitas,
+      //   td: <StatusAktivitasBadge data={item?.status_aktivitas} w={"200px"} />,
+      //   cProps: {
+      //     justify: "center",
+      //   },
+      //   isNumeric: true,
+      // },
       {
         value: item?.deskripsi,
         td: <NooflineText data={item?.deskripsi} />,
@@ -173,10 +227,11 @@ const TableComponent = ({ tableState }: TableProps) => {
     empty: <NoData />,
     loaded: (
       <>
-        <CustomTableContainer minH={"200px !important"}>
+        <CustomTableContainer>
           <CustomTable
             formattedHeader={formattedHeader}
             formattedBody={formattedBody}
+            rowOptions={editPermission ? rowOptions : undefined}
           />
         </CustomTableContainer>
       </>
@@ -210,9 +265,18 @@ interface Props {
 }
 
 export default function ActivitiesTable({ conditions, filterConfig }: Props) {
+  // States
+  const userData = getUserData();
+  const allowedKelurahan = userData?.kelurahan?.map(
+    (kelurahan: any) => kelurahan?.kode_kelurahan
+  );
   const { tableState } = useDataState<any>({
     url: `/api/pemantau-suara/dashboard/management/get-aktivitas`,
-    payload: {},
+    payload: {
+      search: filterConfig?.search?.split(" "),
+      limit: 0,
+      kode_kelurahan: allowedKelurahan,
+    },
     conditions: conditions,
     dependencies: [],
   });

@@ -53,6 +53,8 @@ const useDataState = <T>({
         signal: abortController.signal,
       };
 
+      setData(undefined);
+
       req({ config });
     };
   }, [payload, req, url]);

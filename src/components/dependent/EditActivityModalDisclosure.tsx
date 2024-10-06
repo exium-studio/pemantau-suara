@@ -1,36 +1,35 @@
 import {
-  Icon,
-  IconButton,
+  Box,
   Modal,
   ModalBody,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Plus } from "@phosphor-icons/react";
-import { iconSize } from "../../constant/sizes";
 import useBackOnClose from "../../hooks/useBackOnClose";
 import backOnClose from "../../lib/backOnClose";
-import DisclosureHeader from "../dependent/DisclosureHeader";
 import ActivityForm from "../form/ActivityForm";
+import DisclosureHeader from "./DisclosureHeader";
+import { Type__ActivityInitialValues } from "../../constant/interfaces";
 
-export default function AddActivityModal() {
+interface Props {
+  id: string;
+  children?: any;
+  initialValues?: Type__ActivityInitialValues;
+}
+
+export default function EditActivityModalDisclosure({
+  id,
+  children,
+  initialValues,
+}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  useBackOnClose(`add-activity-modal`, isOpen, onOpen, onClose);
+  useBackOnClose(`edit-activity-modal-${id}`, isOpen, onOpen, onClose);
 
   return (
     <>
-      <Tooltip label="Tambah Aktivitas" openDelay={500} mr={9}>
-        <IconButton
-          aria-label="add-activity"
-          icon={<Icon as={Plus} fontSize={iconSize} />}
-          colorScheme="ap"
-          className="btn-ap clicky"
-          onClick={onOpen}
-        />
-      </Tooltip>
+      <Box onClick={onOpen}>{children}</Box>
 
       <Modal
         isOpen={isOpen}
@@ -45,8 +44,11 @@ export default function AddActivityModal() {
           </ModalHeader>
           <ModalBody pb={6}>
             <ActivityForm
-              submitUrl={`/api/pemantau-suara/dashboard/management/aktivitas`}
-              submitLabel="Tambahkan"
+              initialValues={initialValues}
+              excludeFields={["pelaksana", "kelurahan", "rw"]}
+              submitUrl={`/api/pemantau-suara/dashboard/management/aktivitas/${id}`}
+              submitLabel="Simpan"
+              method={'patch'}
             />
           </ModalBody>
         </ModalContent>

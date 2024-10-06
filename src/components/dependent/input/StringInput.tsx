@@ -83,7 +83,7 @@ export default function StringInput({
                 : "32px"
             })`}
             position={"absolute"}
-            top={"10px"}
+            top={"8px"}
             left={props?.pl || 4}
             pr={props?.pr}
             whiteSpace={"nowrap"}

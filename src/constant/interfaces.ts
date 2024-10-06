@@ -1,6 +1,18 @@
 import { StackProps } from "@chakra-ui/react";
+// Custom Type
 
-// Base Interfaces
+export type Type__ActivityInitialValues = {
+  pelaksana?: Interface__SelectOption;
+  kelurahan?: Interface__SelectOption;
+  rw?: Interface__SelectOption;
+  potensi_suara?: number;
+  deskripsi?: string;
+  tgl_mulai?: Date;
+  tgl_selesai?: Date;
+  tempat_aktivitas?: string;
+  foto_aktivitas?: any;
+};
+
 export type Type__UserInitialValues = {
   foto_profil?: string;
   nama?: string;
@@ -14,6 +26,8 @@ export type Type__UserInitialValues = {
   newusername?: string;
   newpassword?: string;
 };
+
+// Base Interfaces
 
 export interface Interface__FireToast {
   status?: "success" | "loading" | "info" | "warning" | "error";

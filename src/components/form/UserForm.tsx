@@ -143,8 +143,6 @@ export default function UserForm({
 
   // Handle response status
   const prevStatus = useRef<number | null>(null);
-
-  // Handle response status
   useEffect(() => {
     if ((status === 200 || status === 201) && prevStatus.current !== status) {
       setRt(!rt);

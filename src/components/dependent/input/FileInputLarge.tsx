@@ -92,8 +92,6 @@ export default function FileInputLarge({
   //@ts-ignore@
   const isImage = fileURL && /image\/.*/.test(inputValue?.type || "");
 
-  console.log(fileName);
-
   return (
     <>
       <Input

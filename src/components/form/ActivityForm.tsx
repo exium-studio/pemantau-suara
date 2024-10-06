@@ -7,7 +7,10 @@ import {
 import { useFormik } from "formik";
 import { useEffect, useRef, useState } from "react";
 import * as yup from "yup";
-import { Interface__SelectOption } from "../../constant/interfaces";
+import {
+  Interface__SelectOption,
+  Type__ActivityInitialValues,
+} from "../../constant/interfaces";
 import useRequest from "../../hooks/useRequest";
 import createNumberArraybyGivenMaxNumber from "../../lib/createNumberArraybyGivenMaxNumber";
 import getUserData from "../../lib/getUserData";
@@ -22,22 +25,15 @@ import StringInput from "../dependent/input/StringInput";
 import Textarea from "../dependent/input/Textarea";
 import RequiredForm from "./RequiredForm";
 import formatDate from "../../lib/formatDate";
-
-type Type__InitialValues = {
-  pelaksana?: Interface__SelectOption;
-  kelurahan?: Interface__SelectOption;
-  rw?: Interface__SelectOption;
-  deskripsi?: string;
-  tgl_mulai?: Date;
-  tgl_selesai?: Date;
-  tempat_aktivitas?: string;
-  foto_aktivitas?: any;
-};
+import NumberInput from "../dependent/input/NumberInput";
+import useRenderTrigger from "../../hooks/useRenderTrigger";
+import backOnClose from "../../lib/backOnClose";
 
 const defaultValues = {
   pelaksana: undefined,
   kelurahan: undefined,
   rw: undefined,
+  potensi_suara: undefined,
   deskripsi: "",
   tgl_mulai: undefined,
   tgl_selesai: undefined,
@@ -46,38 +42,52 @@ const defaultValues = {
 };
 
 interface Props {
-  initialValues?: Type__InitialValues;
+  initialValues?: Type__ActivityInitialValues;
   excludeFields?: string[];
+  submitUrl: string;
+  submitLabel: string;
+  method?: string;
 }
 export default function ActivityForm({
   initialValues = defaultValues,
   excludeFields,
+  submitUrl,
+  submitLabel,
+  method,
 }: Props) {
   // States
   const [RWOptions, setRWOptions] = useState<
     Interface__SelectOption[] | undefined
   >(undefined);
   const userData = getUserData();
+  const userDataRef = useRef(userData);
 
   // Utils
-  const { req, loading } = useRequest();
+  const { req, loading, status } = useRequest();
+  const { rt, setRt } = useRenderTrigger();
 
   const formik = useFormik({
     validateOnChange: false,
     initialValues: initialValues,
     validationSchema: yup.object().shape({
-      pelaksana: yup.object().required("Harus diisi"),
-      kelurahan: yup.object().required("Harus diisi"),
-      rw: yup
-        .mixed()
-        .test("is-required-based-on-role", "Harus diisi", function (value) {
-          const { role } = this.parent as { role: Interface__SelectOption };
-          // Hanya require 'rw' jika role.value bukan 2
-          if (role?.value !== 2) {
-            return !!value; // Return true if value is present
-          }
-          return true; // If role.value is 2, skip the required check
-        }),
+      pelaksana: !excludeFields?.includes("pelaksana")
+        ? yup.object().required("Harus diisi")
+        : yup.mixed(),
+      kelurahan: !excludeFields?.includes("pelaksana")
+        ? yup.object().required("Harus diisi")
+        : yup.mixed(),
+      rw: !excludeFields?.includes("pelaksana")
+        ? yup
+            .mixed()
+            .test("is-required-based-on-role", "Harus diisi", function (value) {
+              const { role } = this.parent as { role: Interface__SelectOption };
+              // Hanya require 'rw' jika role.value bukan 2
+              if (role?.value !== 2) {
+                return !!value; // Return true if value is present
+              }
+              return true; // If role.value is 2, skip the required check
+            })
+        : yup.mixed(),
       deskripsi: yup.string().required("Harus diisi"),
       tgl_mulai: yup.date().required("Harus diisi"),
       tgl_selesai: yup.date().required("Harus diisi"),
@@ -101,21 +111,25 @@ export default function ActivityForm({
         ),
     }),
     onSubmit: (values, { resetForm }) => {
-      const url = `/api/pemantau-suara/dashboard/management/aktivitas`;
+      const url = submitUrl;
 
       // Form Data
       const payload = new FormData();
 
       // Tambahkan data ke FormData
-      payload.append("pelaksana_id", values.pelaksana?.value);
-      payload.append("kelurahan_id", values.kelurahan?.value);
-      payload.append("rw", values.rw?.value);
-      payload.append("deskripsi", values.deskripsi as string);
+      payload.append("pelaksana_id", `${values.pelaksana?.value}`);
+      payload.append("kelurahan_id", `${values.kelurahan?.value}`);
+      payload.append("rw", `${values.rw?.value}`);
+      payload.append("potensi_suara", `${values.potensi_suara}`);
+      payload.append("deskripsi", `${values.deskripsi}`);
       payload.append("tgl_mulai", formatDate(values.tgl_mulai, "short2"));
       payload.append("tgl_selesai", formatDate(values.tgl_selesai, "short2"));
-      payload.append("tempat_aktivitas", values.tempat_aktivitas as string);
+      payload.append("tempat_aktivitas", `${values.tempat_aktivitas}`);
       if (values.foto_aktivitas) {
         payload.append("foto_aktivitas", values.foto_aktivitas);
+      }
+      if (method) {
+        payload.append("_method", method);
       }
 
       const config = {
@@ -129,16 +143,26 @@ export default function ActivityForm({
   });
   const formikRef = useRef(formik);
 
+  // Handle response status
+  const prevStatus = useRef<number | null>(null);
+  useEffect(() => {
+    if ((status === 200 || status === 201) && prevStatus.current !== status) {
+      setRt(!rt);
+      prevStatus.current = status;
+      backOnClose();
+    }
+  }, [status, setRt, rt]);
+
   // Handle pelaksana by user login (pelaksana/penggerak)
   useEffect(() => {
     // Check is user penggerak
-    if (userData?.role?.id === 3) {
+    if (userDataRef.current?.role?.id === 3) {
       formikRef?.current?.setFieldValue("pelaksana", {
-        value: userData?.id,
-        label: userData?.nama,
+        value: userDataRef.current?.id,
+        label: userDataRef.current?.nama,
       });
     }
-  }, [userData]);
+  }, []);
 
   // Handle kelurahan by pelaksana/penggerak
   useEffect(() => {
@@ -149,7 +173,7 @@ export default function ActivityForm({
         .then((r) => {
           if (r.status === 200) {
             formikRef?.current?.setFieldValue("kelurahan", {
-              value: r?.data?.data?.[0]?.id,
+              value: r?.data?.data?.[0]?.kode_kelurahan,
               label: r?.data?.data?.[0]?.nama_kelurahan,
               original_data: r?.data?.data?.[0],
             });
@@ -174,65 +198,90 @@ export default function ActivityForm({
 
   return (
     <>
-      <form id="addActivityForm" onSubmit={formik.handleSubmit}>
+      <form id="activityForm" onSubmit={formik.handleSubmit}>
         {/* Penggerak */}
-        <FormControl mb={4} isInvalid={!!formik.errors?.pelaksana}>
-          <FormLabel>
-            Penggerak
-            <RequiredForm />
-          </FormLabel>
-          <SelectPenggerak
-            name="pelaksana"
-            onConfirm={(input) => {
-              formik.setFieldValue("pelaksana", input);
-            }}
-            isDisabled={userData?.role?.id === 3}
-            inputValue={formik.values.pelaksana}
-          />
-          <FormErrorMessage>
-            {formik.errors.pelaksana as string}
-          </FormErrorMessage>
-        </FormControl>
+        {!excludeFields?.includes("pelaksana") && (
+          <FormControl mb={4} isInvalid={!!formik.errors?.pelaksana}>
+            <FormLabel>
+              Penggerak
+              <RequiredForm />
+            </FormLabel>
+            <SelectPenggerak
+              name="pelaksana"
+              onConfirm={(input) => {
+                formik.setFieldValue("pelaksana", input);
+              }}
+              isDisabled={userData?.role?.id === 3}
+              inputValue={formik.values.pelaksana}
+            />
+            <FormErrorMessage>
+              {formik.errors.pelaksana as string}
+            </FormErrorMessage>
+          </FormControl>
+        )}
 
         {/* Kelurahan */}
-        <FormControl mb={4} isInvalid={!!formik.errors?.kelurahan}>
-          <FormLabel>
-            Kelurahan
-            <RequiredForm />
-          </FormLabel>
-          <SelectKelurahanbyUser
-            name="kelurahan"
-            onConfirm={(input) => {
-              formik.setFieldValue("kelurahan", input);
-            }}
-            isError={!!formik.errors.kelurahan}
-            inputValue={formik.values.kelurahan}
-            optionsDisplay="chip"
-            isDisabled={true}
-          />
-          <FormErrorMessage>
-            {formik.errors.kelurahan as string}
-          </FormErrorMessage>
-        </FormControl>
+        {!excludeFields?.includes("kelurahan") && (
+          <FormControl mb={4} isInvalid={!!formik.errors?.kelurahan}>
+            <FormLabel>
+              Kelurahan
+              <RequiredForm />
+            </FormLabel>
+            <SelectKelurahanbyUser
+              name="kelurahan"
+              onConfirm={(input) => {
+                formik.setFieldValue("kelurahan", input);
+              }}
+              isError={!!formik.errors.kelurahan}
+              inputValue={formik.values.kelurahan}
+              optionsDisplay="chip"
+              isDisabled={true}
+            />
+            <FormErrorMessage>
+              {formik.errors.kelurahan as string}
+            </FormErrorMessage>
+          </FormControl>
+        )}
 
         {/* Pilih RW */}
-        <FormControl mb={4} isInvalid={!!formik.errors?.rw}>
+        {!excludeFields?.includes("rw") && (
+          <FormControl mb={4} isInvalid={!!formik.errors?.rw}>
+            <FormLabel>
+              RW
+              <RequiredForm />
+            </FormLabel>
+            <SelectRW
+              name="rw"
+              onConfirm={(input) => {
+                formik.setFieldValue("rw", input);
+              }}
+              isError={!!formik.errors.rw}
+              inputValue={formik.values.rw}
+              optionsDisplay="chip"
+              options={RWOptions}
+              isDisabled={!!!formik.values.kelurahan}
+            />
+            <FormErrorMessage>{formik.errors.rw as string}</FormErrorMessage>
+          </FormControl>
+        )}
+
+        {/* Potensi Suara */}
+        <FormControl mb={4} isInvalid={!!formik.errors?.potensi_suara}>
           <FormLabel>
-            RW
+            Potensi Suara
             <RequiredForm />
           </FormLabel>
-          <SelectRW
-            name="rw"
-            onConfirm={(input) => {
-              formik.setFieldValue("rw", input);
+          <NumberInput
+            name="potensi_suara"
+            onChangeSetter={(input) => {
+              formik.setFieldValue("potensi_suara", input);
             }}
-            isError={!!formik.errors.rw}
-            inputValue={formik.values.rw}
-            optionsDisplay="chip"
-            options={RWOptions}
-            isDisabled={!!!formik.values.kelurahan}
+            isError={!!formik.errors.potensi_suara}
+            inputValue={formik.values.potensi_suara}
           />
-          <FormErrorMessage>{formik.errors.rw as string}</FormErrorMessage>
+          <FormErrorMessage>
+            {formik.errors.potensi_suara as string}
+          </FormErrorMessage>
         </FormControl>
 
         {/* Deskripsi */}
@@ -340,10 +389,10 @@ export default function ActivityForm({
         colorScheme="ap"
         className="btn-ap clicky"
         type="submit"
-        form="addActivityForm"
+        form="activityForm"
         isLoading={loading}
       >
-        Tambahkan
+        {submitLabel}
       </Button>
     </>
   );

@@ -106,8 +106,7 @@ export default function UserForm({
         : yup.mixed(),
     }),
     onSubmit: (values, { resetForm }) => {
-      // const url = `/api/pemantau-suara/dashboard/management/pengguna`;
-
+      console.log(values);
       const payload = {
         foto_profil: values?.foto_profil,
         nama: values?.nama,

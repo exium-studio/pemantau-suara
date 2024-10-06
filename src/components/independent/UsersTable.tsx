@@ -12,6 +12,7 @@ import Skeleton from "./feedback/Skeleton";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 import PermissionTooltip from "./wrapper/PermissionTooltip";
 import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
+import RoleBadge from "../dependent/RoleBadge";
 
 interface TableProps {
   tableState: Interface__TableState;
@@ -106,6 +107,9 @@ const TableComponent = ({ tableState }: TableProps) => {
     {
       th: "Role",
       isSortable: true,
+      cProps: {
+        justify: "center",
+      },
     },
     {
       th: "No.Telp",
@@ -157,7 +161,10 @@ const TableComponent = ({ tableState }: TableProps) => {
       },
       {
         value: item?.role?.name,
-        td: item?.role?.name,
+        td: <RoleBadge data={item?.role?.id} w={"160px"} />,
+        cProps: {
+          justify: "center",
+        },
       },
       {
         value: item?.no_hp,

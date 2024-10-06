@@ -30,19 +30,17 @@ export default function SelectKelurahanbyUser({
 
   // States
   const [options, setOptions] = useState<any>(undefined);
-
-  // Utils
   const { data } = useDataState<any>({
     url: `/api/pemantau-suara/publik-request/get-all-kelurahan-loggedIn`,
   });
 
-  // Fetch list kelurahan options
+  // Fetch list item options
   useEffect(() => {
     if (isOpen && data) {
-      const getOptions = data?.map((kelurahan: any) => ({
-        value: kelurahan?.kode_kelurahan,
-        label: kelurahan?.nama_kelurahan,
-        original_data: kelurahan,
+      const getOptions = data?.map((item: any) => ({
+        value: item?.kode_kelurahan,
+        label: item?.nama_kelurahan,
+        original_data: item,
       }));
 
       setOptions(getOptions);

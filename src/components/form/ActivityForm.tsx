@@ -19,9 +19,11 @@ import Textarea from "../dependent/input/Textarea";
 import RequiredForm from "./RequiredForm";
 import DatePickerModal from "../dependent/input/DatePickerModal";
 import FileInput from "../dependent/input/FileInput";
+import SelectPenggerak from "../dependent/dedicated/SelectPenggerak";
+import request from "../../lib/request";
 
 type Type__InitialValues = {
-  pelaksana?: string;
+  pelaksana?: Interface__SelectOption;
   nama_aktivitas?: string;
   kelurahan?: Interface__SelectOption;
   rw?: Interface__SelectOption[];
@@ -66,7 +68,6 @@ export default function ActivityForm({
     initialValues: initialValues,
     validationSchema: yup.object().shape({
       pelaksana: yup.object().required("Harus diisi"),
-      nama_aktivitas: yup.string().required("Harus diisi"),
       kelurahan: yup.object().required("Harus diisi"),
       rw: yup
         .mixed()
@@ -127,6 +128,26 @@ export default function ActivityForm({
     }
   }, [userData]);
 
+  // Handle kelurahan by pelaksana/penggerak
+  useEffect(() => {
+    if (formik.values.pelaksana) {
+      request(
+        `/api/pemantau-suara/publik-request/get-all-kelurahan-users/${formik.values.pelaksana?.value}`
+      )
+        .then((r) => {
+          if (r.status === 200) {
+            formikRef?.current?.setFieldValue("kelurahan", {
+              value: r?.data?.data?.[0]?.id,
+              label: r?.data?.data?.[0]?.nama_kelurahan,
+            });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  }, [formik.values.pelaksana]);
+
   // Handle RWOptions by kelurahan
   useEffect(() => {
     const RWOptions = createNumberArraybyGivenMaxNumber(
@@ -147,35 +168,16 @@ export default function ActivityForm({
             Penggerak
             <RequiredForm />
           </FormLabel>
-          <StringInput
+          <SelectPenggerak
             name="pelaksana"
-            onChangeSetter={(input) => {
+            onConfirm={(input) => {
               formik.setFieldValue("pelaksana", input);
             }}
+            isDisabled={userData?.role?.id === 3}
             inputValue={formik.values.pelaksana}
-            placeholder="Jolitos Kurniawan"
           />
           <FormErrorMessage>
             {formik.errors.pelaksana as string}
-          </FormErrorMessage>
-        </FormControl>
-
-        {/* Nama Aktivitas */}
-        <FormControl mb={4} isInvalid={!!formik.errors?.nama_aktivitas}>
-          <FormLabel>
-            Nama Aktivitas
-            <RequiredForm />
-          </FormLabel>
-          <StringInput
-            name="nama_aktivitas"
-            onChangeSetter={(input) => {
-              formik.setFieldValue("nama_aktivitas", input);
-            }}
-            inputValue={formik.values.nama_aktivitas}
-            placeholder="Cari suara rakyat"
-          />
-          <FormErrorMessage>
-            {formik.errors.nama_aktivitas as string}
           </FormErrorMessage>
         </FormControl>
 
@@ -193,6 +195,7 @@ export default function ActivityForm({
             isError={!!formik.errors.kelurahan}
             inputValue={formik.values.kelurahan}
             optionsDisplay="chip"
+            isDisabled={true}
           />
           <FormErrorMessage>
             {formik.errors.kelurahan as string}

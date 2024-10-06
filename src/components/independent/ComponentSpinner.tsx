@@ -1,11 +1,11 @@
-import { Spinner, SpinnerProps, VStack } from "@chakra-ui/react";
+import { Spinner, StackProps, VStack } from "@chakra-ui/react";
 
-interface Props extends SpinnerProps {}
+interface Props extends StackProps {}
 
 export default function ComponentSpinner({ ...props }: Props) {
   return (
-    <VStack minH={"100px"} justify={"center"}>
-      <Spinner {...props} />
+    <VStack minH={"100px"} justify={"center"} {...props}>
+      <Spinner />
     </VStack>
   );
 }

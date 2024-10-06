@@ -2,12 +2,12 @@ import { ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Interface__SelectOption } from "../../../constant/interfaces";
 import useDataState from "../../../hooks/useDataState";
-import MultipleSelectModal from "../input/MultipleSelectModal";
+import SingleSelectModal from "../input/SingleSelectModal";
 
 interface Props extends ButtonProps {
   name: string;
-  onConfirm: (inputValue: Interface__SelectOption[] | undefined) => void;
-  inputValue: Interface__SelectOption[] | undefined;
+  onConfirm: (inputValue: Interface__SelectOption | undefined) => void;
+  inputValue: Interface__SelectOption | undefined;
   withSearch?: boolean;
   optionsDisplay?: "list" | "chip";
   isError?: boolean;
@@ -15,7 +15,7 @@ interface Props extends ButtonProps {
   nonNullable?: boolean;
 }
 
-export default function MultiSelectKelurahan({
+export default function SelectPenggerak({
   name,
   onConfirm,
   inputValue,
@@ -31,15 +31,15 @@ export default function MultiSelectKelurahan({
   // States
   const [options, setOptions] = useState<any>(undefined);
   const { data } = useDataState<any>({
-    url: `/api/pemantau-suara/publik-request/get-all-kelurahan`,
+    url: `/api/pemantau-suara/publik-request/get-all-users-penggerak`,
   });
 
-  // Fetch list item options
+  // Fetch list options
   useEffect(() => {
     if (isOpen && data) {
       const getOptions = data?.map((item: any) => ({
-        value: item?.kode_kelurahan,
-        label: item?.nama_kelurahan,
+        value: item?.id,
+        label: item?.nama,
         original_data: item,
       }));
 
@@ -48,8 +48,8 @@ export default function MultiSelectKelurahan({
   }, [isOpen, data]);
 
   return (
-    <MultipleSelectModal
-      id="multi-select-kelurahan-modal"
+    <SingleSelectModal
+      id="select-penggeral-modal"
       name={name}
       isOpen={isOpen}
       onOpen={onOpen}
@@ -62,7 +62,7 @@ export default function MultiSelectKelurahan({
       withSearch={withSearch}
       optionsDisplay={optionsDisplay}
       isError={isError}
-      placeholder={placeholder || "Multi Pilih Kelurahan"}
+      placeholder={placeholder || "Pilih Penggerak"}
       nonNullable={nonNullable}
       {...props}
     />

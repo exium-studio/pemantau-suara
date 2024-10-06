@@ -26,6 +26,7 @@ import NotFound from "../../independent/feedback/NotFound";
 import DisclosureHeader from "../DisclosureHeader";
 import SearchComponent from "./SearchComponent";
 import { responsiveSpacing } from "../../../constant/sizes";
+import NoData from "../../independent/feedback/NoData";
 
 interface Props {
   id: string;
@@ -225,117 +226,126 @@ export default function SingleSelectModal({
           </ModalHeader>
 
           <ModalBody className="scrollY" overflowY={"auto"}>
-            {fo && (
-              <>
-                {fo.length > 0 && (
-                  <>
-                    {optionsDisplay === "list" && (
-                      <VStack align={"stretch"}>
-                        {fo.map((option, i) => (
-                          <Tooltip
-                            key={i}
-                            label={`${option?.label || ""} ${
-                              option?.label2 || ""
-                            }`}
-                            placement="bottom-start"
-                            openDelay={500}
-                          >
-                            <Button
-                              px={4}
-                              justifyContent={"space-between"}
-                              className="btn-outline"
-                              onClick={() => {
-                                setSelected(option);
-                              }}
-                              borderColor={
-                                selected && selected.value === option.value
-                                  ? "var(--p500)"
-                                  : "transparent !important"
-                              }
-                              bg={
-                                selected && selected.value === option.value
-                                  ? "var(--p500a4) !important"
-                                  : ""
-                              }
-                            >
-                              <Text
-                                overflow={"hidden"}
-                                whiteSpace={"nowrap"}
-                                textOverflow={"ellipsis"}
-                              >
-                                {option?.label}
-                              </Text>
+            {!options && <ComponentSpinner minH={"300px"} mb={6} />}
 
-                              <Text
-                                ml={4}
-                                opacity={0.4}
-                                maxW={"120px"}
-                                whiteSpace={"nowrap"}
-                                overflow={"hidden"}
-                                textOverflow={"ellipsis"}
-                                fontWeight={400}
+            {options && options.length === 0 && (
+              <NoData minH={"300px"} mb={6} />
+            )}
+
+            {options && options.length > 0 && (
+              <>
+                {fo && (
+                  <>
+                    {fo.length > 0 && (
+                      <>
+                        {optionsDisplay === "list" && (
+                          <VStack align={"stretch"}>
+                            {fo.map((option, i) => (
+                              <Tooltip
+                                key={i}
+                                label={`${option?.label || ""} ${
+                                  option?.label2 || ""
+                                }`}
+                                placement="bottom-start"
+                                openDelay={500}
                               >
-                                {option?.label2}
-                              </Text>
-                            </Button>
-                          </Tooltip>
-                        ))}
-                      </VStack>
+                                <Button
+                                  px={4}
+                                  justifyContent={"space-between"}
+                                  className="btn-outline"
+                                  onClick={() => {
+                                    setSelected(option);
+                                  }}
+                                  borderColor={
+                                    selected && selected.value === option.value
+                                      ? "var(--p500)"
+                                      : "transparent !important"
+                                  }
+                                  bg={
+                                    selected && selected.value === option.value
+                                      ? "var(--p500a4) !important"
+                                      : ""
+                                  }
+                                >
+                                  <Text
+                                    overflow={"hidden"}
+                                    whiteSpace={"nowrap"}
+                                    textOverflow={"ellipsis"}
+                                  >
+                                    {option?.label}
+                                  </Text>
+
+                                  <Text
+                                    ml={4}
+                                    opacity={0.4}
+                                    maxW={"120px"}
+                                    whiteSpace={"nowrap"}
+                                    overflow={"hidden"}
+                                    textOverflow={"ellipsis"}
+                                    fontWeight={400}
+                                  >
+                                    {option?.label2}
+                                  </Text>
+                                </Button>
+                              </Tooltip>
+                            ))}
+                          </VStack>
+                        )}
+
+                        {optionsDisplay === "chip" && (
+                          <Wrap>
+                            {fo.map((option, i) => (
+                              <Tooltip
+                                key={i}
+                                label={`${option?.label || ""}`}
+                                placement="bottom-start"
+                                openDelay={500}
+                              >
+                                <Button
+                                  justifyContent={"space-between"}
+                                  className="btn-outline"
+                                  onClick={() => {
+                                    setSelected(option);
+                                  }}
+                                  borderRadius={"full"}
+                                  borderColor={
+                                    selected && selected.value === option.value
+                                      ? "var(--p500)"
+                                      : ""
+                                  }
+                                  bg={
+                                    selected && selected.value === option.value
+                                      ? "var(--p500a4) !important"
+                                      : ""
+                                  }
+                                  gap={2}
+                                >
+                                  <Text
+                                    overflow={"hidden"}
+                                    whiteSpace={"nowrap"}
+                                    textOverflow={"ellipsis"}
+                                  >
+                                    {option.label}
+                                  </Text>
+                                  {/* <Text opacity={0.4}>{option.label2}</Text> */}
+                                </Button>
+                              </Tooltip>
+                            ))}
+                          </Wrap>
+                        )}
+                      </>
                     )}
 
-                    {optionsDisplay === "chip" && (
-                      <Wrap>
-                        {fo.map((option, i) => (
-                          <Tooltip
-                            key={i}
-                            label={`${option?.label || ""}`}
-                            placement="bottom-start"
-                            openDelay={500}
-                          >
-                            <Button
-                              justifyContent={"space-between"}
-                              className="btn-outline"
-                              onClick={() => {
-                                setSelected(option);
-                              }}
-                              borderRadius={"full"}
-                              borderColor={
-                                selected && selected.value === option.value
-                                  ? "var(--p500)"
-                                  : ""
-                              }
-                              bg={
-                                selected && selected.value === option.value
-                                  ? "var(--p500a4) !important"
-                                  : ""
-                              }
-                              gap={2}
-                            >
-                              <Text
-                                overflow={"hidden"}
-                                whiteSpace={"nowrap"}
-                                textOverflow={"ellipsis"}
-                              >
-                                {option.label}
-                              </Text>
-                              {/* <Text opacity={0.4}>{option.label2}</Text> */}
-                            </Button>
-                          </Tooltip>
-                        ))}
-                      </Wrap>
+                    {fo.length === 0 && (
+                      <NotFound minH={"300px"} label="Opsi tidak ditemukan" />
                     )}
                   </>
                 )}
-
-                {fo.length === 0 && (
-                  <NotFound minH={"300px"} label="Opsi tidak ditemukan" />
-                )}
               </>
             )}
-
-            {!fo && <ComponentSpinner my={"auto"} />}
           </ModalBody>
-          {fo && (
+
+          {options && options.length > 0 && (
             <ModalFooter gap={2}>
               <Button
                 className="btn-solid clicky"

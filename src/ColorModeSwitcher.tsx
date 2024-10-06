@@ -7,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { Moon, Sun } from "@phosphor-icons/react";
 import * as React from "react";
+import { iconSize } from "./constant/sizes";
 
 type ColorModeSwitcherProps = Omit<IconButtonProps, "aria-label">;
 
@@ -14,8 +15,8 @@ export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
   const { toggleColorMode } = useColorMode();
   const text = useColorModeValue("dark", "light");
   const SwitchIcon = useColorModeValue(
-    <Icon as={Sun} fontSize={20} />,
-    <Icon as={Moon} fontSize={20} />
+    <Icon as={Sun} fontSize={iconSize} />,
+    <Icon as={Moon} fontSize={iconSize} />
   );
 
   return (

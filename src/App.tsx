@@ -7,9 +7,12 @@ import Login from "./pages/Login";
 import MissingPage from "./pages/MissingPage";
 import { globalTheme } from "./theme/globalTheme";
 import Dashboard from "./pages/Dashboard";
+import FullscreenSpinner from "./components/independent/FullscreenSpinner";
 
 export const App = () => (
   <ChakraProvider theme={globalTheme}>
+    <FullscreenSpinner />
+
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />

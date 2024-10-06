@@ -2,11 +2,11 @@ import useRequest from "./useRequest";
 
 interface authParams {
   url: string;
-  payload: any;
+  payload?: any;
 }
 
 const useAuth = () => {
-  const { req, loading, response } = useRequest();
+  const { req, loading, response, status } = useRequest();
 
   function login({ url, payload }: authParams) {
     const config = {
@@ -24,7 +24,7 @@ const useAuth = () => {
     req({ config });
   }
 
-  return { login, logout, loading, response };
+  return { login, logout, loading, response, status };
 };
 
 export default useAuth;

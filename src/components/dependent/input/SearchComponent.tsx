@@ -39,8 +39,6 @@ export default function SearchComponent({
   const [hover, setHover] = useState<boolean>(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  console.log(hover);
-
   const handleOnChange = useCallback(
     (value: string) => {
       if (value !== inputValue) {

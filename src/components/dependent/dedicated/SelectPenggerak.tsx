@@ -32,6 +32,7 @@ export default function SelectPenggerak({
   const [options, setOptions] = useState<any>(undefined);
   const { data } = useDataState<any>({
     url: `/api/pemantau-suara/publik-request/get-all-users-penggerak`,
+    conditions: isOpen,
   });
 
   // Fetch list options

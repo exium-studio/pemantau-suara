@@ -11,22 +11,22 @@ import { Interface__SelectOption } from "../../constant/interfaces";
 import useRequest from "../../hooks/useRequest";
 import createNumberArraybyGivenMaxNumber from "../../lib/createNumberArraybyGivenMaxNumber";
 import getUserData from "../../lib/getUserData";
+import request from "../../lib/request";
 import validateFileExtension from "../../lib/validateFIleExtension";
-import MultiSelectRW from "../dependent/dedicated/MultiSelectRW";
 import SelectKelurahanbyUser from "../dependent/dedicated/SelectKelurahanbyUser";
+import SelectPenggerak from "../dependent/dedicated/SelectPenggerak";
+import SelectRW from "../dependent/dedicated/SelectRW";
+import DatePickerModal from "../dependent/input/DatePickerModal";
+import FileInputLarge from "../dependent/input/FileInputLarge";
 import StringInput from "../dependent/input/StringInput";
 import Textarea from "../dependent/input/Textarea";
 import RequiredForm from "./RequiredForm";
-import DatePickerModal from "../dependent/input/DatePickerModal";
-import FileInput from "../dependent/input/FileInput";
-import SelectPenggerak from "../dependent/dedicated/SelectPenggerak";
-import request from "../../lib/request";
+import formatDate from "../../lib/formatDate";
 
 type Type__InitialValues = {
   pelaksana?: Interface__SelectOption;
-  nama_aktivitas?: string;
   kelurahan?: Interface__SelectOption;
-  rw?: Interface__SelectOption[];
+  rw?: Interface__SelectOption;
   deskripsi?: string;
   tgl_mulai?: Date;
   tgl_selesai?: Date;
@@ -36,7 +36,6 @@ type Type__InitialValues = {
 
 const defaultValues = {
   pelaksana: undefined,
-  nama_aktivitas: "",
   kelurahan: undefined,
   rw: undefined,
   deskripsi: "",
@@ -103,9 +102,22 @@ export default function ActivityForm({
     }),
     onSubmit: (values, { resetForm }) => {
       const url = `/api/pemantau-suara/dashboard/management/aktivitas`;
-      const payload = {
-        nama_aktivitas: values?.nama_aktivitas,
-      };
+
+      // Form Data
+      const payload = new FormData();
+
+      // Tambahkan data ke FormData
+      payload.append("pelaksana_id", values.pelaksana?.value);
+      payload.append("kelurahan_id", values.kelurahan?.value);
+      payload.append("rw", values.rw?.value);
+      payload.append("deskripsi", values.deskripsi as string);
+      payload.append("tgl_mulai", formatDate(values.tgl_mulai, "short2"));
+      payload.append("tgl_selesai", formatDate(values.tgl_selesai, "short2"));
+      payload.append("tempat_aktivitas", values.tempat_aktivitas as string);
+      if (values.foto_aktivitas) {
+        payload.append("foto_aktivitas", values.foto_aktivitas);
+      }
+
       const config = {
         url,
         method: "post",
@@ -139,6 +151,7 @@ export default function ActivityForm({
             formikRef?.current?.setFieldValue("kelurahan", {
               value: r?.data?.data?.[0]?.id,
               label: r?.data?.data?.[0]?.nama_kelurahan,
+              original_data: r?.data?.data?.[0],
             });
           }
         })
@@ -208,7 +221,7 @@ export default function ActivityForm({
             RW
             <RequiredForm />
           </FormLabel>
-          <MultiSelectRW
+          <SelectRW
             name="rw"
             onConfirm={(input) => {
               formik.setFieldValue("rw", input);
@@ -308,7 +321,7 @@ export default function ActivityForm({
             Foto Aktivitas
             <RequiredForm />
           </FormLabel>
-          <FileInput
+          <FileInputLarge
             name="foto_aktivitas"
             onChangeSetter={(input) => {
               formik.setFieldValue("foto_aktivitas", input);

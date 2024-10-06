@@ -1,6 +1,5 @@
 import { ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { Interface__SelectOption } from "../../../constant/interfaces";
-import MultipleSelectModal from "../input/MultipleSelectModal";
 import SingleSelectModal from "../input/SingleSelectModal";
 
 interface Props extends ButtonProps {

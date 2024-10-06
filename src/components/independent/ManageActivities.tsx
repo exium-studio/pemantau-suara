@@ -1,28 +1,25 @@
-import {
-  Box,
-  HStack,
-  Icon,
-  IconButton,
-  Tooltip,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { User } from "@phosphor-icons/react";
+import { Box, HStack, Icon, IconButton, Tooltip } from "@chakra-ui/react";
+import { ClockCounterClockwise } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useLightDarkColor } from "../../constant/colors";
 import { iconSize } from "../../constant/sizes";
+import useManageActivities from "../../global/useManageActivities";
+import useManageUsers from "../../global/useManageUsers";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import SearchComponent from "../dependent/input/SearchComponent";
+import AddUserModal from "./AddUserModal";
 import UsersTable from "./UsersTable";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
-import AddUserModal from "./AddUserModal";
 
 export default function ManageActivities() {
   // SX
   const lightDarkColor = useLightDarkColor();
 
   // Utils
-  const { isOpen, onToggle, onClose } = useDisclosure();
+  const { manageActivities, toggleManageActivities, onCloseManageActivities } =
+    useManageActivities();
+  const { onCloseManageUsers } = useManageUsers();
 
   // Filter Config
   const [filterConfig, setFilterConfig] = useState<any>({
@@ -32,28 +29,32 @@ export default function ManageActivities() {
   return (
     <>
       <Tooltip
-        label={"Kelola Pengguna"}
+        label={"Kelola Aktivitas Penggerak"}
         openDelay={500}
         placement="bottom"
         mt={1}
+        mr={4}
       >
         <IconButton
           aria-label={"Kelola Pengguna"}
-          icon={<Icon as={User} fontSize={iconSize} />}
+          icon={<Icon as={ClockCounterClockwise} fontSize={iconSize} />}
           className="btn"
-          onClick={onToggle}
+          onClick={() => {
+            onCloseManageUsers();
+            toggleManageActivities();
+          }}
         />
       </Tooltip>
 
       <FloatingContainer
         maxW={"550px"}
         top={"74px"}
-        right={isOpen ? "16px" : "-580px"}
+        right={manageActivities ? "16px" : "-580px"}
       >
         <DisclosureHeader
-          title="Kelola Pengguna"
+          title="Kelola Aktivitas Penggerak"
           disableBackOnClose
-          onClose={onClose}
+          onClose={onCloseManageActivities}
           textProps={{ fontSize: [16, null, 18] }}
           p={5}
           pt={"16px !important"}
@@ -94,7 +95,10 @@ export default function ManageActivities() {
             </HStack>
           </Box>
 
-          <UsersTable conditions={isOpen} filterConfig={filterConfig} />
+          <UsersTable
+            conditions={manageActivities}
+            filterConfig={filterConfig}
+          />
         </CContainer>
       </FloatingContainer>
     </>

@@ -1,28 +1,25 @@
-import {
-  Box,
-  HStack,
-  Icon,
-  IconButton,
-  Tooltip,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, HStack, Icon, IconButton, Tooltip } from "@chakra-ui/react";
 import { User } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useLightDarkColor } from "../../constant/colors";
 import { iconSize } from "../../constant/sizes";
+import useManageActivities from "../../global/useManageActivities";
+import useManageUsers from "../../global/useManageUsers";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import SearchComponent from "../dependent/input/SearchComponent";
+import AddUserModal from "./AddUserModal";
 import UsersTable from "./UsersTable";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
-import AddUserModal from "./AddUserModal";
 
 export default function ManageUsers() {
   // SX
   const lightDarkColor = useLightDarkColor();
 
   // Utils
-  const { isOpen, onToggle, onClose } = useDisclosure();
+  const { manageUsers, toggleManageUsers, onCloseManageUsers } =
+    useManageUsers();
+  const { onCloseManageActivities } = useManageActivities();
 
   // Filter Config
   const [filterConfig, setFilterConfig] = useState<any>({
@@ -41,19 +38,22 @@ export default function ManageUsers() {
           aria-label={"Kelola Pengguna"}
           icon={<Icon as={User} fontSize={iconSize} />}
           className="btn"
-          onClick={onToggle}
+          onClick={() => {
+            onCloseManageActivities();
+            toggleManageUsers();
+          }}
         />
       </Tooltip>
 
       <FloatingContainer
         maxW={"550px"}
         top={"74px"}
-        right={isOpen ? "16px" : "-580px"}
+        right={manageUsers ? "16px" : "-580px"}
       >
         <DisclosureHeader
           title="Kelola Pengguna"
           disableBackOnClose
-          onClose={onClose}
+          onClose={onCloseManageUsers}
           textProps={{ fontSize: [16, null, 18] }}
           p={5}
           pt={"16px !important"}
@@ -94,7 +94,7 @@ export default function ManageUsers() {
             </HStack>
           </Box>
 
-          <UsersTable conditions={isOpen} filterConfig={filterConfig} />
+          <UsersTable conditions={manageUsers} filterConfig={filterConfig} />
         </CContainer>
       </FloatingContainer>
     </>

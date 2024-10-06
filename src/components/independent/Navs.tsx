@@ -1,6 +1,7 @@
 import { HStack } from "@chakra-ui/react";
 import { useLightDarkColor } from "../../constant/colors";
 import ManageUsers from "./ManageUsers";
+import ManageActivities from "./ManageActivities";
 
 export default function Navs() {
   // SX
@@ -17,6 +18,8 @@ export default function Navs() {
       transition={"200ms"}
     >
       <ManageUsers />
+
+      <ManageActivities />
     </HStack>
   );
 }

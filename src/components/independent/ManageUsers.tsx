@@ -99,6 +99,7 @@ export default function ManageUsers() {
 
               <UserFormModalDisclosure
                 id="tambah-pengguna"
+                title="Tambah Pengguna"
                 submitUrl="/api/pemantau-suara/dashboard/management/pengguna"
                 submitLabel="Tambahkan"
               >

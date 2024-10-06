@@ -50,7 +50,7 @@ const TableComponent = ({ tableState }: TableProps) => {
           label: item?.role?.name,
         },
         kelurahan: item?.kelurahan?.map((kelurahan: any) => ({
-          values: kelurahan?.id,
+          value: kelurahan?.kode_kelurahan,
           label: kelurahan?.nama_kelurahan,
           original_data: kelurahan,
         })),
@@ -63,10 +63,12 @@ const TableComponent = ({ tableState }: TableProps) => {
       return (
         <UserFormModalDisclosure
           id={`edit-user-modal-${rowData?.id}`}
+          title="Edit Pengguna"
           submitUrl={`/api/pemantau-suara/dashboard/management/pengguna/${rowData?.id}`}
           submitLabel="Simpan"
           initialValues={initialValues}
           excludeFields={["tgl_diangkat", "username", "password"]}
+          method={"patch"}
         >
           <PermissionTooltip permission={editPermission} placement="left">
             <MenuItem isDisabled={!editPermission}>

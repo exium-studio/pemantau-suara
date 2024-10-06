@@ -44,6 +44,7 @@ interface Props {
   submitLabel: string;
   initialValues?: Type__UserInitialValues;
   excludeFields?: string[];
+  method?: string;
 }
 
 export default function UserForm({
@@ -51,6 +52,7 @@ export default function UserForm({
   submitLabel,
   initialValues = defaultValues,
   excludeFields,
+  method,
 }: Props) {
   // States
   const [RWOptions, setRWOptions] = useState<
@@ -70,7 +72,9 @@ export default function UserForm({
         .string()
         .required("Harus diisi")
         .length(16, "NIK KTP harus 16 karakter"),
-      tgl_diangkat: yup.date().required("Harus diisi"),
+      tgl_diangkat: !excludeFields?.includes("tgl_diangkat")
+        ? yup.date().required("Harus diisi")
+        : yup.mixed(),
       no_hp: yup.string().required("Harus diisi"),
       role: yup.object().required("Harus diisi"),
       kelurahan: yup
@@ -88,15 +92,15 @@ export default function UserForm({
             return true; // Skip check if role.value is not 3
           }
         ),
-      rw: yup
+      rw_pelaksana: yup
         .mixed()
         .test("is-required-based-on-role", "Harus diisi", function (value) {
           const { role } = this.parent as { role: Interface__SelectOption };
-          // Hanya require 'rw' jika role.value bukan 2
-          if (role?.value !== 2) {
-            return !!value; // Return true if value is present
+          // Hanya require 'rw' jika role.value === 3
+          if (role?.value === 3) {
+            return !!value; // Return true if rw is present (required)
           }
-          return true; // If role.value is 2, skip the required check
+          return true; // If role.value is not 3, skip the required check
         }),
       newusername: !excludeFields?.includes("username")
         ? yup.string().required("Harus diisi")
@@ -118,9 +122,10 @@ export default function UserForm({
         kelurahan_id: values?.kelurahan?.map(
           (kelurahan: any) => kelurahan.value
         ),
-        rw: values?.rw_pelaksana,
+        rw_pelaksana: values?.rw_pelaksana,
         username: values?.newusername,
         password: values?.newpassword,
+        _method: method,
       };
 
       const config = {
@@ -144,14 +149,16 @@ export default function UserForm({
 
   // Handle RWOptions by kelurahan
   useEffect(() => {
-    const RWOptions = createNumberArraybyGivenMaxNumber(
-      formik.values.kelurahan?.[0]?.original_data?.max_rw
-    )?.map((rw) => ({
-      value: rw,
-      label: rw.toString(),
-    }));
+    if (formik.values.kelurahan?.[0]?.original_data?.max_rw) {
+      const RWOptions = createNumberArraybyGivenMaxNumber(
+        formik.values.kelurahan?.[0]?.original_data?.max_rw
+      )?.map((rw) => ({
+        value: rw,
+        label: rw.toString(),
+      }));
 
-    setRWOptions(RWOptions);
+      setRWOptions(RWOptions);
+    }
   }, [formik.values.kelurahan]);
 
   console.log(formik.values);

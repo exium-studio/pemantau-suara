@@ -16,20 +16,24 @@ import { Type__UserInitialValues } from "../../../constant/interfaces";
 
 interface Props extends BoxProps {
   id: string;
+  title: string;
   submitUrl: string;
   submitLabel: string;
   children?: any;
   initialValues?: Type__UserInitialValues;
   excludeFields?: string[];
+  method?: string;
 }
 
 export default function UserFormModalDisclosure({
   id,
+  title,
   submitUrl,
   submitLabel,
   children,
   initialValues,
   excludeFields,
+  method,
   ...props
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -50,7 +54,7 @@ export default function UserFormModalDisclosure({
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <DisclosureHeader title={"Tambah Pengguna"} />
+            <DisclosureHeader title={title} />
           </ModalHeader>
           <ModalBody pb={6}>
             <UserForm
@@ -58,6 +62,7 @@ export default function UserFormModalDisclosure({
               submitLabel={submitLabel}
               initialValues={initialValues}
               excludeFields={excludeFields}
+              method={method}
             />
           </ModalBody>
         </ModalContent>

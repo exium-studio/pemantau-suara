@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
@@ -26,18 +26,52 @@ import useRenderTrigger from "../hooks/useRenderTrigger";
 import getAuthToken from "../lib/getAuthToken";
 import getUserData from "../lib/getUserData";
 
+const Logout = () => {
+  // States
+  const { rt, setRt } = useRenderTrigger();
+  const rtRef = useRef(rt);
+
+  // Utils
+  const { logout, loading, response, status } = useAuth();
+
+  // Handle Response
+  useEffect(() => {
+    if (status === 200) {
+      localStorage.removeItem("__auth_token");
+      localStorage.removeItem("__user_data");
+      setRt(!rtRef?.current);
+    }
+  }, [status, response, setRt]);
+
+  return (
+    <Button
+      w={"100%"}
+      colorScheme="ap"
+      variant={"ghost"}
+      className="clicky"
+      onClick={() => {
+        logout({ url: `/api/logout` });
+      }}
+      isLoading={loading}
+    >
+      Login Ulang
+    </Button>
+  );
+};
+
 export default function Login() {
   // SX
   const lightDarkColor = useLightDarkColor();
 
-  // Auth
+  // States
   const authToken = getAuthToken();
   const userData = getUserData();
+  const [key, setKey] = useState(1);
 
   // Utils
-  const { rt, setRt } = useRenderTrigger();
   const navigate = useNavigate();
-  const { login, loading, response } = useAuth();
+  const { login, loading, response, status } = useAuth();
+  const { rt } = useRenderTrigger();
 
   const formik = useFormik({
     validateOnChange: false,
@@ -57,9 +91,9 @@ export default function Login() {
     },
   });
 
-  // Handle login response
+  // Handle response
   useEffect(() => {
-    if (response) {
+    if (status === 200) {
       localStorage.setItem(
         "__auth_token",
         JSON.stringify(response.data?.data?.token)
@@ -70,7 +104,12 @@ export default function Login() {
       );
       navigate("/dashboard");
     }
-  }, [response, navigate]);
+  }, [status, response, navigate]);
+
+  // Handle rerender
+  useEffect(() => {
+    setKey((ps) => ps + 1);
+  }, [rt]);
 
   return (
     <Center minH={"100vh"} p={responsiveSpacing}>
@@ -97,6 +136,7 @@ export default function Login() {
       />
 
       <CContainer
+        key={key}
         maxW={"400px"}
         border={"1px solid var(--divider)"}
         borderRadius={8}
@@ -193,19 +233,7 @@ export default function Login() {
                 Klik untuk masuk
               </Button>
 
-              <Button
-                w={"100%"}
-                colorScheme="ap"
-                variant={"ghost"}
-                className="clicky"
-                onClick={() => {
-                  localStorage.removeItem("__auth_token");
-                  localStorage.removeItem("__user_data");
-                  setRt(!rt);
-                }}
-              >
-                Login Ulang
-              </Button>
+              <Logout />
             </CContainer>
           </>
         )}

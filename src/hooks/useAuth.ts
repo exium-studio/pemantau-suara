@@ -6,7 +6,8 @@ interface authParams {
 }
 
 const useAuth = () => {
-  const { req, loading, response, status } = useRequest();
+  const { req, loading, setLoading, response, setResponse, status, setStatus } =
+    useRequest();
 
   function login({ url, payload }: authParams) {
     const config = {
@@ -24,7 +25,16 @@ const useAuth = () => {
     req({ config });
   }
 
-  return { login, logout, loading, response, status };
+  return {
+    login,
+    logout,
+    loading,
+    setLoading,
+    response,
+    setResponse,
+    status,
+    setStatus,
+  };
 };
 
 export default useAuth;

@@ -46,6 +46,7 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
       })
       .catch((e) => {
         console.log(e);
+        setStatus(e.status);
         setResponse(e.response);
 
         // Set state error if request fail
@@ -69,6 +70,10 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
           errorToast &&
             fireToast({ status: "error", title: response?.data?.message });
           break;
+        case 401:
+          errorToast &&
+            fireToast({ status: "error", title: response?.data?.message });
+          break;
         case 403:
           errorToast &&
             fireToast({ status: "error", title: response?.data?.message });
@@ -83,7 +88,14 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
           break;
       }
     }
-  }, [loading, status, response, error, fireToast, successToast, errorToast]);
+  }, [
+    loading,
+    status,
+    fireToast,
+    response?.data?.message,
+    successToast,
+    errorToast,
+  ]);
 
   return {
     req,

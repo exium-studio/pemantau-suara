@@ -7,15 +7,16 @@ import {
 import { useFormik } from "formik";
 import { useEffect, useRef } from "react";
 import * as yup from "yup";
+import { Interface__SelectOption } from "../../constant/interfaces";
 import useRequest from "../../hooks/useRequest";
 import { generateUsernameByName } from "../../lib/generateUsernameByName";
+import MultiSelectKelurahan from "../dependent/dedicated/MultiSelectKelurahan";
 import SelectGender from "../dependent/dedicated/SelectGender";
 import SelectRole from "../dependent/dedicated/SelectRole";
 import DatePickerModal from "../dependent/input/DatePickerModal";
 import PasswordInput from "../dependent/input/PasswordInput";
 import StringInput from "../dependent/input/StringInput";
 import RequiredForm from "./RequiredForm";
-import { Interface__SelectOption } from "../../constant/interfaces";
 
 type Type__InitialValues = {
   foto_profil?: string;
@@ -25,6 +26,7 @@ type Type__InitialValues = {
   tgl_diangkat?: Date;
   no_hp?: string;
   role?: Interface__SelectOption;
+  kelurahan?: any[];
   newusername?: string;
   newpassword?: string;
 };
@@ -37,6 +39,7 @@ const defaultValues = {
   tgl_diangkat: undefined,
   no_hp: "",
   role: undefined,
+  kelurahan: undefined,
   newusername: "",
   newpassword: "",
 };
@@ -61,6 +64,7 @@ export default function UserForm({
       tgl_diangkat: yup.mixed().required("Harus diisi"),
       no_hp: yup.string().required("Harus diisi"),
       role: yup.object().required("Harus diisi"),
+      kelurahan: yup.mixed().required("Harus diisi"),
       newusername: yup.string().required("Harus diisi"),
       newpassword: yup.string().required("Harus diisi"),
     }),
@@ -74,6 +78,7 @@ export default function UserForm({
         tgl_diangkat: values?.tgl_diangkat,
         no_hp: values?.no_hp,
         role_id: values?.role?.value,
+        kelurahan: values?.kelurahan?.map((kelurahan: any) => kelurahan.value),
         username: values?.newusername,
         password: values?.newpassword,
       };
@@ -208,6 +213,22 @@ export default function UserForm({
         </FormControl>
 
         {/* Area kelurahan */}
+        <FormControl mb={4} isInvalid={!!formik.errors?.kelurahan}>
+          <FormLabel>
+            Area Kelurahan
+            <RequiredForm />
+          </FormLabel>
+          <MultiSelectKelurahan
+            name="kelurahan"
+            onConfirm={(input) => {
+              formik.setFieldValue("kelurahan", input);
+            }}
+            isError={!!formik.errors.kelurahan}
+            inputValue={formik.values.kelurahan}
+            optionsDisplay="chip"
+          />
+          <FormErrorMessage>{formik.errors.role as string}</FormErrorMessage>
+        </FormControl>
 
         {/* Username */}
         <FormControl mb={4} isInvalid={!!formik.errors?.newusername}>

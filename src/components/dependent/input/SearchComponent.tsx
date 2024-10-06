@@ -5,11 +5,11 @@ import {
   InputGroup,
   InputGroupProps,
   InputLeftElement,
+  InputProps,
   Tooltip,
 } from "@chakra-ui/react";
-import { X } from "@phosphor-icons/react";
-import { RiSearchLine } from "@remixicon/react";
-import { Dispatch } from "react";
+import { RiCloseLine, RiSearchLine } from "@remixicon/react";
+import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 import { iconSize } from "../../../constant/sizes";
 import StringInput from "./StringInput";
 
@@ -20,6 +20,7 @@ interface Props extends InputGroupProps {
   placeholder?: string;
   tooltipLabel?: string;
   inputRef?: any;
+  inputProps?: InputProps;
 }
 
 export default function SearchComponent({
@@ -29,17 +30,64 @@ export default function SearchComponent({
   onChangeSetter,
   tooltipLabel,
   placeholder = "Pencarian",
+  inputProps,
   ...props
 }: Props) {
+  // States
+  const [searchLocal, setSearchLocal] = useState(inputValue);
+  const [focus, setFocus] = useState<boolean>(false);
+  const [hover, setHover] = useState<boolean>(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  console.log(hover);
+
+  const handleOnChange = useCallback(
+    (value: string) => {
+      if (value !== inputValue) {
+        onChangeSetter(value);
+      }
+    },
+    [onChangeSetter, inputValue]
+  );
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      handleOnChange(searchLocal);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchLocal, handleOnChange]);
+
+  // Sync searchLocal with inputValue prop when it changes
+  useEffect(() => {
+    setSearchLocal(inputValue);
+  }, [inputValue]);
+
+  const handleMouseEnter = () => {
+    timeoutRef.current = setTimeout(() => {
+      setHover(true);
+    }, 500);
+  };
+
+  const handleMouseLeave = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null; // Reset the timeout reference
+    }
+    setHover(false);
+  };
+
   return (
     <Tooltip
-      label={tooltipLabel || placeholder}
+      label={(!focus || hover) && (tooltipLabel || placeholder)}
       openDelay={500}
       placement="bottom-start"
     >
       <InputGroup {...props}>
         <InputLeftElement>
-          <Icon as={RiSearchLine} fontSize={iconSize} />
+          <Icon as={RiSearchLine} fontSize={iconSize} mb={"1px"} />
         </InputLeftElement>
 
         <StringInput
@@ -49,13 +97,22 @@ export default function SearchComponent({
           placeholder={placeholder}
           pr={"36px"}
           onChangeSetter={(input) => {
-            onChangeSetter(input as string);
+            setSearchLocal(input as string);
           }}
-          inputValue={inputValue}
+          inputValue={searchLocal}
           boxShadow={"none !important"}
+          onFocus={() => {
+            setFocus(true);
+          }}
+          onBlur={() => {
+            setFocus(false);
+          }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          {...inputProps}
         />
 
-        {inputValue && (
+        {searchLocal && (
           <Center
             flexShrink={0}
             zIndex={3}
@@ -65,9 +122,11 @@ export default function SearchComponent({
           >
             <IconButton
               aria-label="Clear Search"
-              icon={<Icon as={X} fontSize={props.fontSize || iconSize} />}
+              icon={
+                <Icon as={RiCloseLine} fontSize={props.fontSize || iconSize} />
+              }
               onClick={() => {
-                onChangeSetter("");
+                setSearchLocal("");
               }}
               colorScheme="error"
               variant={"ghost"}

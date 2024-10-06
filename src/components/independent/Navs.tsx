@@ -2,10 +2,15 @@ import { HStack } from "@chakra-ui/react";
 import { useLightDarkColor } from "../../constant/colors";
 import ManageUsers from "./ManageUsers";
 import ManageActivities from "./ManageActivities";
+import getUserData from "../../lib/getUserData";
 
 export default function Navs() {
   // SX
   const lightDarkColor = useLightDarkColor();
+
+  // States
+  const userData = getUserData();
+  const isUserPenggerak = userData?.role?.id === 3;
 
   return (
     <HStack
@@ -17,7 +22,7 @@ export default function Navs() {
       shadow={"sm"}
       transition={"200ms"}
     >
-      <ManageUsers />
+      {!isUserPenggerak && <ManageUsers />}
 
       <ManageActivities />
     </HStack>

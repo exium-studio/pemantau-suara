@@ -27,10 +27,10 @@ type Type__InitialValues = {
   nama?: string;
   jenis_kelamin?: Interface__SelectOption;
   nik_ktp?: string;
-  tgl_diangkat?: string;
+  tgl_diangkat?: Date;
   no_hp?: string;
   role?: Interface__SelectOption;
-  kelurahan?: any[];
+  kelurahan?: Interface__SelectOption[];
   rw?: Interface__SelectOption[];
   newusername?: string;
   newpassword?: string;
@@ -41,7 +41,7 @@ const defaultValues = {
   nama: "",
   jenis_kelamin: undefined,
   nik_ktp: "",
-  tgl_diangkat: "",
+  tgl_diangkat: undefined,
   no_hp: "",
   role: undefined,
   kelurahan: undefined,
@@ -76,7 +76,7 @@ export default function UserForm({
         .string()
         .required("Harus diisi")
         .length(16, "NIK KTP harus 16 karakter"),
-      tgl_diangkat: yup.mixed().required("Harus diisi"),
+      tgl_diangkat: yup.date().required("Harus diisi"),
       no_hp: yup.string().required("Harus diisi"),
       role: yup.object().required("Harus diisi"),
       kelurahan: yup
@@ -114,7 +114,7 @@ export default function UserForm({
         nama: values?.nama,
         jenis_kelamin: values?.jenis_kelamin?.value,
         nik_ktp: values?.nik_ktp,
-        tgl_diangkat: formatDate(values?.tgl_diangkat as string, "short2"),
+        tgl_diangkat: formatDate(values?.tgl_diangkat, "short2"),
         no_hp: values?.no_hp,
         role_id: values?.role?.value,
         kelurahan_id: values?.kelurahan?.map(
@@ -146,7 +146,7 @@ export default function UserForm({
   // Handle RWOptions by kelurahan
   useEffect(() => {
     const RWOptions = createNumberArraybyGivenMaxNumber(
-      formik.values.kelurahan?.[0]?.label2
+      formik.values.kelurahan?.[0]?.original_data?.max_data
     )?.map((rw) => ({
       value: rw,
       label: rw.toString(),
@@ -222,11 +222,7 @@ export default function UserForm({
             onConfirm={(input) => {
               formik.setFieldValue("tgl_diangkat", input);
             }}
-            inputValue={
-              formik.values.tgl_diangkat
-                ? new Date(formik.values.tgl_diangkat)
-                : undefined
-            }
+            inputValue={formik.values.tgl_diangkat}
             isError={!!formik.errors.tgl_diangkat}
             placeholder="Tanggal Diangkat"
           />

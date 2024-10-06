@@ -7,7 +7,7 @@ import useManageActivities from "../../global/useManageActivities";
 import useManageUsers from "../../global/useManageUsers";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import SearchComponent from "../dependent/input/SearchComponent";
-import AddUserModal from "./AddUserModal";
+import AddActivityModal from "./AddActivityModal";
 import UsersTable from "./UsersTable";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
@@ -91,7 +91,7 @@ export default function ManageActivities() {
                 inputValue={filterConfig.search}
               />
 
-              <AddUserModal />
+              <AddActivityModal />
             </HStack>
           </Box>
 

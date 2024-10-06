@@ -188,19 +188,19 @@ export default function FileInput({
         >
           <HStack gap={0} w={"100%"}>
             <Box px={4} py={2} w={"100%"}>
-              <Tooltip label={fileName}>
-                <HStack justify={"center"} opacity={inputValue ? 1 : 0.3}>
-                  {/* <Icon
+              <HStack justify={"center"} opacity={inputValue ? 1 : 0.3}>
+                {/* <Icon
                   as={
                     typeof inputValue === "string"
-                      ? RiFileLine
-                      : inputValue
-                      ? fileIcons(inputValue.type)
-                      : RiUploadCloud2Line
-                  }
-                  fontSize={iconSize}
-                /> */}
-                  <Icon as={inputValue ? RiFileLine : RiUploadCloud2Line} />
+                    ? RiFileLine
+                    : inputValue
+                    ? fileIcons(inputValue.type)
+                    : RiUploadCloud2Line
+                    }
+                    fontSize={iconSize}
+                    /> */}
+                <Icon as={inputValue ? RiFileLine : RiUploadCloud2Line} />
+                <Tooltip label={fileName} openDelay={500}>
                   <Text
                     overflow={"hidden"}
                     textOverflow={"ellipsis"}
@@ -212,8 +212,8 @@ export default function FileInput({
                       placeholder ||
                       "Seret & letakkan atau klik untuk telusuri"}
                   </Text>
-                </HStack>
-              </Tooltip>
+                </Tooltip>
+              </HStack>
             </Box>
           </HStack>
         </Button>
@@ -243,7 +243,7 @@ export default function FileInput({
                   className="iconButton"
                   as={RiCloseCircleFill}
                   strokeWidth={4}
-                  mr={"-2.5px"}
+                  mr={"-3px"}
                 />
               }
               variant={"ghost"}

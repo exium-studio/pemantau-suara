@@ -30,7 +30,7 @@ export default function MultiSelectRW({
 
   return (
     <MultipleSelectModal
-      id="select-kelurahan-modal"
+      id="multi-select-rw-modal"
       name={name}
       isOpen={isOpen}
       onOpen={onOpen}
@@ -43,7 +43,7 @@ export default function MultiSelectRW({
       withSearch={withSearch}
       optionsDisplay={optionsDisplay}
       isError={isError}
-      placeholder={placeholder || "Pilih Kelurahan"}
+      placeholder={placeholder || "Multi Pilih RW"}
       nonNullable={nonNullable}
       {...props}
     />

@@ -108,7 +108,7 @@ const TableComponent = ({ tableState }: TableProps) => {
 
   // Render lateral
   const render = {
-    loading: <Skeleton minH={"256px"} flex={1} />,
+    loading: <Skeleton minH={"300px"} flex={1} />,
     error: <Retry retry={tableState.retry} />,
     empty: <NoData />,
     loaded: (

@@ -36,7 +36,14 @@ export default function ManageUsers() {
       >
         <IconButton
           aria-label={"Kelola Pengguna"}
-          icon={<Icon as={User} fontSize={iconSize} />}
+          icon={
+            <Icon
+              as={User}
+              fontSize={iconSize}
+              weight={manageUsers ? "bold" : "regular"}
+              color={manageUsers ? "p.500" : ""}
+            />
+          }
           className="btn"
           onClick={() => {
             onCloseManageActivities();

@@ -37,7 +37,14 @@ export default function ManageActivities() {
       >
         <IconButton
           aria-label={"Kelola Pengguna"}
-          icon={<Icon as={ClockCounterClockwise} fontSize={iconSize} />}
+          icon={
+            <Icon
+              as={ClockCounterClockwise}
+              fontSize={iconSize}
+              weight={manageActivities ? "bold" : "regular"}
+              color={manageActivities ? "p.500" : ""}
+            />
+          }
           className="btn"
           onClick={() => {
             onCloseManageUsers();

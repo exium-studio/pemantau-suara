@@ -22,6 +22,7 @@ export default function FullscreenSpinner() {
       opacity={isOpen ? 1 : 0}
       transition={"200ms"}
       gap={4}
+      p={8}
     >
       <CircularProgress
         isIndeterminate
@@ -31,7 +32,7 @@ export default function FullscreenSpinner() {
         mx={"auto"}
         size={"40px"}
       />
-      <Text>{label}</Text>
+      <Text textAlign={"center"}>{label}</Text>
     </CContainer>
   );
 }

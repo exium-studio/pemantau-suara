@@ -16,10 +16,14 @@ import useAuth from "../../hooks/useAuth";
 import useFullscreenSpinner from "../../global/useFullscreenSpinner";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import useManageUsers from "../../global/useManageUsers";
+import useManageActivities from "../../global/useManageActivities";
 
 export default function Profile() {
   // States
   const userData = getUserData();
+  const { onCloseManageUsers } = useManageUsers();
+  const { onCloseManageActivities } = useManageActivities();
 
   // Utils
   const { onOpen, onClose, setLabel } = useFullscreenSpinner();
@@ -38,9 +42,11 @@ export default function Profile() {
       onClose();
       localStorage.removeItem("__auth_token");
       localStorage.removeItem("__user_data");
+      onCloseManageUsers();
+      onCloseManageActivities();
       navigate("/");
     }
-  }, [status, navigate, onClose]);
+  }, [status, navigate, onClose, onCloseManageUsers, onCloseManageActivities]);
 
   return (
     <Menu>

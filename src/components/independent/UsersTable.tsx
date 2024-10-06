@@ -19,8 +19,10 @@ interface TableProps {
 }
 
 const TableComponent = ({ tableState }: TableProps) => {
-  const userData = getUserData();
+  // console.log(tableState?.data);
 
+  // States
+  const userData = getUserData();
   const isUserSuperAdmin = userData?.role?.id === 1;
   const isUserPenanggungJawab = userData?.role?.id === 2;
 
@@ -186,7 +188,7 @@ const TableComponent = ({ tableState }: TableProps) => {
     empty: <NoData />,
     loaded: (
       <>
-        <CustomTableContainer minH={"200px !important"}>
+        <CustomTableContainer>
           <CustomTable
             formattedHeader={formattedHeader}
             formattedBody={formattedBody}
@@ -226,9 +228,9 @@ interface Props {
 export default function UsersTable({ conditions, filterConfig }: Props) {
   const { tableState } = useDataState<any>({
     url: `/api/pemantau-suara/dashboard/management/get-pengguna`,
-    payload: {},
+    payload: { search: filterConfig?.search?.split(" "), limit: 0 },
     conditions: conditions,
-    dependencies: [],
+    dependencies: [filterConfig],
   });
 
   return <TableComponent tableState={tableState} />;

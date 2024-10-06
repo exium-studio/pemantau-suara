@@ -8,8 +8,6 @@ interface Props<T> {
   payload?: any;
   dependencies?: any[];
   conditions?: boolean;
-  page?: number;
-  limit?: number;
   noRt?: boolean;
 }
 
@@ -19,8 +17,6 @@ const useDataState = <T>({
   url,
   dependencies = [],
   conditions = true,
-  page = 1,
-  limit,
   noRt = false,
 }: Props<T>) => {
   // States
@@ -33,36 +29,38 @@ const useDataState = <T>({
     successToast: false,
   });
 
-  // Request func
-  const makeRequest = () => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    const abortController = new AbortController();
-    abortControllerRef.current = abortController;
+  // useRef to store a stable reference to the request function
+  const makeRequestRef = useRef<() => void>(() => {});
 
-    const method = payload ? "POST" : "GET";
-    const data = {
-      ...payload,
-      limit: limit,
+  // Define makeRequest inside useEffect but assign it to the ref
+  useEffect(() => {
+    makeRequestRef.current = () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
+
+      const method = payload ? "POST" : "GET";
+      const data = {
+        ...payload,
+      };
+
+      const config = {
+        method,
+        url,
+        data: method === "POST" ? data : undefined,
+        signal: abortController.signal,
+      };
+
+      req({ config });
     };
+  }, [payload, req, url]);
 
-    const config = {
-      method,
-      url,
-      data: method === "POST" ? data : undefined,
-      // params: method === "GET" ? data : undefined,
-      signal: abortController.signal,
-    };
-
-    req({ config });
-  };
-  const makeRequestRef = useRef(makeRequest);
-
-  // Handle request
+  // Handle request via useEffect
   useEffect(() => {
     if (conditions && url) {
-      makeRequestRef?.current();
+      makeRequestRef.current(); // Use the stable ref function
     }
 
     return () => {
@@ -70,15 +68,8 @@ const useDataState = <T>({
         abortControllerRef.current.abort();
       }
     };
-  }, [
-    conditions,
-    url,
-    page,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...(noRt ? [] : [rt]),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...dependencies,
-  ]);
+  }, [conditions, url, ...(noRt ? [] : [rt]), ...dependencies]);
 
   // Handle response
   useEffect(() => {
@@ -89,13 +80,12 @@ const useDataState = <T>({
   }, [response]);
 
   function retry() {
-    makeRequest();
+    makeRequestRef.current(); // Call the stable function
   }
 
   function loadMore() {
     setLoadingLoadMore(true);
-
-    //TODO http request dan append ke data
+    // TODO: Handle load more
   }
 
   const tableState = {

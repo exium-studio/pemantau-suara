@@ -24,6 +24,8 @@ import RequiredForm from "./RequiredForm";
 import createNumberArraybyGivenMaxNumber from "../../lib/createNumberArraybyGivenMaxNumber";
 import MultiSelectRW from "../dependent/dedicated/MultiSelectRW";
 import formatDate from "../../lib/formatDate";
+import useRenderTrigger from "../../hooks/useRenderTrigger";
+import backOnClose from "../../lib/backOnClose";
 
 const defaultValues = {
   foto_profil: "",
@@ -60,7 +62,8 @@ export default function UserForm({
   >(undefined);
 
   // Utils
-  const { req, loading } = useRequest();
+  const { req, loading, status } = useRequest();
+  const { rt, setRt } = useRenderTrigger();
 
   const formik = useFormik({
     validateOnChange: false,
@@ -110,7 +113,6 @@ export default function UserForm({
         : yup.mixed(),
     }),
     onSubmit: (values, { resetForm }) => {
-      console.log(values);
       const payload = {
         foto_profil: values?.foto_profil,
         nama: values?.nama,
@@ -139,6 +141,18 @@ export default function UserForm({
   });
   const formikRef = useRef(formik);
 
+  // Handle response status
+  const prevStatus = useRef<number | null>(null);
+
+  // Handle response status
+  useEffect(() => {
+    if ((status === 200 || status === 201) && prevStatus.current !== status) {
+      setRt(!rt);
+      prevStatus.current = status;
+      backOnClose();
+    }
+  }, [status, setRt, rt]);
+
   // Handle value username by inputted nama
   useEffect(() => {
     formikRef.current.setFieldValue(
@@ -160,8 +174,6 @@ export default function UserForm({
       setRWOptions(RWOptions);
     }
   }, [formik.values.kelurahan]);
-
-  console.log(formik.values);
 
   return (
     <>

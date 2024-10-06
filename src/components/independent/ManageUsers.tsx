@@ -76,12 +76,10 @@ export default function ManageUsers() {
           overflowY={"auto"}
           className={"scrollY"}
         >
-          <Box>
+          <Box position={"sticky"} top={0} zIndex={10}>
             <HStack
               overflowX={"auto"}
               className="scrollX"
-              position={"sticky"}
-              top={0}
               bg={lightDarkColor}
               zIndex={20}
               pb={4}

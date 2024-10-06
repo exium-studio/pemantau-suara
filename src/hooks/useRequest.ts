@@ -26,6 +26,8 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
   // Make request func
   function req({ config }: Request__Interface) {
     setLoading(true);
+    setStatus(undefined);
+    setError(false);
 
     // Abort request
     if (abortControllerRef.current) {
@@ -37,7 +39,6 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
     // Start request
     request(config)
       .then((r) => {
-        setError(false);
         setStatus(r.status);
         if (r.status === 200 || r.status === 201) {
           setResponse(r);
@@ -84,7 +85,17 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
     }
   }, [loading, status, response, error, fireToast, successToast, errorToast]);
 
-  return { req, loading, status, response, error };
+  return {
+    req,
+    loading,
+    setLoading,
+    status,
+    setStatus,
+    response,
+    setResponse,
+    error,
+    setError,
+  };
 };
 
 export default useRequest;

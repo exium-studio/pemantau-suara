@@ -2,6 +2,7 @@ import {
   Button,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
@@ -19,13 +20,14 @@ import StringInput from "../dependent/input/StringInput";
 import RequiredForm from "./RequiredForm";
 import createNumberArraybyGivenMaxNumber from "../../lib/createNumberArraybyGivenMaxNumber";
 import MultiSelectRW from "../dependent/dedicated/MultiSelectRW";
+import formatDate from "../../lib/formatDate";
 
 type Type__InitialValues = {
   foto_profil?: string;
   nama?: string;
   jenis_kelamin?: Interface__SelectOption;
   nik_ktp?: string;
-  tgl_diangkat?: Date;
+  tgl_diangkat?: string;
   no_hp?: string;
   role?: Interface__SelectOption;
   kelurahan?: any[];
@@ -39,13 +41,13 @@ const defaultValues = {
   nama: "",
   jenis_kelamin: undefined,
   nik_ktp: "",
-  tgl_diangkat: undefined,
+  tgl_diangkat: "",
   no_hp: "",
   role: undefined,
   kelurahan: undefined,
   rw: undefined,
   newusername: "",
-  newpassword: "",
+  newpassword: "bocahe_dewe",
 };
 
 interface Props {
@@ -70,12 +72,38 @@ export default function UserForm({
     validationSchema: yup.object().shape({
       nama: yup.string().required("Harus diisi"),
       jenis_kelamin: yup.object().required("Harus diisi"),
-      nik_ktp: yup.string().required("Harus diisi"),
+      nik_ktp: yup
+        .string()
+        .required("Harus diisi")
+        .length(16, "NIK KTP harus 16 karakter"),
       tgl_diangkat: yup.mixed().required("Harus diisi"),
       no_hp: yup.string().required("Harus diisi"),
       role: yup.object().required("Harus diisi"),
-      kelurahan: yup.mixed().required("Harus diisi"),
-      rw: yup.mixed().required("Harus diisi"),
+      kelurahan: yup
+        .mixed()
+        .required("Harus diisi")
+        .test(
+          "max-array-size-based-on-role",
+          "Maksimal 1 kelurahan",
+          function (value) {
+            const { role } = this.parent as { role: Interface__SelectOption };
+            // Jika role.value === 3, pastikan kelurahan maksimal hanya 1 elemen
+            if (role?.value === 3) {
+              return Array.isArray(value) && value.length <= 1; // Max 1 element if role.value is 3
+            }
+            return true; // Skip check if role.value is not 3
+          }
+        ),
+      rw: yup
+        .mixed()
+        .test("is-required-based-on-role", "Harus diisi", function (value) {
+          const { role } = this.parent as { role: Interface__SelectOption };
+          // Hanya require 'rw' jika role.value bukan 2
+          if (role?.value !== 2) {
+            return !!value; // Return true if value is present
+          }
+          return true; // If role.value is 2, skip the required check
+        }),
       newusername: yup.string().required("Harus diisi"),
       newpassword: yup.string().required("Harus diisi"),
     }),
@@ -86,10 +114,12 @@ export default function UserForm({
         nama: values?.nama,
         jenis_kelamin: values?.jenis_kelamin?.value,
         nik_ktp: values?.nik_ktp,
-        tgl_diangkat: values?.tgl_diangkat,
+        tgl_diangkat: formatDate(values?.tgl_diangkat as string, "short2"),
         no_hp: values?.no_hp,
         role_id: values?.role?.value,
-        kelurahan: values?.kelurahan?.map((kelurahan: any) => kelurahan.value),
+        kelurahan_id: values?.kelurahan?.map(
+          (kelurahan: any) => kelurahan.value
+        ),
         rw: values?.rw,
         username: values?.newusername,
         password: values?.newpassword,
@@ -108,7 +138,7 @@ export default function UserForm({
   // Handle value username by inputted nama
   useEffect(() => {
     formikRef.current.setFieldValue(
-      "username",
+      "newusername",
       generateUsernameByName(formik.values.nama)
     );
   }, [formik.values.nama]);
@@ -192,7 +222,11 @@ export default function UserForm({
             onConfirm={(input) => {
               formik.setFieldValue("tgl_diangkat", input);
             }}
-            inputValue={formik.values.tgl_diangkat}
+            inputValue={
+              formik.values.tgl_diangkat
+                ? new Date(formik.values.tgl_diangkat)
+                : undefined
+            }
             isError={!!formik.errors.tgl_diangkat}
             placeholder="Tanggal Diangkat"
           />
@@ -249,6 +283,7 @@ export default function UserForm({
             isError={!!formik.errors.kelurahan}
             inputValue={formik.values.kelurahan}
             optionsDisplay="chip"
+            isDisabled={!!!formik.values?.role?.value}
           />
           <FormErrorMessage>
             {formik.errors.kelurahan as string}
@@ -256,25 +291,27 @@ export default function UserForm({
         </FormControl>
 
         {/* Pilih RW */}
-        {formik.values?.role?.value === 3 && formik.values.kelurahan && (
-          <FormControl mb={4} isInvalid={!!formik.errors?.rw}>
-            <FormLabel>
-              Area RW
-              <RequiredForm />
-            </FormLabel>
-            <MultiSelectRW
-              name="rw"
-              onConfirm={(input) => {
-                formik.setFieldValue("rw", input);
-              }}
-              isError={!!formik.errors.rw}
-              inputValue={formik.values.rw}
-              optionsDisplay="chip"
-              options={RWOptions}
-            />
-            <FormErrorMessage>{formik.errors.rw as string}</FormErrorMessage>
-          </FormControl>
-        )}
+        <FormControl mb={4} isInvalid={!!formik.errors?.rw}>
+          <FormLabel>
+            Area RW
+            <RequiredForm />
+          </FormLabel>
+          <MultiSelectRW
+            name="rw"
+            onConfirm={(input) => {
+              formik.setFieldValue("rw", input);
+            }}
+            isError={!!formik.errors.rw}
+            inputValue={formik.values.rw}
+            optionsDisplay="chip"
+            options={RWOptions}
+            isDisabled={
+              !!!(formik.values?.role?.value === 3 && formik.values.kelurahan)
+            }
+          />
+          <FormHelperText>Jika role Penggerak maka input RW</FormHelperText>
+          <FormErrorMessage>{formik.errors.rw as string}</FormErrorMessage>
+        </FormControl>
 
         {/* Username */}
         <FormControl mb={4} isInvalid={!!formik.errors?.newusername}>

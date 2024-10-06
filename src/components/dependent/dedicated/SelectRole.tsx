@@ -2,6 +2,7 @@ import { ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { Interface__SelectOption } from "../../../constant/interfaces";
 import { optionsRole } from "../../../constant/selectOptions";
 import SingleSelectModal from "../input/SingleSelectModal";
+import getUserData from "../../../lib/getUserData";
 
 interface Props extends ButtonProps {
   name: string;
@@ -27,6 +28,15 @@ export default function SelectRole({
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const userRoleId = getUserData()?.role?.id;
+  const fo = optionsRole.filter((option, index) => {
+    if (userRoleId) {
+      return index === 0;
+    } else {
+      return option;
+    }
+  });
+
   return (
     <SingleSelectModal
       id="select-gender-modal"
@@ -34,7 +44,7 @@ export default function SelectRole({
       isOpen={isOpen}
       onOpen={onOpen}
       onClose={onClose}
-      options={optionsRole}
+      options={fo}
       onConfirm={(input) => {
         onConfirm(input);
       }}

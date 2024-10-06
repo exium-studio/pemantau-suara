@@ -48,7 +48,7 @@ export default function EditActivityModalDisclosure({
               excludeFields={["pelaksana", "kelurahan", "rw"]}
               submitUrl={`/api/pemantau-suara/dashboard/management/aktivitas/${id}`}
               submitLabel="Simpan"
-              method={'patch'}
+              method={"patch"}
             />
           </ModalBody>
         </ModalContent>

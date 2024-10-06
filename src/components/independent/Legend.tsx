@@ -76,9 +76,6 @@ const LegendComponent: React.FC = () => {
           title="Legenda"
           disableBackOnClose
           onClose={onClose}
-          textProps={{ fontSize: [16, null, 18] }}
-          p={5}
-          pt={"16px !important"}
           position={"sticky"}
           top={0}
           bg={lightDarkColor}
@@ -118,7 +115,7 @@ const LegendComponent: React.FC = () => {
           </SimpleGrid>
         </CContainer>
 
-        <ButtonGroup py={4} px={5}>
+        <ButtonGroup p={5}>
           <Button
             w={"100%"}
             size={"sm"}

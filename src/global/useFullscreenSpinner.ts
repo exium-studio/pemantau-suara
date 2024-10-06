@@ -7,19 +7,19 @@ interface State {
 
 interface Actions {
   setLabel: (newState: State["label"]) => void;
-  onOpen: () => void;
-  onClose: () => void;
+  onFullscreenSpinnerOpen: () => void;
+  onFullscreenSpinnerClose: () => void;
 }
 
 const useFullscreenSpinner = create<State & Actions>((set) => ({
   label: "",
   setLabel: (newState) => set({ label: newState }),
   isOpen: false,
-  onOpen: () =>
+  onFullscreenSpinnerOpen: () =>
     set({
       isOpen: true,
     }),
-  onClose: () =>
+  onFullscreenSpinnerClose: () =>
     set({
       isOpen: false,
     }),

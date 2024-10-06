@@ -1,82 +1,142 @@
 import {
   Avatar,
-  Center,
+  Button,
+  ButtonGroup,
   HStack,
   Icon,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
-import getUserData from "../../lib/getUserData";
 import { RiLogoutBoxLine } from "@remixicon/react";
-import { iconSize } from "../../constant/sizes";
-import useAuth from "../../hooks/useAuth";
-import useFullscreenSpinner from "../../global/useFullscreenSpinner";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useManageUsers from "../../global/useManageUsers";
+import { iconSize } from "../../constant/sizes";
+import useFullscreenSpinner from "../../global/useFullscreenSpinner";
 import useManageActivities from "../../global/useManageActivities";
+import useManageUsers from "../../global/useManageUsers";
+import useAuth from "../../hooks/useAuth";
+import getUserData from "../../lib/getUserData";
+import DisclosureHeader from "../dependent/DisclosureHeader";
+import CContainer from "./wrapper/CContainer";
+import FloatingContainer from "./wrapper/FloatingContainer";
+import RoleBadge from "../dependent/RoleBadge";
 
-export default function Profile() {
-  // States
-  const userData = getUserData();
+const Logout = () => {
   const { onCloseManageUsers } = useManageUsers();
   const { onCloseManageActivities } = useManageActivities();
 
   // Utils
-  const { onOpen, onClose, setLabel } = useFullscreenSpinner();
+  const { onFullscreenSpinnerOpen, onFullscreenSpinnerClose, setLabel } =
+    useFullscreenSpinner();
   const navigate = useNavigate();
-  const { logout, status } = useAuth();
+  const { logout, loading, status } = useAuth();
   function onLogout() {
-    onOpen();
+    onFullscreenSpinnerOpen();
     setLabel("Sedang keluar, harap menunggu, jangan menutup halaman ini");
     logout({ url: `/api/logout` });
   }
-  // Handle response status
-  const prevStatus = useRef<number | null>(null);
+  // Handle response
   useEffect(() => {
-    if (status === 200 && prevStatus.current !== status) {
-      prevStatus.current = status;
-      onClose();
+    if (status === 200) {
+      onFullscreenSpinnerClose();
       localStorage.removeItem("__auth_token");
       localStorage.removeItem("__user_data");
       onCloseManageUsers();
       onCloseManageActivities();
       navigate("/");
     }
-  }, [status, navigate, onClose, onCloseManageUsers, onCloseManageActivities]);
+  }, [
+    status,
+    navigate,
+    onFullscreenSpinnerClose,
+    onCloseManageUsers,
+    onCloseManageActivities,
+  ]);
 
   return (
-    <Menu>
-      <MenuButton as={Center} cursor={"pointer"} borderRadius={"full"}>
-        <Avatar
-          src={
-            userData?.foto_profil || "/asset/images/defaultProfilePhoto.webp"
-          }
-          name={userData?.nama}
-          mb={1}
-          borderRadius={"full"}
-          w={"46px"}
-          h={"46px"}
-          shadow={"sm"}
+    <Button
+      w={"100%"}
+      color={"red.400"}
+      className="btn-solid clicky"
+      rightIcon={
+        <Icon
+          as={RiLogoutBoxLine}
+          transform={"rotate(180deg)"}
+          fontSize={iconSize}
         />
-      </MenuButton>
+      }
+      isLoading={loading}
+      onClick={onLogout}
+    >
+      Logout
+    </Button>
+  );
+};
 
-      <MenuList minW={"160px"} zIndex={999}>
-        <MenuItem onClick={onLogout}>
-          <HStack justify={"space-between"} w={"100%"} color={"red.400"}>
-            <Text>Logout</Text>
+export default function Profile() {
+  // States
+  const userData = getUserData();
+  const { isOpen, onClose, onToggle } = useDisclosure();
 
-            <Icon
-              as={RiLogoutBoxLine}
-              transform={"rotate(180deg)"}
-              fontSize={iconSize}
+  return (
+    <>
+      <Avatar
+        src={userData?.foto_profil || ""}
+        name={userData?.nama}
+        mb={1}
+        borderRadius={"full"}
+        w={"46px"}
+        h={"46px"}
+        shadow={"sm"}
+        cursor={"pointer"}
+        onClick={onToggle}
+      />
+
+      <FloatingContainer
+        maxW={"300px"}
+        top={"74px"}
+        right={isOpen ? "16px" : "calc(-300px + -16px)"}
+      >
+        <DisclosureHeader
+          title=""
+          disableBackOnClose
+          onClose={onClose}
+          position={"sticky"}
+          top={0}
+          zIndex={20}
+        />
+
+        <CContainer px={5}>
+          <Avatar
+            src={userData?.foto_profil || ""}
+            name={userData?.nama}
+            size={"xl"}
+            mx={"auto"}
+            mt={-10}
+            mb={4}
+          />
+          <Text fontWeight={600} fontSize={18} textAlign={"center"}>
+            {userData?.nama}
+          </Text>
+
+          <HStack justify={"center"}>
+            <Text textAlign={"center"} opacity={0.4}>
+              {userData?.username}
+            </Text>
+
+            <RoleBadge
+              data={userData?.role?.id}
+              fontSize={10}
+              py={"2px"}
+              px={2}
             />
           </HStack>
-        </MenuItem>
-      </MenuList>
-    </Menu>
+        </CContainer>
+
+        <ButtonGroup p={5}>
+          <Logout />
+        </ButtonGroup>
+      </FloatingContainer>
+    </>
   );
 }

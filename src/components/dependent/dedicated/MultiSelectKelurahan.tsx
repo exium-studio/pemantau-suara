@@ -32,6 +32,7 @@ export default function MultiSelectKelurahan({
   const [options, setOptions] = useState<any>(undefined);
   const { data } = useDataState<any>({
     url: `/api/pemantau-suara/publik-request/get-all-kelurahan`,
+    conditions: isOpen,
   });
 
   // Fetch list item options

@@ -44,7 +44,9 @@ export default function AddUser() {
             <DisclosureHeader title={"Tambah Pengguna"} />
           </ModalHeader>
           <ModalBody pb={6}>
-            <UserForm />
+            <UserForm
+              submitUrl={`/api/pemantau-suara/dashboard/management/pengguna`}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>

@@ -8,7 +8,10 @@ import {
 import { useFormik } from "formik";
 import { useEffect, useRef, useState } from "react";
 import * as yup from "yup";
-import { Interface__SelectOption } from "../../constant/interfaces";
+import {
+  Interface__SelectOption,
+  Type__UserInitialValues,
+} from "../../constant/interfaces";
 import useRequest from "../../hooks/useRequest";
 import { generateUsernameByName } from "../../lib/generateUsernameByName";
 import MultiSelectKelurahan from "../dependent/dedicated/MultiSelectKelurahan";
@@ -22,20 +25,6 @@ import createNumberArraybyGivenMaxNumber from "../../lib/createNumberArraybyGive
 import MultiSelectRW from "../dependent/dedicated/MultiSelectRW";
 import formatDate from "../../lib/formatDate";
 
-type Type__InitialValues = {
-  foto_profil?: string;
-  nama?: string;
-  jenis_kelamin?: Interface__SelectOption;
-  nik_ktp?: string;
-  tgl_diangkat?: Date;
-  no_hp?: string;
-  role?: Interface__SelectOption;
-  kelurahan?: Interface__SelectOption[];
-  rw?: Interface__SelectOption[];
-  newusername?: string;
-  newpassword?: string;
-};
-
 const defaultValues = {
   foto_profil: "",
   nama: "",
@@ -45,17 +34,19 @@ const defaultValues = {
   no_hp: "",
   role: undefined,
   kelurahan: undefined,
-  rw: undefined,
+  rw_pelaksana: undefined,
   newusername: "",
   newpassword: "bocahe_dewe",
 };
 
 interface Props {
-  initialValues?: Type__InitialValues;
+  submitUrl: string;
+  initialValues?: Type__UserInitialValues;
   excludeFields?: string[];
 }
 
 export default function UserForm({
+  submitUrl,
   initialValues = defaultValues,
   excludeFields,
 }: Props) {
@@ -109,7 +100,7 @@ export default function UserForm({
       newpassword: yup.string().required("Harus diisi"),
     }),
     onSubmit: (values, { resetForm }) => {
-      const url = `/api/pemantau-suara/dashboard/management/pengguna`;
+      // const url = `/api/pemantau-suara/dashboard/management/pengguna`;
 
       const payload = {
         foto_profil: values?.foto_profil,
@@ -122,13 +113,13 @@ export default function UserForm({
         kelurahan_id: values?.kelurahan?.map(
           (kelurahan: any) => kelurahan.value
         ),
-        rw: values?.rw,
+        rw: values?.rw_pelaksana,
         username: values?.newusername,
         password: values?.newpassword,
       };
 
       const config = {
-        url,
+        url: submitUrl,
         method: "post",
         data: payload,
       };
@@ -149,17 +140,20 @@ export default function UserForm({
   // Handle RWOptions by kelurahan
   useEffect(() => {
     const RWOptions = createNumberArraybyGivenMaxNumber(
-      formik.values.kelurahan?.[0]?.original_data?.max_data
+      formik.values.kelurahan?.[0]?.original_data?.max_rw
     )?.map((rw) => ({
       value: rw,
       label: rw.toString(),
     }));
+
     setRWOptions(RWOptions);
   }, [formik.values.kelurahan]);
 
+  console.log(formik.values);
+
   return (
     <>
-      <form id="addUserForm" onSubmit={formik.handleSubmit}>
+      <form id="userForm" onSubmit={formik.handleSubmit}>
         {/* Nama */}
         <FormControl mb={4} isInvalid={!!formik.errors?.nama}>
           <FormLabel>
@@ -214,25 +208,27 @@ export default function UserForm({
         </FormControl>
 
         {/* Tanggal diangkat */}
-        <FormControl mb={4} isInvalid={!!formik.errors?.tgl_diangkat}>
-          <FormLabel>
-            Tanggal Diangkat
-            <RequiredForm />
-          </FormLabel>
-          <DatePickerModal
-            id={`add-user`}
-            name="tgl_diangkat"
-            onConfirm={(input) => {
-              formik.setFieldValue("tgl_diangkat", input);
-            }}
-            inputValue={formik.values.tgl_diangkat}
-            isError={!!formik.errors.tgl_diangkat}
-            placeholder="Tanggal Diangkat"
-          />
-          <FormErrorMessage>
-            {formik.errors.tgl_diangkat as string}
-          </FormErrorMessage>
-        </FormControl>
+        {!excludeFields?.includes("tgl_diangkat") && (
+          <FormControl mb={4} isInvalid={!!formik.errors?.tgl_diangkat}>
+            <FormLabel>
+              Tanggal Diangkat
+              <RequiredForm />
+            </FormLabel>
+            <DatePickerModal
+              id={`add-user`}
+              name="tgl_diangkat"
+              onConfirm={(input) => {
+                formik.setFieldValue("tgl_diangkat", input);
+              }}
+              inputValue={formik.values.tgl_diangkat}
+              isError={!!formik.errors.tgl_diangkat}
+              placeholder="Tanggal Diangkat"
+            />
+            <FormErrorMessage>
+              {formik.errors.tgl_diangkat as string}
+            </FormErrorMessage>
+          </FormControl>
+        )}
 
         {/* No.Telp */}
         <FormControl mb={4} isInvalid={!!formik.errors?.no_hp}>
@@ -290,50 +286,56 @@ export default function UserForm({
         </FormControl>
 
         {/* Pilih RW */}
-        <FormControl mb={4} isInvalid={!!formik.errors?.rw}>
-          <FormLabel>
-            Area RW
-            <RequiredForm />
-          </FormLabel>
-          <MultiSelectRW
-            name="rw"
-            onConfirm={(input) => {
-              formik.setFieldValue("rw", input);
-            }}
-            isError={!!formik.errors.rw}
-            inputValue={formik.values.rw}
-            optionsDisplay="chip"
-            options={RWOptions}
-            isDisabled={
-              !!!(formik.values?.role?.value === 3 && formik.values.kelurahan)
-            }
-          />
-          <FormHelperText>Jika role Penggerak maka input RW</FormHelperText>
-          <FormErrorMessage>{formik.errors.rw as string}</FormErrorMessage>
-        </FormControl>
+        {!excludeFields?.includes("rw_pelaksana") && (
+          <FormControl mb={4} isInvalid={!!formik.errors?.rw_pelaksana}>
+            <FormLabel>
+              Area RW
+              <RequiredForm />
+            </FormLabel>
+            <MultiSelectRW
+              name="rw_pelaksana"
+              onConfirm={(input) => {
+                formik.setFieldValue("rw_pelaksana", input);
+              }}
+              isError={!!formik.errors.rw_pelaksana}
+              inputValue={formik.values.rw_pelaksana}
+              optionsDisplay="chip"
+              options={RWOptions}
+              isDisabled={
+                !!!(formik.values?.role?.value === 3 && formik.values.kelurahan)
+              }
+            />
+            <FormHelperText>Jika role Penggerak maka input RW</FormHelperText>
+            <FormErrorMessage>
+              {formik.errors.rw_pelaksana as string}
+            </FormErrorMessage>
+          </FormControl>
+        )}
 
         {/* Username */}
-        <FormControl mb={4} isInvalid={!!formik.errors?.newusername}>
-          <FormLabel>
-            Username
-            <RequiredForm />
-          </FormLabel>
-          <StringInput
-            name="newusername"
-            onChangeSetter={(input) => {
-              formik.setFieldValue("newusername", input);
-            }}
-            inputValue={formik.values.newusername}
-            placeholder="jolitos.kurniawan"
-          />
-          <FormErrorMessage>
-            {formik.errors.newusername as string}
-          </FormErrorMessage>
-        </FormControl>
+        {!excludeFields?.includes("username") && (
+          <FormControl mb={4} isInvalid={!!formik.errors?.newusername}>
+            <FormLabel>
+              Username
+              <RequiredForm />
+            </FormLabel>
+            <StringInput
+              name="newusername"
+              onChangeSetter={(input) => {
+                formik.setFieldValue("newusername", input);
+              }}
+              inputValue={formik.values.newusername}
+              placeholder="jolitos.kurniawan"
+            />
+            <FormErrorMessage>
+              {formik.errors.newusername as string}
+            </FormErrorMessage>
+          </FormControl>
+        )}
 
         {/* Password */}
         {!excludeFields?.includes("password") && (
-          <FormControl mb={8} isInvalid={!!formik.errors?.newpassword}>
+          <FormControl mb={4} isInvalid={!!formik.errors?.newpassword}>
             <FormLabel>
               Password
               <RequiredForm />
@@ -354,11 +356,12 @@ export default function UserForm({
       </form>
 
       <Button
+        mt={4}
         w={"100%"}
         colorScheme="ap"
         className="btn-ap clicky"
         type="submit"
-        form="addUserForm"
+        form="userForm"
         isLoading={loading}
       >
         Tambahkan

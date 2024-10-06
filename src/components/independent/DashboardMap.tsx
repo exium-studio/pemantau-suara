@@ -24,7 +24,7 @@ export default function DashboardMap() {
     if (!geoJSONKecamatan) {
       fetchGeoJSONData();
     }
-  }, []);
+  }, [geoJSONKecamatan, setGeoJSONKecamatan]);
 
   return (
     <Box position={"relative"}>

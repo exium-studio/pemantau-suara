@@ -39,7 +39,7 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
       .then((r) => {
         setError(false);
         setStatus(r.status);
-        if (r.status === 200) {
+        if (r.status === 200 || r.status === 201) {
           setResponse(r);
         }
       })
@@ -60,6 +60,7 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
     if (!loading && status) {
       switch (status) {
         case 200:
+        case 201:
           successToast &&
             fireToast({ status: "success", title: response?.data?.message });
           break;

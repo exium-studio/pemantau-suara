@@ -109,6 +109,7 @@ export default function UserForm({
     }),
     onSubmit: (values, { resetForm }) => {
       const url = `/api/pemantau-suara/dashboard/management/pengguna`;
+
       const payload = {
         foto_profil: values?.foto_profil,
         nama: values?.nama,
@@ -124,6 +125,7 @@ export default function UserForm({
         username: values?.newusername,
         password: values?.newpassword,
       };
+
       const config = {
         url,
         method: "post",

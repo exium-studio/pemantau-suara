@@ -4,6 +4,7 @@ import { Map, MapRef, Marker } from "react-map-gl";
 import useSearchAddress from "../../global/useSearchAddress";
 import LayerHoveredAndClicked from "../independent/mapLayer/LayerHoveredAndClicked";
 import LayerKecamaatanSemarang from "../independent/mapLayer/LayerKecamaatanSemarang";
+import getUserData from "../../lib/getUserData";
 
 interface Props {
   geoJSONData: any;
@@ -26,6 +27,20 @@ export default function Maps({
 }: Props) {
   // SX
   const { colorMode } = useColorMode();
+
+  // States
+  const userData = getUserData();
+  const allowedKelurahan = userData?.kelurahan?.map(
+    (kelurahan: any) => kelurahan?.kode_kelurahan
+  );
+  const isSuperAdmin = userData?.role?.id === 1;
+  const filteredGeoJSON = isSuperAdmin
+    ? geoJSONData
+    : geoJSONData?.flatMap((kecamatan: any) =>
+        kecamatan?.features?.filter((kelurahan: any) =>
+          allowedKelurahan?.includes(kelurahan?.properties?.village_code)
+        )
+      ) || []; // Kembali ke array kosong jika geoJSONData undefined
 
   // Handle render map component
   const [isMapLoaded, setIsMapLoaded] = useState(false);
@@ -93,10 +108,13 @@ export default function Maps({
           )}
 
           {/* Layer all geoJSON data */}
-          <LayerKecamaatanSemarang geoJSONData={geoJSONData} />
+          <LayerKecamaatanSemarang geoJSONData={filteredGeoJSON} />
 
           {/* Hovered & clicked layers */}
-          <LayerHoveredAndClicked mapRef={mapRef} geoJSONData={geoJSONData} />
+          <LayerHoveredAndClicked
+            mapRef={mapRef}
+            geoJSONData={filteredGeoJSON}
+          />
         </>
       )}
     </Map>

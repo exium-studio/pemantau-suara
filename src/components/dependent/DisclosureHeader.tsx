@@ -1,22 +1,31 @@
-import { Box, BoxProps, HStack, Text, TextProps } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  HStack,
+  IconButtonProps,
+  Text,
+  TextProps,
+} from "@chakra-ui/react";
 import BackOnCloseButton from "../independent/BackOnCloseButton";
 
 interface Props extends BoxProps {
-  title: string;
+  title?: string;
   withoutCloseButton?: boolean;
   onClose?: () => void;
   addition?: any;
   textProps?: TextProps;
   disableBackOnClose?: boolean;
+  iconButtonProps?: IconButtonProps;
 }
 
 export default function DisclosureHeader({
-  title,
+  title = "",
   withoutCloseButton,
   onClose,
   addition,
   textProps,
   disableBackOnClose,
+  iconButtonProps,
   ...props
 }: Props) {
   return (
@@ -35,6 +44,7 @@ export default function DisclosureHeader({
             mr={"-6px"}
             mt={"-2px"}
             disableBackOnClose={disableBackOnClose}
+            {...iconButtonProps}
           />
         )}
       </HStack>

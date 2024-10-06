@@ -7,8 +7,8 @@ import useManageActivities from "../../global/useManageActivities";
 import useManageUsers from "../../global/useManageUsers";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import SearchComponent from "../dependent/input/SearchComponent";
+import ActivitiesTable from "./ActivitiesTable";
 import AddActivityModal from "./AddActivityModal";
-import UsersTable from "./UsersTable";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
 
@@ -102,7 +102,7 @@ export default function ManageActivities() {
             </HStack>
           </Box>
 
-          <UsersTable
+          <ActivitiesTable
             conditions={manageActivities}
             filterConfig={filterConfig}
           />

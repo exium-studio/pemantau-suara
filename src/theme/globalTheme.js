@@ -228,7 +228,6 @@ export const globalTheme = extendTheme({
           color: props.colorMode === "dark" ? "wt" : "bt",
           // bg: "#252525ee",
           // color: "white !important",
-          backdropFilter: "blur(40px)",
           boxShadow: "none",
           borderRadius: 12,
           // m: 4,

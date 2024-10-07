@@ -46,10 +46,20 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
       })
       .catch((e) => {
         console.log(e);
-        setStatus(e.status);
+        setStatus(e.response?.status);
         setResponse(e.response);
 
-        // Set state error if request fail
+        // Handle common errors such as network issues
+        // Network Error atau Timeout
+        if (e.code === "ERR_NETWORK") {
+          fireToast({
+            status: "error",
+            title:
+              "Network error: Gagal terhubung ke server. Periksa jaringan Anda.",
+          });
+        }
+
+        // Set state error if request fails
         setError(true);
       })
       .finally(() => {
@@ -64,27 +74,27 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
         case 200:
         case 201:
           successToast &&
-            fireToast({ status: "success", title: response?.data?.message });
+            fireToast({
+              status: "success",
+              title:
+                typeof response?.data?.message === "string"
+                  ? response?.data?.message
+                  : "Maaf terjadi kendala",
+            });
           break;
         case 400:
-          errorToast &&
-            fireToast({ status: "error", title: response?.data?.message });
-          break;
         case 401:
-          errorToast &&
-            fireToast({ status: "error", title: response?.data?.message });
-          break;
         case 403:
-          errorToast &&
-            fireToast({ status: "error", title: response?.data?.message });
-          break;
         case 404:
-          errorToast &&
-            fireToast({ status: "error", title: response?.data?.message });
-          break;
         case 500:
           errorToast &&
-            fireToast({ status: "error", title: response?.data?.message });
+            fireToast({
+              status: "error",
+              title:
+                typeof response?.data?.message === "string"
+                  ? response?.data?.message
+                  : "Maaf terjadi kendala",
+            });
           break;
       }
     }

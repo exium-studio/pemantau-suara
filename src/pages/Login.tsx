@@ -17,7 +17,6 @@ import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import PasswordInput from "../components/dependent/input/PasswordInput";
 import StringInput from "../components/dependent/input/StringInput";
 import MapboxMapLogin from "../components/dependent/MapboxMapLogin";
-import SmallLink from "../components/independent/SmallLink";
 import CContainer from "../components/independent/wrapper/CContainer";
 import { useLightDarkColor } from "../constant/colors";
 import { responsiveSpacing } from "../constant/sizes";
@@ -199,9 +198,9 @@ export default function Login() {
               </Button>
             </ButtonGroup>
 
-            <SmallLink to="/forgot-password" mx={"auto"}>
+            {/* <SmallLink to="/forgot-password" mx={"auto"}>
               Lupa password?
-            </SmallLink>
+            </SmallLink> */}
           </>
         )}
 
@@ -209,7 +208,7 @@ export default function Login() {
           <>
             <CContainer>
               <HStack
-                gap={2}
+                gap={4}
                 mb={2}
                 borderRadius={8}
                 p={responsiveSpacing}

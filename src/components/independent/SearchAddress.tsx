@@ -100,7 +100,11 @@ export default function SearchAddress() {
   };
 
   return (
-    <CContainer w={"100%"} maxW={"420px"} fRef={containerRef}>
+    <CContainer
+      w={"100%"}
+      // maxW={"420px"}
+      fRef={containerRef}
+    >
       <CContainer
         w={searchMode ? "100% !important" : "101px"}
         transition={"200ms"}
@@ -119,7 +123,7 @@ export default function SearchAddress() {
           p={1}
           gap={searchMode ? 0 : 1}
           w={"100%"}
-          maxW={"420px"}
+          // maxW={"420px"}
           transition={"200ms"}
           align={"stretch"}
           zIndex={4}
@@ -216,7 +220,7 @@ export default function SearchAddress() {
             bg={lightDarkColor}
             borderRadius={"0 0 12px 12px"}
             w={"100%"}
-            maxW={"420px"}
+            // maxW={"420px"}
             overflowY="auto"
             className="scrollY"
             zIndex={1}

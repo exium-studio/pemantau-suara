@@ -1,6 +1,6 @@
 import { Icon, MenuItem, Text } from "@chakra-ui/react";
 import { Pencil } from "@phosphor-icons/react";
-import { Interface__TableState } from "../../constant/interfaces";
+import { Interface__dataStates } from "../../constant/interfaces";
 import { iconSize } from "../../constant/sizes";
 import useDataState from "../../hooks/useDataState";
 import getUserData from "../../lib/getUserData";
@@ -15,11 +15,11 @@ import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
 import RoleBadge from "../dependent/RoleBadge";
 
 interface TableProps {
-  tableState: Interface__TableState;
+  dataStates: Interface__dataStates;
 }
 
-const TableComponent = ({ tableState }: TableProps) => {
-  // console.log(tableState?.data);
+const TableComponent = ({ dataStates }: TableProps) => {
+  // console.log(dataStates?.data);
 
   // States
   const userData = getUserData();
@@ -124,7 +124,7 @@ const TableComponent = ({ tableState }: TableProps) => {
       isSortable: true,
     },
   ];
-  const formattedBody = tableState?.data?.map((item: any, i: number) => ({
+  const formattedBody = dataStates?.data?.map((item: any, i: number) => ({
     id: item.id,
     originalData: item,
     columnsFormat: [
@@ -184,7 +184,7 @@ const TableComponent = ({ tableState }: TableProps) => {
   // Render lateral
   const render = {
     loading: <Skeleton minH={"300px"} flex={1} />,
-    error: <Retry retry={tableState.retry} />,
+    error: <Retry retry={dataStates.retry} />,
     empty: <NoData />,
     loaded: (
       <>
@@ -201,17 +201,17 @@ const TableComponent = ({ tableState }: TableProps) => {
 
   return (
     <>
-      {tableState.loading && render.loading}
+      {dataStates.loading && render.loading}
 
-      {!tableState.loading && (
+      {!dataStates.loading && (
         <>
-          {tableState.error && render.error}
+          {dataStates.error && render.error}
 
-          {!tableState.error && (
+          {!dataStates.error && (
             <>
-              {tableState?.data?.length === 0 && render.empty}
+              {dataStates?.data?.length === 0 && render.empty}
 
-              {tableState?.data?.length > 0 && render.loaded}
+              {dataStates?.data?.length > 0 && render.loaded}
             </>
           )}
         </>
@@ -226,12 +226,12 @@ interface Props {
 }
 
 export default function UsersTable({ conditions, filterConfig }: Props) {
-  const { tableState } = useDataState<any>({
+  const { dataStates } = useDataState<any>({
     url: `/api/pemantau-suara/dashboard/management/get-pengguna`,
     payload: { search: filterConfig?.search?.split(" "), limit: 0 },
     conditions: conditions,
     dependencies: [filterConfig],
   });
 
-  return <TableComponent tableState={tableState} />;
+  return <TableComponent dataStates={dataStates} />;
 }

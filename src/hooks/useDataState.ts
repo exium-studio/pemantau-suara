@@ -90,7 +90,7 @@ const useDataState = <T>({
     // TODO: Handle load more
   }
 
-  const tableState = {
+  const dataStates = {
     loading: loading,
     error: error,
     status: status,
@@ -109,7 +109,7 @@ const useDataState = <T>({
     loadingLoadMore,
     setLoadingLoadMore,
     paginationData,
-    tableState,
+    dataStates,
   };
 };
 

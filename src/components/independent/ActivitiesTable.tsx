@@ -1,6 +1,6 @@
 import { Button, Icon, MenuItem, Text } from "@chakra-ui/react";
 import { Pencil } from "@phosphor-icons/react";
-import { Interface__TableState } from "../../constant/interfaces";
+import { Interface__dataStates } from "../../constant/interfaces";
 import { iconSize } from "../../constant/sizes";
 import useDataState from "../../hooks/useDataState";
 import formatDate from "../../lib/formatDate";
@@ -18,10 +18,10 @@ import CustomTableContainer from "./wrapper/CustomTableContainer";
 import PermissionTooltip from "./wrapper/PermissionTooltip";
 
 interface TableProps {
-  tableState: Interface__TableState;
+  dataStates: Interface__dataStates;
 }
 
-const TableComponent = ({ tableState }: TableProps) => {
+const TableComponent = ({ dataStates }: TableProps) => {
   // States
   const userData = getUserData();
 
@@ -124,7 +124,7 @@ const TableComponent = ({ tableState }: TableProps) => {
       isSortable: true,
     },
   ];
-  const formattedBody = tableState?.data?.map((item: any, i: number) => ({
+  const formattedBody = dataStates?.data?.map((item: any, i: number) => ({
     id: item.id,
     originalData: item,
     columnsFormat: [
@@ -223,7 +223,7 @@ const TableComponent = ({ tableState }: TableProps) => {
   // Render lateral
   const render = {
     loading: <Skeleton minH={"300px"} flex={1} />,
-    error: <Retry retry={tableState.retry} />,
+    error: <Retry retry={dataStates.retry} />,
     empty: <NoData />,
     loaded: (
       <>
@@ -240,17 +240,17 @@ const TableComponent = ({ tableState }: TableProps) => {
 
   return (
     <>
-      {tableState.loading && render.loading}
+      {dataStates.loading && render.loading}
 
-      {!tableState.loading && (
+      {!dataStates.loading && (
         <>
-          {tableState.error && render.error}
+          {dataStates.error && render.error}
 
-          {!tableState.error && (
+          {!dataStates.error && (
             <>
-              {tableState?.data?.length === 0 && render.empty}
+              {dataStates?.data?.length === 0 && render.empty}
 
-              {tableState?.data?.length > 0 && render.loaded}
+              {dataStates?.data?.length > 0 && render.loaded}
             </>
           )}
         </>
@@ -270,7 +270,7 @@ export default function ActivitiesTable({ conditions, filterConfig }: Props) {
   const allowedKelurahan = userData?.kelurahan?.map(
     (kelurahan: any) => kelurahan?.kode_kelurahan
   );
-  const { tableState } = useDataState<any>({
+  const { dataStates } = useDataState<any>({
     url: `/api/pemantau-suara/dashboard/management/get-aktivitas`,
     payload: {
       search: filterConfig?.search?.split(" "),
@@ -281,5 +281,5 @@ export default function ActivitiesTable({ conditions, filterConfig }: Props) {
     dependencies: [],
   });
 
-  return <TableComponent tableState={tableState} />;
+  return <TableComponent dataStates={dataStates} />;
 }

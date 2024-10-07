@@ -40,7 +40,7 @@ export interface Interface__Credentials {
   password: string;
 }
 
-export interface Interface__TableState {
+export interface Interface__dataStates {
   loading: boolean;
   error: boolean;
   data: any;

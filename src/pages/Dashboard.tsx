@@ -36,9 +36,9 @@ export default function Dashboard() {
         position={"fixed"}
         top={0}
         left={0}
-        // zIndex={3}
+        zIndex={3}
         w={searchMode ? "100%" : ""}
-        maxW={"450px"}
+        maxW={"480px"}
       >
         <SearchAddress />
       </HStack>

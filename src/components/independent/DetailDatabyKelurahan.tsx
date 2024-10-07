@@ -612,7 +612,7 @@ const DataCard = ({ kodeKelurahan, isOpen }: any) => {
         </Text>
       </Wrap>
 
-      {/* {dataStates.loading && render.loading}
+      {dataStates.loading && render.loading}
 
       {!dataStates.loading && (
         <>
@@ -626,8 +626,8 @@ const DataCard = ({ kodeKelurahan, isOpen }: any) => {
             </>
           )}
         </>
-      )} */}
-      {render.loading}
+      )}
+      {/* {render.loading} */}
     </CContainer>
   );
 };

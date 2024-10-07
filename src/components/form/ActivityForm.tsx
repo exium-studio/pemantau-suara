@@ -103,6 +103,8 @@ export default function ActivityForm({
               ".PNG",
               ".jpg",
               ".JPG",
+              ".jpeg",
+              ".JPEG",
               ".heic",
               ".HEIC",
             ];

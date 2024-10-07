@@ -4,6 +4,7 @@ import { Layer, MapRef, Source } from "react-map-gl";
 import geoJSONLayers from "../../../constant/geoJSONLayers";
 import useDetailGeoJSONData from "../../../global/useDetailGeoJSONData";
 import useHighlighedKecamatan from "../../../global/useHighlighedKecamatan";
+import getUserData from "../../../lib/getUserData";
 
 interface Props {
   mapRef: RefObject<MapRef>;
@@ -14,6 +15,9 @@ export default function LayerHoveredAndClicked({ mapRef, geoJSONData }: Props) {
   // SX
   const { colorMode } = useColorMode();
 
+  // States
+  const isPenggerak = getUserData()?.role?.id === 3;
+
   // Handle layer hover, onclick, set detail data
   const [hoveredFeature, setHoveredFeature] = useState<any>(null);
   const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
@@ -22,7 +26,7 @@ export default function LayerHoveredAndClicked({ mapRef, geoJSONData }: Props) {
   const handleLayerClick = useCallback(
     (layer: any) => (event: any) => {
       const clickedFeature = event.features[0];
-      if (clickedFeature) {
+      if (clickedFeature && !isPenggerak) {
         setDetailGeoJSONData({ layer: layer, geoJSONData: clickedFeature });
 
         if (!highlightedKecamatanIndex?.includes(-1)) {
@@ -35,6 +39,7 @@ export default function LayerHoveredAndClicked({ mapRef, geoJSONData }: Props) {
       setDetailGeoJSONData,
       highlightedKecamatanIndex,
       setHighlightedKecamatanIndex,
+      isPenggerak,
     ]
   );
   const onMouseMove = useCallback((event: any) => {

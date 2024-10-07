@@ -32,7 +32,9 @@ export default function FullscreenSpinner() {
         mx={"auto"}
         size={"40px"}
       />
-      <Text textAlign={"center"}>{label}</Text>
+      <Text textAlign={"center"} color={"white"}>
+        {label}
+      </Text>
     </CContainer>
   );
 }

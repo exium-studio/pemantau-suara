@@ -76,13 +76,10 @@ const LegendComponent: React.FC = () => {
           title="Legenda"
           disableBackOnClose
           onClose={onClose}
-          position={"sticky"}
-          top={0}
-          bg={lightDarkColor}
           zIndex={20}
         />
 
-        <CContainer flex={1} px={5} overflowY={"auto"} className={"scrollY"}>
+        <CContainer px={5} overflowY={"auto"} className={"scrollY"}>
           <SimpleGrid columns={[2]} gap={2} spacingX={4} w={"100%"}>
             {geoJSONLayers.map((layer, i) => {
               const isHighlighted = highlightedKecamatanIndex.includes(i);

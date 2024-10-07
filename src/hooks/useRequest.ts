@@ -25,9 +25,9 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
 
   // Make request func
   function req({ config }: Request__Interface) {
-    setLoading(true);
-    setStatus(undefined);
     setError(false);
+    setStatus(undefined);
+    setLoading(true);
 
     // Abort request
     if (abortControllerRef.current) {

@@ -8,16 +8,16 @@ import {
   MenuItem,
   MenuList,
   SimpleGrid,
+  Switch,
   Text,
   useDisclosure,
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { ArrowsLeftRight, CaretDown, Circle } from "@phosphor-icons/react";
+import { CaretDown, Circle } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import chartColors from "../../constant/chartColors";
 import { useLightDarkColor } from "../../constant/colors";
-import { iconSize } from "../../constant/sizes";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
 import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
 import useDataState from "../../hooks/useDataState";
@@ -35,6 +35,7 @@ import Skeleton from "./feedback/Skeleton";
 import CContainer from "./wrapper/CContainer";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
+import useDataKelurahanComparisonMode from "../../global/useDataKelurahanComparisonMode";
 
 const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
   return (
@@ -69,6 +70,21 @@ const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
     </Menu>
   );
 };
+const ToggleComparisonMode = () => {
+  const { dataKelurahanComparaisonMode, toggleDataKelurahanComparisonMode } =
+    useDataKelurahanComparisonMode();
+
+  return (
+    <HStack>
+      <Switch
+        isChecked={dataKelurahanComparaisonMode}
+        onChange={toggleDataKelurahanComparisonMode}
+        colorScheme="ap"
+      ></Switch>
+      <Text>Bandingkan</Text>
+    </HStack>
+  );
+};
 
 const PotensiSuaraChart = ({ data }: any) => {
   const labels = data?.map((item: any) => `RW ${item.rw}`);
@@ -94,7 +110,7 @@ const PotensiSuaraChart = ({ data }: any) => {
     <HStack spacing={6} px={4} mb={6}>
       <VStack flex={"1 1 0"} position={"relative"}>
         <VStack w={"100%"} className="doughnutChartContainer">
-          <ChartDoughnut labels={labels} datasets={datasets} cutout={"65"} />
+          <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
         </VStack>
 
         <VStack
@@ -117,9 +133,6 @@ const PotensiSuaraChart = ({ data }: any) => {
         {data?.map((item: any, i: number) => (
           <HStack key={i}>
             <Icon as={Circle} weight="fill" color={colors[i]} fontSize={8} />
-            {/* <Text opacity={0.6} whiteSpace={"nowrap"}>
-              RW {item?.rw}
-            </Text> */}
             <Text fontSize={"sm"}>{formatNumber(item?.potensi_suara)}</Text>
           </HStack>
         ))}
@@ -171,14 +184,14 @@ const PotensiSuaraTable = ({ dataStates }: any) => {
         justify: "center",
       },
     },
-    {
-      th: "Kelurahan",
-      isSortable: true,
-    },
-    {
-      th: "Kecamatan",
-      isSortable: true,
-    },
+    // {
+    //   th: "Kelurahan",
+    //   isSortable: true,
+    // },
+    // {
+    //   th: "Kecamatan",
+    //   isSortable: true,
+    // },
     {
       th: "Foto Aktivitas",
       cProps: {
@@ -261,14 +274,14 @@ const PotensiSuaraTable = ({ dataStates }: any) => {
             justify: "center",
           },
         },
-        {
-          value: item?.kelurahan?.nama_kelurahan,
-          td: item?.kelurahan?.nama_kelurahan,
-        },
-        {
-          value: item?.kelurahan?.kecamatan?.nama_kecamatan,
-          td: item?.kelurahan?.kecamatan?.nama_kecamatan,
-        },
+        // {
+        //   value: item?.kelurahan?.nama_kelurahan,
+        //   td: item?.kelurahan?.nama_kelurahan,
+        // },
+        // {
+        //   value: item?.kelurahan?.kecamatan?.nama_kecamatan,
+        //   td: item?.kelurahan?.kecamatan?.nama_kecamatan,
+        // },
         {
           value: item?.foto_aktivitas,
           td: (
@@ -308,7 +321,7 @@ const PotensiSuaraTable = ({ dataStates }: any) => {
   );
 
   return (
-    <CustomTableContainer maxH={"calc(100vh - 64px - 80px)"}>
+    <CustomTableContainer maxH={"35vh"}>
       <CustomTable
         formattedHeader={formattedHeader}
         formattedBody={formattedBody}
@@ -318,16 +331,14 @@ const PotensiSuaraTable = ({ dataStates }: any) => {
   );
 };
 
-const SuaraSuaraKPUChart = ({ data }: any) => {
-  const labels = data?.map((item: any) => `RW ${item.rw}`);
-  const colors = Array.from({ length: data?.length }).map(
-    (_, i) => chartColors[i % chartColors.length]
-  );
+const SuaraKPUChart = ({ data }: any) => {
+  const labels = data?.map((item: any) => `${item.partai?.nama}`);
+  const colors = data?.map((item: any) => `#${item.partai?.color}`);
   const datasets = [
     {
-      customTooltipLabels: data?.map((item: any) => item?.potensi_suara),
+      customTooltipLabels: data?.map((item: any) => item?.jumlah_suara),
       label: "Nominal (N)",
-      data: data?.map((item: any) => item?.potensi_suara),
+      data: data?.map((item: any) => item?.jumlah_suara),
       backgroundColor: colors,
       borderWidth: 0,
     },
@@ -337,7 +348,7 @@ const SuaraSuaraKPUChart = ({ data }: any) => {
     <HStack spacing={6} px={4} mb={6}>
       <VStack flex={"1 1 0"} position={"relative"}>
         <VStack w={"100%"} className="doughnutChartContainer">
-          <ChartDoughnut labels={labels} datasets={datasets} />
+          <ChartDoughnut labels={labels} datasets={datasets} cutout="70" />
         </VStack>
 
         <Text
@@ -356,10 +367,7 @@ const SuaraSuaraKPUChart = ({ data }: any) => {
         {data?.map((item: any, i: number) => (
           <HStack key={i}>
             <Icon as={Circle} weight="fill" color={colors[i]} fontSize={8} />
-            {/* <Text opacity={0.6} whiteSpace={"nowrap"}>
-              RW {item?.rw}
-            </Text> */}
-            <Text fontSize={"sm"}>{formatNumber(item?.potensi_suara)}</Text>
+            <Text fontSize={"sm"}>{formatNumber(item?.jumlah_suara)}</Text>
           </HStack>
         ))}
       </SimpleGrid>
@@ -382,28 +390,11 @@ const SuaraKPUTable = ({ dataStates }: any) => {
     //   },
     // },
     {
-      th: "Penggerak",
+      th: "Partai",
       isSortable: true,
-      props: {
-        // w: "243px",
-      },
     },
     {
-      th: "Potensi Suara",
-      isSortable: true,
-      cProps: {
-        justify: "center",
-      },
-    },
-    // {
-    //   th: "Status Aktivitas",
-    //   isSortable: true,
-    //   cProps: {
-    //     justify: "center",
-    //   },
-    // },
-    {
-      th: "RW",
+      th: "TPS",
       isSortable: true,
       isNumeric: true,
       cProps: {
@@ -411,34 +402,56 @@ const SuaraKPUTable = ({ dataStates }: any) => {
       },
     },
     {
-      th: "Kelurahan",
+      th: "Total Suara",
       isSortable: true,
-    },
-    {
-      th: "Kecamatan",
-      isSortable: true,
-    },
-    {
-      th: "Foto Aktivitas",
+      isNumeric: true,
       cProps: {
         justify: "center",
       },
     },
     {
-      th: "Tanggal Mulai",
+      th: "Kategori",
       isSortable: true,
     },
     {
-      th: "Tanggal Selesai",
+      th: "DPT Laki - laki",
       isSortable: true,
+      isNumeric: true,
+      cProps: {
+        justify: "center",
+      },
     },
     {
-      th: "Tempat Aktivitas",
+      th: "DPT Perempuan",
       isSortable: true,
+      isNumeric: true,
+      cProps: {
+        justify: "center",
+      },
     },
     {
-      th: "Deskripsi",
+      th: "Total DPT",
       isSortable: true,
+      isNumeric: true,
+      cProps: {
+        justify: "center",
+      },
+    },
+    {
+      th: "Suara Caleg",
+      isSortable: true,
+      isNumeric: true,
+      cProps: {
+        justify: "center",
+      },
+    },
+    {
+      th: "Suara Partai",
+      isSortable: true,
+      isNumeric: true,
+      cProps: {
+        justify: "center",
+      },
     },
   ];
   const formattedBody = dataStates?.data?.table?.map(
@@ -462,92 +475,68 @@ const SuaraKPUTable = ({ dataStates }: any) => {
         //   },
         // },
         {
-          value: item?.pelaksana?.nama,
-          td: (
-            <AvatarUserTableBody
-              w={"100%"}
-              data={{
-                id: item?.pelaksana?.id,
-                nama: item?.pelaksana?.nama,
-                foto_profil: item?.pelaksana?.foto_profil,
-              }}
-            />
-          ),
-          props: {
-            zIndex: 1,
-          },
+          value: item.partai?.nama,
+          td: item.partai?.nama,
         },
         {
-          value: item?.potensi_suara,
-          td: formatNumber(item?.potensi_suara),
-          cProps: {
-            justify: "center",
-          },
-          isNumeric: true,
-        },
-        // {
-        //   value: item?.status_aktivitas,
-        //   td: <StatusAktivitasBadge data={item?.status_aktivitas} w={"200px"} />,
-        //   cProps: {
-        //     justify: "center",
-        //   },
-        //   isNumeric: true,
-        // },
-        {
-          value: item?.rw,
-          td: item?.rw,
+          value: item?.tps,
+          td: formatNumber(item?.tps),
           cProps: {
             justify: "center",
           },
         },
         {
-          value: item?.kelurahan?.nama_kelurahan,
-          td: item?.kelurahan?.nama_kelurahan,
-        },
-        {
-          value: item?.kelurahan?.kecamatan?.nama_kecamatan,
-          td: item?.kelurahan?.kecamatan?.nama_kecamatan,
-        },
-        {
-          value: item?.foto_aktivitas,
-          td: (
-            <ImageViewModalDisclosure
-              id={`img-foto-aktivitas-${item?.id}`}
-              src={item?.foto_aktivitas}
-            >
-              <Button colorScheme="ap" variant={"ghost"}>
-                Lihat
-              </Button>
-            </ImageViewModalDisclosure>
-          ),
+          value: item?.jumlah_suara,
+          td: formatNumber(item?.jumlah_suara),
           cProps: {
             justify: "center",
           },
         },
         {
-          value: item?.tgl_mulai,
-          td: formatDate(item?.tgl_mulai),
-          isDate: true,
+          value: item?.kategori_suara?.label,
+          td: item?.kategori_suara?.label,
         },
         {
-          value: item?.tgl_selesai,
-          td: formatDate(item?.tgl_selesai),
-          isDate: true,
+          value: item?.dpt_laki,
+          td: formatNumber(item?.dpt_laki),
+          cProps: {
+            justify: "center",
+          },
         },
         {
-          value: item?.tempat_aktivitas,
-          td: item?.tempat_aktivitas,
+          value: item?.dpt_perempuan,
+          td: formatNumber(item?.dpt_perempuan),
+          cProps: {
+            justify: "center",
+          },
         },
         {
-          value: item?.deskripsi,
-          td: <NooflineText data={item?.deskripsi} />,
+          value: item?.jumlah_dpt,
+          td: formatNumber(item?.jumlah_dpt),
+          cProps: {
+            justify: "center",
+          },
+        },
+        {
+          value: item?.suara_caleg,
+          td: formatNumber(item?.suara_caleg),
+          cProps: {
+            justify: "center",
+          },
+        },
+        {
+          value: item?.suara_partai,
+          td: formatNumber(item?.suara_partai),
+          cProps: {
+            justify: "center",
+          },
         },
       ],
     })
   );
 
   return (
-    <CustomTableContainer maxH={"calc(100vh - 64px - 80px)"}>
+    <CustomTableContainer maxH={"35vh"}>
       <CustomTable
         formattedHeader={formattedHeader}
         formattedBody={formattedBody}
@@ -557,7 +546,7 @@ const SuaraKPUTable = ({ dataStates }: any) => {
   );
 };
 
-const PotensiSuaraDataCard = ({ kodeKelurahan }: any) => {
+const DataCard = ({ kodeKelurahan, isOpen }: any) => {
   // States
   const jenisDataProps: Record<string, any> = {
     potensi_suara: {
@@ -576,29 +565,42 @@ const PotensiSuaraDataCard = ({ kodeKelurahan }: any) => {
       kode_kelurahan: [kodeKelurahan],
       tahun: [new Date().getFullYear()],
     },
+    conditions: isOpen,
     dependencies: [kodeKelurahan],
   });
+  const { dataKelurahanComparaisonMode } = useDataKelurahanComparisonMode();
 
   // Render lateral
   const render = {
     loading: (
       <CContainer px={5} gap={4}>
         <Skeleton minH={"200px"} flex={1} />
-        <Skeleton minH={"350px"} flex={1} />
+        <Skeleton minH={"300px"} flex={1} />
       </CContainer>
     ),
     error: <Retry retry={dataStates.retry} />,
     empty: <NoData />,
     loaded: (
       <CContainer px={5}>
-        <PotensiSuaraChart data={dataStates?.data?.chart} />
-        <PotensiSuaraTable dataStates={dataStates} />
+        {jenisData === "potensi_suara" && (
+          <>
+            <PotensiSuaraChart data={dataStates?.data?.chart} />
+            <PotensiSuaraTable dataStates={dataStates} />
+          </>
+        )}
+
+        {jenisData === "suara_kpu" && (
+          <>
+            <SuaraKPUChart data={dataStates?.data?.chart} />
+            <SuaraKPUTable dataStates={dataStates} />
+          </>
+        )}
       </CContainer>
     ),
   };
 
   return (
-    <>
+    <CContainer w={dataKelurahanComparaisonMode ? "50%" : "100%"}>
       <Wrap px={5} mb={6} align={"center"} justify={"space-between"}>
         <JenisDataMenu
           jenisDataProps={jenisDataProps}
@@ -610,7 +612,7 @@ const PotensiSuaraDataCard = ({ kodeKelurahan }: any) => {
         </Text>
       </Wrap>
 
-      {dataStates.loading && render.loading}
+      {/* {dataStates.loading && render.loading}
 
       {!dataStates.loading && (
         <>
@@ -624,9 +626,9 @@ const PotensiSuaraDataCard = ({ kodeKelurahan }: any) => {
             </>
           )}
         </>
-      )}
-      {/* {render.loading} */}
-    </>
+      )} */}
+      {render.loading}
+    </CContainer>
   );
 };
 
@@ -638,6 +640,7 @@ export default function DetailDatabyKelurahan() {
   const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
   const kodeKelurahan =
     detailGeoJSONData?.geoJSONData?.properties?.village_code;
+  const { dataKelurahanComparaisonMode } = useDataKelurahanComparisonMode();
 
   // Utils
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -654,11 +657,12 @@ export default function DetailDatabyKelurahan() {
 
   return (
     <FloatingContainer
-      maxW={"450px"}
+      h={"100%"}
+      maxW={dataKelurahanComparaisonMode ? "1000px" : "450px"}
       top={"74px"}
-      left={isOpen ? "16px" : "-480px"}
+      left={isOpen ? "16px" : "-1030px"}
     >
-      <CContainer pb={5}>
+      <CContainer flex={0} pb={5}>
         <DisclosureHeader
           title={`Kelurahan ${geoData?.village}`}
           textProps={{ fontSize: [16, null, 18] }}
@@ -689,17 +693,17 @@ export default function DetailDatabyKelurahan() {
 
       {/* Container */}
       <CContainer overflowY={"auto"} className="scrollY">
-        <PotensiSuaraDataCard kodeKelurahan={kodeKelurahan} />
+        <HStack flex={1} align={"stretch"} gap={0} overflowX={"clip"}>
+          <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
+
+          {dataKelurahanComparaisonMode && (
+            <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
+          )}
+        </HStack>
       </CContainer>
 
       <ButtonGroup p={5}>
-        <Button
-          leftIcon={<Icon as={ArrowsLeftRight} fontSize={iconSize} />}
-          className="btn-solid clicky"
-          pl={5}
-        >
-          Bandingkan
-        </Button>
+        <ToggleComparisonMode />
       </ButtonGroup>
     </FloatingContainer>
   );

@@ -18,9 +18,11 @@ import { CaretDown, Circle } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import chartColors from "../../constant/chartColors";
 import { useLightDarkColor } from "../../constant/colors";
+import useDataKelurahanComparisonMode from "../../global/useDataKelurahanComparisonMode";
 import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
 import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
 import useDataState from "../../hooks/useDataState";
+import useScreenWidth from "../../hooks/useScreenWidth";
 import formatDate from "../../lib/formatDate";
 import formatNumber from "../../lib/formatNumber";
 import AvatarUserTableBody from "../dependent/AvatarUserTableBody";
@@ -35,7 +37,6 @@ import Skeleton from "./feedback/Skeleton";
 import CContainer from "./wrapper/CContainer";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
-import useDataKelurahanComparisonMode from "../../global/useDataKelurahanComparisonMode";
 
 const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
   return (
@@ -107,7 +108,7 @@ const PotensiSuaraChart = ({ data }: any) => {
   );
 
   return (
-    <HStack spacing={6} px={4} mb={6}>
+    <Wrap spacing={6} px={4} mb={6}>
       <VStack flex={"1 1 0"} position={"relative"}>
         <VStack w={"100%"} className="doughnutChartContainer">
           <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
@@ -129,7 +130,14 @@ const PotensiSuaraChart = ({ data }: any) => {
         </VStack>
       </VStack>
 
-      <SimpleGrid columns={2} px={2} spacingX={4} spacingY={1}>
+      <SimpleGrid
+        m={"auto"}
+        h={"fit-content"}
+        columns={2}
+        px={2}
+        spacingX={4}
+        spacingY={1}
+      >
         {data?.map((item: any, i: number) => (
           <HStack key={i}>
             <Icon as={Circle} weight="fill" color={colors[i]} fontSize={8} />
@@ -137,7 +145,7 @@ const PotensiSuaraChart = ({ data }: any) => {
           </HStack>
         ))}
       </SimpleGrid>
-    </HStack>
+    </Wrap>
   );
 };
 const PotensiSuaraTable = ({ dataStates }: any) => {
@@ -321,11 +329,10 @@ const PotensiSuaraTable = ({ dataStates }: any) => {
   );
 
   return (
-    <CustomTableContainer maxH={"35vh"}>
+    <CustomTableContainer maxH={"400px"}>
       <CustomTable
         formattedHeader={formattedHeader}
         formattedBody={formattedBody}
-        // rowOptions={editPermission ? rowOptions : undefined}
       />
     </CustomTableContainer>
   );
@@ -536,11 +543,10 @@ const SuaraKPUTable = ({ dataStates }: any) => {
   );
 
   return (
-    <CustomTableContainer maxH={"35vh"}>
+    <CustomTableContainer maxH={"400px"}>
       <CustomTable
         formattedHeader={formattedHeader}
         formattedBody={formattedBody}
-        // rowOptions={editPermission ? rowOptions : undefined}
       />
     </CustomTableContainer>
   );
@@ -568,7 +574,6 @@ const DataCard = ({ kodeKelurahan, isOpen }: any) => {
     conditions: isOpen,
     dependencies: [kodeKelurahan],
   });
-  const { dataKelurahanComparaisonMode } = useDataKelurahanComparisonMode();
 
   // Render lateral
   const render = {
@@ -600,7 +605,13 @@ const DataCard = ({ kodeKelurahan, isOpen }: any) => {
   };
 
   return (
-    <CContainer w={dataKelurahanComparaisonMode ? "50%" : "100%"}>
+    <CContainer
+      flexShrink={0}
+      maxW={"444.67px"}
+      scrollSnapAlign={"center"}
+      // w={dataKelurahanComparaisonMode ? (sw > 900 ? "50%" : "100%") : "100%"}
+      // border={"1px solid red"}
+    >
       <Wrap px={5} mb={6} align={"center"} justify={"space-between"}>
         <JenisDataMenu
           jenisDataProps={jenisDataProps}
@@ -654,13 +665,15 @@ export default function DetailDatabyKelurahan() {
   const geoData = detailGeoJSONData?.geoJSONData?.properties;
   const layerData = detailGeoJSONData?.layer;
   const { removeFromHighlightedKecamatanIndex } = useHighlighedKecamatan();
+  const sw = useScreenWidth();
 
   return (
     <FloatingContainer
       h={"100%"}
-      maxW={dataKelurahanComparaisonMode ? "1000px" : "450px"}
+      maxW={dataKelurahanComparaisonMode ? "900px" : "450px"}
       top={"74px"}
       left={isOpen ? "16px" : "-1030px"}
+      transition={"200ms"}
     >
       <CContainer flex={0} pb={5}>
         <DisclosureHeader
@@ -693,7 +706,14 @@ export default function DetailDatabyKelurahan() {
 
       {/* Container */}
       <CContainer overflowY={"auto"} className="scrollY">
-        <HStack flex={1} align={"stretch"} gap={0} overflowX={"clip"}>
+        <HStack
+          flex={1}
+          align={"stretch"}
+          gap={0}
+          overflowX={sw > 900 ? "clip" : "auto"}
+          className="noScroll"
+          scrollSnapType={"x mandatory"}
+        >
           <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
 
           {dataKelurahanComparaisonMode && (

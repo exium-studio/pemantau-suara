@@ -8,7 +8,7 @@ interface Props extends StackProps {
 
 export default function Retry({ loading, retry, ...props }: Props) {
   return (
-    <VStack p={4} minH={"300px"} justify={"center"} {...props}>
+    <VStack p={4} minH={"300px"} justify={"center"} m={"auto"} {...props}>
       <Icon opacity={0.2} as={RiErrorWarningLine} fontSize={80} />
       <Text opacity={0.2} textAlign={"center"} fontWeight={600} mb={2}>
         Maaf, data gagal dimuat

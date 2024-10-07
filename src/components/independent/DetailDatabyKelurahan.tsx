@@ -405,20 +405,9 @@ const SuaraKPUTable = ({ dataStates }: any) => {
     },
   }));
 
+  console.log(tpsTh);
+
   const formattedHeader = [
-    // {
-    //   th: "#",
-    //   props: {
-    //     position: "sticky",
-    //     left: 0,
-    //     zIndex: 3,
-    //     w: "50px",
-    //   },
-    //   cProps: {
-    //     borderRight: "1px solid var(--divider2)",
-    //     w: "50px",
-    //   },
-    // },
     {
       th: "Partai",
       isSortable: true,
@@ -430,7 +419,7 @@ const SuaraKPUTable = ({ dataStates }: any) => {
         borderRight: "1px solid var(--divider3)",
       },
     },
-    ...tpsTh,
+    ...(tpsTh ? tpsTh : []),
   ];
   const formattedBody = dataStates?.data?.table?.map((item: any, i: number) => {
     const tpsTd = item?.tps?.map((tps: any) => ({
@@ -445,21 +434,6 @@ const SuaraKPUTable = ({ dataStates }: any) => {
       id: item.id,
       originalData: item,
       columnsFormat: [
-        // {
-        //   value: i + 1,
-        //   td: i + 1,
-        //   isNumeric: true,
-        //   props: {
-        //     position: "sticky",
-        //     left: 0,
-        //     zIndex: 2,
-        //     w: "50px",
-        //   },
-        //   cProps: {
-        //     borderRight: "1px solid var(--divider2)",
-        //     w: "50px",
-        //   },
-        // },
         {
           value: item.partai?.nama,
           td: item.partai?.nama,
@@ -471,7 +445,7 @@ const SuaraKPUTable = ({ dataStates }: any) => {
             borderRight: "1px solid var(--divider3)",
           },
         },
-        ...tpsTd,
+        ...(tpsTd ? tpsTd : []),
       ],
     };
   });
@@ -627,18 +601,30 @@ export default function DetailDatabyKelurahan() {
           bg={lightDarkColor}
           pb={0}
         />
-        <HStack px={5}>
-          <Icon
-            as={Circle}
-            weight="fill"
-            color={layerData?.color}
-            fontSize={12}
-          />
-          <Text opacity={0.6}>{geoData?.district}</Text>
+
+        <HStack>
+          <HStack px={5}>
+            <Icon
+              as={Circle}
+              weight="fill"
+              color={layerData?.color}
+              fontSize={12}
+            />
+            <Text opacity={0.6}>{geoData?.district}</Text>
+          </HStack>
+
+          <HStack>
+            <Text fontSize={"sm"} opacity={0.6}>
+              {}
+            </Text>
+            <Text fontSize={"sm"} opacity={0.4}>
+              Total TPS yang akan datang
+            </Text>
+          </HStack>
         </HStack>
       </CContainer>
 
-      {/* Container */}
+      {/* Content Body */}
       <CContainer overflowY={"auto"} className="scrollY">
         <HStack
           flex={1}

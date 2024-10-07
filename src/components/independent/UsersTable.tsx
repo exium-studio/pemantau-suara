@@ -51,15 +51,16 @@ const TableComponent = ({ dataStates }: TableProps) => {
           value: item?.role?.id,
           label: item?.role?.name,
         },
-        kelurahan: item?.kelurahan?.map((kelurahan: any) => ({
-          value: kelurahan?.kode_kelurahan,
-          label: kelurahan?.nama_kelurahan,
-          original_data: kelurahan,
-        })),
-        rw_pelaksana: item?.rw_pelaksana?.map((rw: any) => ({
-          value: rw,
-          label: rw,
-        })),
+        kelurahan: {
+          value: item?.kelurahan?.[0].kode_kelurahan,
+          label: item?.kelurahan?.[0].nama_kelurahan,
+          original_data: item?.kelurahan?.[0],
+        },
+        rw_pelaksana: item?.rw_pelaksana,
+        // rw_pelaksana: item?.rw_pelaksana?.map((rw: any) => ({
+        //   value: rw,
+        //   label: rw,
+        // })),
       };
 
       return (

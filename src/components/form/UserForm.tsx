@@ -62,7 +62,7 @@ export default function UserForm({
     Interface__SelectOption[] | undefined
   >(undefined);
   const userData = getUserData();
-  const isPenanggungJawab = userData?.role?.id === 2;
+  const isUserPj = userData?.role?.id === 2;
 
   // Utils
   const { req, loading, status } = useRequest();
@@ -122,7 +122,7 @@ export default function UserForm({
         tgl_diangkat: formatDate(values?.tgl_diangkat, "short2"),
         no_hp: values?.no_hp,
         role_id: values?.role?.value,
-        kelurahan_id: isPenanggungJawab
+        kelurahan_id: isUserPj
           ? [values?.kelurahan?.value]
           : values?.kelurahan?.map((kelurahan: any) => kelurahan.value),
         rw_pelaksana: values?.rw_pelaksana,
@@ -174,17 +174,15 @@ export default function UserForm({
     }
   }, [formik.values.kelurahan]);
 
-  console.log(formik.values.kelurahan);
-
   // Handle role by user login
   useEffect(() => {
     formikRef?.current.setFieldValue(
       "role",
-      isPenanggungJawab
+      isUserPj
         ? { value: 3, label: "Penggerak" }
         : { value: 2, label: "Penanggung Jawab" }
     );
-  }, [isPenanggungJawab]);
+  }, [isUserPj]);
 
   return (
     <>
@@ -306,7 +304,7 @@ export default function UserForm({
             Area Kelurahan
             <RequiredForm />
           </FormLabel>
-          {isPenanggungJawab ? (
+          {isUserPj ? (
             <SelectKelurahan
               name="kelurahan"
               onConfirm={(input) => {
@@ -337,7 +335,7 @@ export default function UserForm({
         {/* Pilih RW */}
         {!excludeFields?.includes("rw_pelaksana") && (
           <>
-            {isPenanggungJawab && (
+            {isUserPj && (
               <FormControl mb={4} isInvalid={!!formik.errors?.rw_pelaksana}>
                 <FormLabel>
                   Area RW

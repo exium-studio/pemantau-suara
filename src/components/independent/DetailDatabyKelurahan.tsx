@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   ButtonGroup,
   HStack,
@@ -399,7 +400,7 @@ const SuaraKPUChart = ({ data, dataStates }: any) => {
         </SimpleGrid>
       </Wrap>
 
-      <HStack mb={2}>
+      <HStack mb={2} ml={2}>
         <Text fontSize={"sm"}>{upcomingTotalTPS}</Text>
         <Text fontSize={"sm"} opacity={0.4}>
           Total TPS yang akan datang
@@ -469,7 +470,7 @@ const SuaraKPUTable = ({ dataStates }: any) => {
   );
 };
 
-const DataCard = ({ kodeKelurahan, isOpen }: any) => {
+const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
   // States
   const jenisDataProps: Record<string, any> = {
     potensi_suara: {
@@ -495,7 +496,7 @@ const DataCard = ({ kodeKelurahan, isOpen }: any) => {
   // Render lateral
   const render = {
     loading: (
-      <CContainer px={5} gap={4}>
+      <CContainer px={5} gap={4} {...props}>
         <Skeleton minH={"200px"} flex={1} />
         <Skeleton minH={"300px"} flex={1} />
       </CContainer>
@@ -503,7 +504,7 @@ const DataCard = ({ kodeKelurahan, isOpen }: any) => {
     error: <Retry retry={dataStates.retry} />,
     empty: <NoData />,
     loaded: (
-      <CContainer px={5}>
+      <CContainer px={5} {...props}>
         {jenisData === "potensi_suara" && (
           <>
             <PotensiSuaraChart data={dataStates?.data?.chart} />
@@ -525,12 +526,13 @@ const DataCard = ({ kodeKelurahan, isOpen }: any) => {
   };
 
   return (
-    <CContainer
+    <Box
       flexShrink={0}
+      w={"100%"}
       maxW={"444.67px"}
       scrollSnapAlign={"center"}
       // w={dataKelurahanComparaisonMode ? (sw > 900 ? "50%" : "100%") : "100%"}
-      // border={"1px solid red"}
+      // border={"1px solid yellow"}
     >
       <Wrap px={5} mb={6} align={"center"} justify={"space-between"}>
         <JenisDataMenu
@@ -559,7 +561,7 @@ const DataCard = ({ kodeKelurahan, isOpen }: any) => {
         </>
       )}
       {/* {render.loading} */}
-    </CContainer>
+    </Box>
   );
 };
 
@@ -640,7 +642,11 @@ export default function DetailDatabyKelurahan() {
           <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
 
           {dataKelurahanComparaisonMode && (
-            <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
+            <DataCard
+              kodeKelurahan={kodeKelurahan}
+              isOpen={isOpen}
+              borderLeft={"1px solid var(--divider3)"}
+            />
           )}
         </HStack>
       </CContainer>

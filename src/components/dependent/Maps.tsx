@@ -52,7 +52,7 @@ export default function Maps({
   // Handle render map component
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [mapStyle, setMapStyle] = useState("");
-  const [viewState, setViewState] = useState({ latitude, longitude, zoom });
+  const [viewState] = useState({ latitude, longitude, zoom });
   const mapRef = useRef<MapRef>(null);
 
   // Handle change style depend on dark mode
@@ -84,11 +84,15 @@ export default function Maps({
     <Map
       ref={mapRef}
       onLoad={() => setIsMapLoaded(true)}
-      {...viewState}
+      initialViewState={viewState}
+      doubleClickZoom={false}
+      pitchWithRotate={false}
+      dragRotate={false}
+      // {...viewState}
       pitch={0}
       style={{ width: "100vw", height: "100vh", ...style }}
       mapStyle={mapStyle}
-      onMove={(evt) => setViewState(evt.viewState)}
+      // onMove={(evt) => setViewState(evt.viewState)}
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
     >
       {isMapLoaded && (

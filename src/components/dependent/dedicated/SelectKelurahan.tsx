@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Interface__SelectOption } from "../../../constant/interfaces";
 import useDataState from "../../../hooks/useDataState";
 import SingleSelectModal from "../input/SingleSelectModal";
+import getUserData from "../../../lib/getUserData";
 
 interface Props extends ButtonProps {
   name: string;
@@ -34,6 +35,13 @@ export default function SelectKelurahan({
     url: `/api/pemantau-suara/publik-request/get-all-kelurahan`,
     conditions: isOpen,
   });
+  const userData = getUserData();
+  const isPj = userData?.role?.id === 2;
+  const kelurahanPj = userData?.kelurahan?.map((item: any) => ({
+    value: item?.kode_kelurahan,
+    label: item?.nama_kelurahan,
+    original_data: item,
+  }));
 
   // Fetch list item options
   useEffect(() => {
@@ -55,7 +63,7 @@ export default function SelectKelurahan({
       isOpen={isOpen}
       onOpen={onOpen}
       onClose={onClose}
-      options={options}
+      options={isPj ? kelurahanPj : options}
       onConfirm={(input) => {
         onConfirm(input);
       }}

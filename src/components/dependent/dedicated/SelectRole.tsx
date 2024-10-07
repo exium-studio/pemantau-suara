@@ -29,11 +29,11 @@ export default function SelectRole({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const userRoleId = getUserData()?.role?.id;
-  const fo = optionsRole.filter((option, index) => {
-    if (userRoleId) {
+  const fo = optionsRole.filter((_, index) => {
+    if (userRoleId === 1) {
       return index === 0;
     } else {
-      return option;
+      return index === 1;
     }
   });
 

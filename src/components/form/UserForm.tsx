@@ -26,6 +26,7 @@ import MultiSelectRW from "../dependent/dedicated/MultiSelectRW";
 import formatDate from "../../lib/formatDate";
 import useRenderTrigger from "../../hooks/useRenderTrigger";
 import backOnClose from "../../lib/backOnClose";
+import getUserData from "../../lib/getUserData";
 
 const defaultValues = {
   foto_profil: "",
@@ -34,7 +35,10 @@ const defaultValues = {
   nik_ktp: "",
   tgl_diangkat: undefined,
   no_hp: "",
-  role: undefined,
+  role:
+    getUserData()?.role?.id === 1
+      ? { value: 2, label: "Penanggung Jawab" }
+      : { value: 3, label: "Penggerak" },
   kelurahan: undefined,
   rw_pelaksana: undefined,
   newusername: "",
@@ -282,6 +286,7 @@ export default function UserForm({
             }}
             isError={!!formik.errors.role}
             inputValue={formik.values.role}
+            isDisabled
           />
           <FormErrorMessage>{formik.errors.role as string}</FormErrorMessage>
         </FormControl>

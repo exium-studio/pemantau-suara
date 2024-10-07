@@ -1,3 +1,6 @@
+import useDetailGeoJSONData from "../global/useDetailGeoJSONData";
+import useManageActivities from "../global/useManageActivities";
+import useManageUsers from "../global/useManageUsers";
 import useRequest from "./useRequest";
 
 interface authParams {
@@ -8,6 +11,9 @@ interface authParams {
 const useAuth = () => {
   const { req, loading, setLoading, response, setResponse, status, setStatus } =
     useRequest();
+  const { onCloseManageUsers } = useManageUsers();
+  const { onCloseManageActivities } = useManageActivities();
+  const { setDetailGeoJSONData } = useDetailGeoJSONData();
 
   function login({ url, payload }: authParams) {
     const config = {
@@ -19,6 +25,9 @@ const useAuth = () => {
   }
 
   function logout({ url }: authParams) {
+    setDetailGeoJSONData(undefined);
+    onCloseManageUsers();
+    onCloseManageActivities();
     const config = {
       url: url,
     };

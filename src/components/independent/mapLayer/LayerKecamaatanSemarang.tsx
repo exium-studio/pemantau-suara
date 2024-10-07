@@ -29,8 +29,8 @@ export default function LayerKecamaatanSemarang({ geoJSONData }: Props) {
                 "fill-opacity":
                   isHighlighted || highlightedKecamatanIndex.length === 0
                     ? 0.6
-                    : 0.1,
-                "fill-outline-color": colorMode === "dark" ? "#ccc" : "#444",
+                    : 0.2,
+                "fill-outline-color": colorMode === "dark" ? "#fff" : "#444",
               }}
             />
           </Source>

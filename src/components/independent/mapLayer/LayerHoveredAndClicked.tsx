@@ -38,8 +38,8 @@ export default function LayerHoveredAndClicked({ mapRef, geoJSONData }: Props) {
     ]
   );
   const onMouseMove = useCallback((event: any) => {
-    const currentHoveredFeature = event.features[0];
-    setHoveredFeature(currentHoveredFeature || null);
+    // const currentHoveredFeature = event.features[0];
+    // setHoveredFeature(currentHoveredFeature || null);
   }, []);
   useEffect(() => {
     const map = mapRef.current?.getMap();

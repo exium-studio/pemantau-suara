@@ -17,22 +17,22 @@ import useManageUsers from "../../global/useManageUsers";
 import useAuth from "../../hooks/useAuth";
 import getUserData from "../../lib/getUserData";
 import DisclosureHeader from "../dependent/DisclosureHeader";
+import RoleBadge from "../dependent/RoleBadge";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
-import RoleBadge from "../dependent/RoleBadge";
 
 const Logout = () => {
   const { onCloseManageUsers } = useManageUsers();
   const { onCloseManageActivities } = useManageActivities();
 
   // Utils
-  const { onFullscreenSpinnerOpen, onFullscreenSpinnerClose, setLabel } =
+  const { onFullscreenSpinnerOpen, onFullscreenSpinnerClose } =
     useFullscreenSpinner();
   const navigate = useNavigate();
   const { logout, loading, status } = useAuth();
   function onLogout() {
     onFullscreenSpinnerOpen();
-    setLabel("Sedang keluar, harap menunggu, jangan menutup halaman ini");
+    // setLabel("Sedang keluar, harap menunggu, jangan menutup halaman ini");
     logout({ url: `/api/logout` });
   }
   // Handle response

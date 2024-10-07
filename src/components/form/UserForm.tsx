@@ -21,12 +21,12 @@ import getUserData from "../../lib/getUserData";
 import MultiSelectKelurahan from "../dependent/dedicated/MultiSelectKelurahan";
 import MultiSelectRW from "../dependent/dedicated/MultiSelectRW";
 import SelectGender from "../dependent/dedicated/SelectGender";
+import SelectKelurahan from "../dependent/dedicated/SelectKelurahan";
 import SelectRole from "../dependent/dedicated/SelectRole";
 import DatePickerModal from "../dependent/input/DatePickerModal";
 import PasswordInput from "../dependent/input/PasswordInput";
 import StringInput from "../dependent/input/StringInput";
 import RequiredForm from "./RequiredForm";
-import SelectKelurahan from "../dependent/dedicated/SelectKelurahan";
 
 const defaultValues = {
   foto_profil: "",
@@ -35,10 +35,7 @@ const defaultValues = {
   nik_ktp: "",
   tgl_diangkat: undefined,
   no_hp: "",
-  role:
-    getUserData()?.role?.id === 1
-      ? { value: 2, label: "Penanggung Jawab" }
-      : { value: 3, label: "Penggerak" },
+  role: undefined,
   kelurahan: undefined,
   rw_pelaksana: undefined,
   newusername: "",
@@ -86,21 +83,19 @@ export default function UserForm({
         : yup.mixed(),
       no_hp: yup.string().required("Harus diisi"),
       role: yup.object().required("Harus diisi"),
-      kelurahan: yup
-        .mixed()
-        .required("Harus diisi")
-        .test(
-          "max-array-size-based-on-role",
-          "Maksimal 1 kelurahan",
-          function (value) {
-            const { role } = this.parent as { role: Interface__SelectOption };
-            // Jika role.value === 3, pastikan kelurahan maksimal hanya 1 elemen
-            if (role?.value === 3) {
-              return Array.isArray(value) && value.length <= 1; // Max 1 element if role.value is 3
-            }
-            return true; // Skip check if role.value is not 3
-          }
-        ),
+      kelurahan: yup.mixed().required("Harus diisi"),
+      // .test(
+      //   "max-array-size-based-on-role",
+      //   "Maksimal 1 kelurahan",
+      //   function (value) {
+      //     const { role } = this.parent as { role: Interface__SelectOption };
+      //     // Jika role.value === 3, pastikan kelurahan maksimal hanya 1 elemen
+      //     if (role?.value === 3) {
+      //       return Array.isArray(value) && value.length <= 1; // Max 1 element if role.value is 3
+      //     }
+      //     return true; // Skip check if role.value is not 3
+      //   }
+      // ),
       rw_pelaksana: yup
         .mixed()
         .test("is-required-based-on-role", "Harus diisi", function (value) {
@@ -167,9 +162,9 @@ export default function UserForm({
 
   // Handle RWOptions by kelurahan
   useEffect(() => {
-    if (formik.values.kelurahan?.[0]?.original_data?.max_rw) {
+    if (formik.values.kelurahan?.original_data?.max_rw) {
       const RWOptions = createNumberArraybyGivenMaxNumber(
-        formik.values.kelurahan?.[0]?.original_data?.max_rw
+        formik.values.kelurahan?.original_data?.max_rw
       )?.map((rw) => ({
         value: rw,
         label: rw.toString(),
@@ -178,6 +173,18 @@ export default function UserForm({
       setRWOptions(RWOptions);
     }
   }, [formik.values.kelurahan]);
+
+  console.log(formik.values.kelurahan);
+
+  // Handle role by user login
+  useEffect(() => {
+    formikRef?.current.setFieldValue(
+      "role",
+      isPenanggungJawab
+        ? { value: 3, label: "Penggerak" }
+        : { value: 2, label: "Penanggung Jawab" }
+    );
+  }, [isPenanggungJawab]);
 
   return (
     <>

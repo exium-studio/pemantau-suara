@@ -8,8 +8,9 @@ import {
   InputProps,
   Tooltip,
 } from "@chakra-ui/react";
-import { RiCloseLine, RiSearchLine } from "@remixicon/react";
-import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
+import { X } from "@phosphor-icons/react";
+import { RiSearchLine } from "@remixicon/react";
+import { Dispatch, useCallback, useEffect, useState } from "react";
 import { iconSize } from "../../../constant/sizes";
 import StringInput from "./StringInput";
 
@@ -33,11 +34,7 @@ export default function SearchComponent({
   inputProps,
   ...props
 }: Props) {
-  // States
   const [searchLocal, setSearchLocal] = useState(inputValue);
-  const [focus, setFocus] = useState<boolean>(false);
-  const [hover, setHover] = useState<boolean>(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleOnChange = useCallback(
     (value: string) => {
@@ -63,29 +60,15 @@ export default function SearchComponent({
     setSearchLocal(inputValue);
   }, [inputValue]);
 
-  const handleMouseEnter = () => {
-    timeoutRef.current = setTimeout(() => {
-      setHover(true);
-    }, 500);
-  };
-
-  const handleMouseLeave = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null; // Reset the timeout reference
-    }
-    setHover(false);
-  };
-
   return (
     <Tooltip
-      label={(!focus || hover) && (tooltipLabel || placeholder)}
+      label={tooltipLabel || placeholder}
       openDelay={500}
       placement="bottom-start"
     >
       <InputGroup {...props}>
         <InputLeftElement>
-          <Icon as={RiSearchLine} fontSize={iconSize} />
+          <Icon as={RiSearchLine} fontSize={iconSize} mb={"1px"} />
         </InputLeftElement>
 
         <StringInput
@@ -99,14 +82,6 @@ export default function SearchComponent({
           }}
           inputValue={searchLocal}
           boxShadow={"none !important"}
-          onFocus={() => {
-            setFocus(true);
-          }}
-          onBlur={() => {
-            setFocus(false);
-          }}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
           {...inputProps}
         />
 
@@ -120,9 +95,7 @@ export default function SearchComponent({
           >
             <IconButton
               aria-label="Clear Search"
-              icon={
-                <Icon as={RiCloseLine} fontSize={props.fontSize || iconSize} />
-              }
+              icon={<Icon as={X} fontSize={props.fontSize || iconSize} />}
               onClick={() => {
                 setSearchLocal("");
               }}

@@ -12,7 +12,7 @@ interface Actions {
 }
 
 const useFullscreenSpinner = create<State & Actions>((set) => ({
-  label: "",
+  label: "Mohon tunggu hingga proses selesai",
   setLabel: (newState) => set({ label: newState }),
   isOpen: false,
   onFullscreenSpinnerOpen: () =>

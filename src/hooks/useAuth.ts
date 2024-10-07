@@ -1,4 +1,5 @@
 import useDetailGeoJSONData from "../global/useDetailGeoJSONData";
+import useHighlighedKecamatan from "../global/useHighlighedKecamatan";
 import useManageActivities from "../global/useManageActivities";
 import useManageUsers from "../global/useManageUsers";
 import useRequest from "./useRequest";
@@ -14,6 +15,7 @@ const useAuth = () => {
   const { onCloseManageUsers } = useManageUsers();
   const { onCloseManageActivities } = useManageActivities();
   const { setDetailGeoJSONData } = useDetailGeoJSONData();
+  const { setHighlightedKecamatanIndex } = useHighlighedKecamatan();
 
   function login({ url, payload }: authParams) {
     const config = {
@@ -28,6 +30,8 @@ const useAuth = () => {
     setDetailGeoJSONData(undefined);
     onCloseManageUsers();
     onCloseManageActivities();
+    setHighlightedKecamatanIndex([]);
+
     const config = {
       url: url,
     };

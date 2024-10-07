@@ -327,7 +327,7 @@ export default function ActivityForm({
             }}
             inputValue={formik.values.tgl_mulai}
             isError={!!formik.errors.tgl_mulai}
-            placeholder="Tanggal Diangkat"
+            placeholder="Tanggal Mulai"
           />
           <FormErrorMessage>
             {formik.errors.tgl_mulai as string}
@@ -348,7 +348,7 @@ export default function ActivityForm({
             }}
             inputValue={formik.values.tgl_selesai}
             isError={!!formik.errors.tgl_selesai}
-            placeholder="Tanggal Diangkat"
+            placeholder="Tanggal Selesai"
           />
           <FormErrorMessage>
             {formik.errors.tgl_selesai as string}

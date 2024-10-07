@@ -338,7 +338,7 @@ const PotensiSuaraTable = ({ dataStates }: any) => {
   );
 };
 
-const SuaraKPUChart = ({ data }: any) => {
+const SuaraKPUChart = ({ data, dataStates }: any) => {
   const labels = data?.map((item: any) => `${item.partai?.nama}`);
   const colors = data?.map((item: any) => `#${item.partai?.color}`);
   const datasets = [
@@ -356,45 +356,56 @@ const SuaraKPUChart = ({ data }: any) => {
     0
   );
 
+  const upcomingTotalTPS = dataStates?.data?.upcomingTPS?.jumlah_tps;
+
   return (
-    <Wrap spacing={6} px={4} mb={6}>
-      <VStack flex={"1 0 0"} position={"relative"}>
-        <VStack w={"100%"} className="doughnutChartContainer">
-          <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
+    <>
+      <Wrap spacing={6} px={4} mb={6}>
+        <VStack flex={"1 0 0"} position={"relative"}>
+          <VStack w={"100%"} className="doughnutChartContainer">
+            <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
+          </VStack>
+
+          <VStack
+            position={"absolute"}
+            left={"50%"}
+            top={"50%"}
+            transform={"translate(-50%, -50%)"}
+            gap={0}
+          >
+            <Text textAlign={"center"} opacity={0.6}>
+              Total
+            </Text>
+            <Text fontSize={30} fontWeight={600} lineHeight={1.2} mb={4}>
+              {formatNumber(totalSuara)}
+            </Text>
+          </VStack>
         </VStack>
 
-        <VStack
-          position={"absolute"}
-          left={"50%"}
-          top={"50%"}
-          transform={"translate(-50%, -50%)"}
-          gap={0}
+        <SimpleGrid
+          m={"auto"}
+          h={"fit-content"}
+          columns={2}
+          px={2}
+          spacingX={4}
+          spacingY={1}
         >
-          <Text textAlign={"center"} opacity={0.6}>
-            Total
-          </Text>
-          <Text fontSize={30} fontWeight={600} lineHeight={1.2} mb={4}>
-            {formatNumber(totalSuara)}
-          </Text>
-        </VStack>
-      </VStack>
+          {data?.map((item: any, i: number) => (
+            <HStack key={i}>
+              <Icon as={Circle} weight="fill" color={colors[i]} fontSize={8} />
+              <Text fontSize={"sm"}>{formatNumber(item?.jumlah_suara)}</Text>
+            </HStack>
+          ))}
+        </SimpleGrid>
+      </Wrap>
 
-      <SimpleGrid
-        m={"auto"}
-        h={"fit-content"}
-        columns={2}
-        px={2}
-        spacingX={4}
-        spacingY={1}
-      >
-        {data?.map((item: any, i: number) => (
-          <HStack key={i}>
-            <Icon as={Circle} weight="fill" color={colors[i]} fontSize={8} />
-            <Text fontSize={"sm"}>{formatNumber(item?.jumlah_suara)}</Text>
-          </HStack>
-        ))}
-      </SimpleGrid>
-    </Wrap>
+      <HStack mb={2}>
+        <Text fontSize={"sm"}>{upcomingTotalTPS}</Text>
+        <Text fontSize={"sm"} opacity={0.4}>
+          Total TPS yang akan datang
+        </Text>
+      </HStack>
+    </>
   );
 };
 const SuaraKPUTable = ({ dataStates }: any) => {
@@ -404,8 +415,6 @@ const SuaraKPUTable = ({ dataStates }: any) => {
       justify: "end",
     },
   }));
-
-  console.log(tpsTh);
 
   const formattedHeader = [
     {
@@ -504,7 +513,10 @@ const DataCard = ({ kodeKelurahan, isOpen }: any) => {
 
         {jenisData === "suara_kpu" && (
           <>
-            <SuaraKPUChart data={dataStates?.data?.chart} />
+            <SuaraKPUChart
+              data={dataStates?.data?.chart}
+              dataStates={dataStates}
+            />
             <SuaraKPUTable dataStates={dataStates} />
           </>
         )}
@@ -611,15 +623,6 @@ export default function DetailDatabyKelurahan() {
               fontSize={12}
             />
             <Text opacity={0.6}>{geoData?.district}</Text>
-          </HStack>
-
-          <HStack>
-            <Text fontSize={"sm"} opacity={0.6}>
-              {}
-            </Text>
-            <Text fontSize={"sm"} opacity={0.4}>
-              Total TPS yang akan datang
-            </Text>
           </HStack>
         </HStack>
       </CContainer>

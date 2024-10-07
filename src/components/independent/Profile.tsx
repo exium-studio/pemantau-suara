@@ -115,15 +115,11 @@ export default function Profile() {
             mt={-10}
             mb={4}
           />
-          <Text fontWeight={600} fontSize={18} textAlign={"center"}>
+          <Text fontWeight={600} fontSize={18} textAlign={"center"} mb={1}>
             {userData?.nama}
           </Text>
 
           <HStack justify={"center"}>
-            <Text textAlign={"center"} opacity={0.4}>
-              {userData?.username}
-            </Text>
-
             <RoleBadge
               data={userData?.role?.id}
               fontSize={10}

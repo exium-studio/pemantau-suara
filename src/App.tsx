@@ -17,7 +17,7 @@ export const App = () => {
 
       <HStack
         position={"fixed"}
-        zIndex={9999999999}
+        zIndex={2}
         bottom={4}
         left={"50%"}
         transform={"translateX(-50%)"}

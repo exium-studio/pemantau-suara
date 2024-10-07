@@ -613,12 +613,12 @@ button[aria-label="Close"] > svg {
 /* Date Picker End */
 
 .doughnutChartContainer canvas {
-  width: 100% !important;
-  height: 100% !important;
-  min-width: 200px !important;
+  width: 220px !important;
+  height: 220px !important;
+  /* min-width: 200px !important;
   max-width: 250px !important;
   min-height: 200px !important;
-  max-height: 250px !important;
+  max-height: 250px !important; */
 }
 
 /* Custom Start*/

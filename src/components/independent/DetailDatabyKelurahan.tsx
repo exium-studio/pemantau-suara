@@ -109,7 +109,7 @@ const PotensiSuaraChart = ({ data }: any) => {
 
   return (
     <Wrap spacing={6} px={4} mb={6}>
-      <VStack flex={"1 1 0"} position={"relative"}>
+      <VStack flex={"1 0 0"} position={"relative"}>
         <VStack w={"100%"} className="doughnutChartContainer">
           <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
         </VStack>
@@ -351,26 +351,42 @@ const SuaraKPUChart = ({ data }: any) => {
     },
   ];
 
+  const totalSuara = data?.reduce(
+    (sum: any, item: any) => sum + item.jumlah_suara,
+    0
+  );
+
   return (
-    <HStack spacing={6} px={4} mb={6}>
-      <VStack flex={"1 1 0"} position={"relative"}>
+    <Wrap spacing={6} px={4} mb={6}>
+      <VStack flex={"1 0 0"} position={"relative"}>
         <VStack w={"100%"} className="doughnutChartContainer">
-          <ChartDoughnut labels={labels} datasets={datasets} cutout="70" />
+          <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
         </VStack>
 
-        <Text
+        <VStack
           position={"absolute"}
           left={"50%"}
           top={"50%"}
           transform={"translate(-50%, -50%)"}
-          fontSize={48}
-          opacity={0.6}
+          gap={0}
         >
-          N
-        </Text>
+          <Text textAlign={"center"} opacity={0.6}>
+            Total
+          </Text>
+          <Text fontSize={30} fontWeight={600} lineHeight={1.2} mb={4}>
+            {formatNumber(totalSuara)}
+          </Text>
+        </VStack>
       </VStack>
 
-      <SimpleGrid columns={2} px={2} spacingX={4} spacingY={1}>
+      <SimpleGrid
+        m={"auto"}
+        h={"fit-content"}
+        columns={2}
+        px={2}
+        spacingX={4}
+        spacingY={1}
+      >
         {data?.map((item: any, i: number) => (
           <HStack key={i}>
             <Icon as={Circle} weight="fill" color={colors[i]} fontSize={8} />
@@ -378,10 +394,17 @@ const SuaraKPUChart = ({ data }: any) => {
           </HStack>
         ))}
       </SimpleGrid>
-    </HStack>
+    </Wrap>
   );
 };
 const SuaraKPUTable = ({ dataStates }: any) => {
+  const tpsTh = dataStates?.data?.table?.[0]?.tps?.map((tps: any) => ({
+    th: `TPS ${tps?.tps}`,
+    cProps: {
+      justify: "end",
+    },
+  }));
+
   const formattedHeader = [
     // {
     //   th: "#",
@@ -399,70 +422,26 @@ const SuaraKPUTable = ({ dataStates }: any) => {
     {
       th: "Partai",
       isSortable: true,
-    },
-    {
-      th: "TPS",
-      isSortable: true,
-      isNumeric: true,
+      props: {
+        position: "sticky",
+        left: "0",
+      },
       cProps: {
-        justify: "center",
+        borderRight: "1px solid var(--divider3)",
       },
     },
-    {
-      th: "Total Suara",
-      isSortable: true,
-      isNumeric: true,
-      cProps: {
-        justify: "center",
-      },
-    },
-    {
-      th: "Kategori",
-      isSortable: true,
-    },
-    {
-      th: "DPT Laki - laki",
-      isSortable: true,
-      isNumeric: true,
-      cProps: {
-        justify: "center",
-      },
-    },
-    {
-      th: "DPT Perempuan",
-      isSortable: true,
-      isNumeric: true,
-      cProps: {
-        justify: "center",
-      },
-    },
-    {
-      th: "Total DPT",
-      isSortable: true,
-      isNumeric: true,
-      cProps: {
-        justify: "center",
-      },
-    },
-    {
-      th: "Suara Caleg",
-      isSortable: true,
-      isNumeric: true,
-      cProps: {
-        justify: "center",
-      },
-    },
-    {
-      th: "Suara Partai",
-      isSortable: true,
-      isNumeric: true,
-      cProps: {
-        justify: "center",
-      },
-    },
+    ...tpsTh,
   ];
-  const formattedBody = dataStates?.data?.table?.map(
-    (item: any, i: number) => ({
+  const formattedBody = dataStates?.data?.table?.map((item: any, i: number) => {
+    const tpsTd = item?.tps?.map((tps: any) => ({
+      value: tps?.jumlah_suara,
+      td: formatNumber(tps?.jumlah_suara),
+      cProps: {
+        justify: "end",
+      },
+    }));
+
+    return {
       id: item.id,
       originalData: item,
       columnsFormat: [
@@ -484,63 +463,18 @@ const SuaraKPUTable = ({ dataStates }: any) => {
         {
           value: item.partai?.nama,
           td: item.partai?.nama,
-        },
-        {
-          value: item?.tps,
-          td: formatNumber(item?.tps),
+          props: {
+            position: "sticky",
+            left: "0",
+          },
           cProps: {
-            justify: "center",
+            borderRight: "1px solid var(--divider3)",
           },
         },
-        {
-          value: item?.jumlah_suara,
-          td: formatNumber(item?.jumlah_suara),
-          cProps: {
-            justify: "center",
-          },
-        },
-        {
-          value: item?.kategori_suara?.label,
-          td: item?.kategori_suara?.label,
-        },
-        {
-          value: item?.dpt_laki,
-          td: formatNumber(item?.dpt_laki),
-          cProps: {
-            justify: "center",
-          },
-        },
-        {
-          value: item?.dpt_perempuan,
-          td: formatNumber(item?.dpt_perempuan),
-          cProps: {
-            justify: "center",
-          },
-        },
-        {
-          value: item?.jumlah_dpt,
-          td: formatNumber(item?.jumlah_dpt),
-          cProps: {
-            justify: "center",
-          },
-        },
-        {
-          value: item?.suara_caleg,
-          td: formatNumber(item?.suara_caleg),
-          cProps: {
-            justify: "center",
-          },
-        },
-        {
-          value: item?.suara_partai,
-          td: formatNumber(item?.suara_partai),
-          cProps: {
-            justify: "center",
-          },
-        },
+        ...tpsTd,
       ],
-    })
-  );
+    };
+  });
 
   return (
     <CustomTableContainer maxH={"400px"}>

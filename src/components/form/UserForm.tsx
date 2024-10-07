@@ -2,7 +2,6 @@ import {
   Button,
   FormControl,
   FormErrorMessage,
-  FormHelperText,
   FormLabel,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
@@ -12,21 +11,22 @@ import {
   Interface__SelectOption,
   Type__UserInitialValues,
 } from "../../constant/interfaces";
+import useRenderTrigger from "../../hooks/useRenderTrigger";
 import useRequest from "../../hooks/useRequest";
+import backOnClose from "../../lib/backOnClose";
+import createNumberArraybyGivenMaxNumber from "../../lib/createNumberArraybyGivenMaxNumber";
+import formatDate from "../../lib/formatDate";
 import { generateUsernameByName } from "../../lib/generateUsernameByName";
+import getUserData from "../../lib/getUserData";
 import MultiSelectKelurahan from "../dependent/dedicated/MultiSelectKelurahan";
+import MultiSelectRW from "../dependent/dedicated/MultiSelectRW";
 import SelectGender from "../dependent/dedicated/SelectGender";
 import SelectRole from "../dependent/dedicated/SelectRole";
 import DatePickerModal from "../dependent/input/DatePickerModal";
 import PasswordInput from "../dependent/input/PasswordInput";
 import StringInput from "../dependent/input/StringInput";
 import RequiredForm from "./RequiredForm";
-import createNumberArraybyGivenMaxNumber from "../../lib/createNumberArraybyGivenMaxNumber";
-import MultiSelectRW from "../dependent/dedicated/MultiSelectRW";
-import formatDate from "../../lib/formatDate";
-import useRenderTrigger from "../../hooks/useRenderTrigger";
-import backOnClose from "../../lib/backOnClose";
-import getUserData from "../../lib/getUserData";
+import SelectKelurahan from "../dependent/dedicated/SelectKelurahan";
 
 const defaultValues = {
   foto_profil: "",
@@ -64,6 +64,8 @@ export default function UserForm({
   const [RWOptions, setRWOptions] = useState<
     Interface__SelectOption[] | undefined
   >(undefined);
+  const userData = getUserData();
+  const isPenanggungJawab = userData?.role?.id === 2;
 
   // Utils
   const { req, loading, status } = useRequest();
@@ -125,9 +127,9 @@ export default function UserForm({
         tgl_diangkat: formatDate(values?.tgl_diangkat, "short2"),
         no_hp: values?.no_hp,
         role_id: values?.role?.value,
-        kelurahan_id: values?.kelurahan?.map(
-          (kelurahan: any) => kelurahan.value
-        ),
+        kelurahan_id: isPenanggungJawab
+          ? [values?.kelurahan?.value]
+          : values?.kelurahan?.map((kelurahan: any) => kelurahan.value),
         rw_pelaksana: values?.rw_pelaksana,
         username: values?.newusername,
         password: values?.newpassword,
@@ -297,16 +299,29 @@ export default function UserForm({
             Area Kelurahan
             <RequiredForm />
           </FormLabel>
-          <MultiSelectKelurahan
-            name="kelurahan"
-            onConfirm={(input) => {
-              formik.setFieldValue("kelurahan", input);
-            }}
-            isError={!!formik.errors.kelurahan}
-            inputValue={formik.values.kelurahan}
-            optionsDisplay="chip"
-            isDisabled={!!!formik.values?.role?.value}
-          />
+          {isPenanggungJawab ? (
+            <SelectKelurahan
+              name="kelurahan"
+              onConfirm={(input) => {
+                formik.setFieldValue("kelurahan", input);
+              }}
+              isError={!!formik.errors.kelurahan}
+              inputValue={formik.values.kelurahan}
+              optionsDisplay="chip"
+              isDisabled={!!!formik.values?.role?.value}
+            />
+          ) : (
+            <MultiSelectKelurahan
+              name="kelurahan"
+              onConfirm={(input) => {
+                formik.setFieldValue("kelurahan", input);
+              }}
+              isError={!!formik.errors.kelurahan}
+              inputValue={formik.values.kelurahan}
+              optionsDisplay="chip"
+              isDisabled={!!!formik.values?.role?.value}
+            />
+          )}
           <FormErrorMessage>
             {formik.errors.kelurahan as string}
           </FormErrorMessage>
@@ -314,29 +329,36 @@ export default function UserForm({
 
         {/* Pilih RW */}
         {!excludeFields?.includes("rw_pelaksana") && (
-          <FormControl mb={4} isInvalid={!!formik.errors?.rw_pelaksana}>
-            <FormLabel>
-              Area RW
-              <RequiredForm />
-            </FormLabel>
-            <MultiSelectRW
-              name="rw_pelaksana"
-              onConfirm={(input) => {
-                formik.setFieldValue("rw_pelaksana", input);
-              }}
-              isError={!!formik.errors.rw_pelaksana}
-              inputValue={formik.values.rw_pelaksana}
-              optionsDisplay="chip"
-              options={RWOptions}
-              isDisabled={
-                !!!(formik.values?.role?.value === 3 && formik.values.kelurahan)
-              }
-            />
-            <FormHelperText>Jika role Penggerak maka input RW</FormHelperText>
-            <FormErrorMessage>
-              {formik.errors.rw_pelaksana as string}
-            </FormErrorMessage>
-          </FormControl>
+          <>
+            {isPenanggungJawab && (
+              <FormControl mb={4} isInvalid={!!formik.errors?.rw_pelaksana}>
+                <FormLabel>
+                  Area RW
+                  <RequiredForm />
+                </FormLabel>
+                <MultiSelectRW
+                  name="rw_pelaksana"
+                  onConfirm={(input) => {
+                    formik.setFieldValue("rw_pelaksana", input);
+                  }}
+                  isError={!!formik.errors.rw_pelaksana}
+                  inputValue={formik.values.rw_pelaksana}
+                  optionsDisplay="chip"
+                  options={RWOptions}
+                  isDisabled={
+                    !!!(
+                      formik.values?.role?.value === 3 &&
+                      formik.values.kelurahan
+                    )
+                  }
+                />
+                {/* <FormHelperText>Jika role Penggerak maka input RW</FormHelperText> */}
+                <FormErrorMessage>
+                  {formik.errors.rw_pelaksana as string}
+                </FormErrorMessage>
+              </FormControl>
+            )}
+          </>
         )}
 
         {/* Username */}

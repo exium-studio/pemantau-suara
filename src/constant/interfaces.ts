@@ -21,7 +21,7 @@ export type Type__UserInitialValues = {
   tgl_diangkat?: Date;
   no_hp?: string;
   role?: Interface__SelectOption;
-  kelurahan?: Interface__SelectOption[];
+  kelurahan?: any;
   rw_pelaksana?: Interface__SelectOption[];
   newusername?: string;
   newpassword?: string;

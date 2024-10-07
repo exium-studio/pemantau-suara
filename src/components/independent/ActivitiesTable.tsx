@@ -274,7 +274,7 @@ export default function ActivitiesTable({ conditions, filterConfig }: Props) {
     url: `/api/pemantau-suara/dashboard/management/get-aktivitas`,
     payload: {
       search: filterConfig?.search?.split(" "),
-      limit: 0,
+      limit: 20,
       kode_kelurahan: allowedKelurahan,
     },
     conditions: conditions,

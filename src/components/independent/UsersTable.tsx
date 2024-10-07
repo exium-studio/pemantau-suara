@@ -228,7 +228,7 @@ interface Props {
 export default function UsersTable({ conditions, filterConfig }: Props) {
   const { dataStates } = useDataState<any>({
     url: `/api/pemantau-suara/dashboard/management/get-pengguna`,
-    payload: { search: filterConfig?.search?.split(" "), limit: 0 },
+    payload: { search: filterConfig?.search?.split(" "), limit: 20 },
     conditions: conditions,
     dependencies: [filterConfig],
   });

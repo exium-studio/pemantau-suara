@@ -1,26 +1,167 @@
 import {
   Avatar,
   Button,
-  ButtonGroup,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   HStack,
   Icon,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { RiLogoutBoxLine } from "@remixicon/react";
+import { useFormik } from "formik";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
 import { iconSize } from "../../constant/sizes";
+import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
 import useFullscreenSpinner from "../../global/useFullscreenSpinner";
 import useManageActivities from "../../global/useManageActivities";
 import useManageUsers from "../../global/useManageUsers";
 import useAuth from "../../hooks/useAuth";
+import useBackOnClose from "../../hooks/useBackOnClose";
+import useRequest from "../../hooks/useRequest";
+import backOnClose from "../../lib/backOnClose";
 import getUserData from "../../lib/getUserData";
 import DisclosureHeader from "../dependent/DisclosureHeader";
+import PasswordInput from "../dependent/input/PasswordInput";
 import RoleBadge from "../dependent/RoleBadge";
+import RequiredForm from "../form/RequiredForm";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
-import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
+
+const ChangePassword = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  useBackOnClose("change-password-modal", isOpen, onOpen, onClose);
+
+  const { req, loading } = useRequest();
+
+  const formik = useFormik({
+    validateOnChange: false,
+    initialValues: {
+      current_password: "",
+      password: "",
+      password_confirmation: "",
+    },
+    validationSchema: yup.object().shape({
+      current_password: yup.string().required("harus diisi"),
+      password: yup.string().required("harus diisi"),
+      password_confirmation: yup.string().required("harus diisi"),
+    }),
+    onSubmit: (values, { resetForm }) => {
+      const payload = {
+        current_password: values.current_password,
+        password: values.password,
+        password_confirmation: values.password_confirmation,
+      };
+      const config = {
+        url: "/api/pemantau-suara/dashboard/credentials/update-password-pengguna",
+        data: payload,
+        method: "post",
+      };
+
+      req({ config });
+    },
+  });
+
+  return (
+    <>
+      <Button w={"100%"} className="btn-solid clicky" onClick={onOpen}>
+        Ubah Password
+      </Button>
+
+      <Modal
+        isOpen={isOpen}
+        onClose={backOnClose}
+        isCentered
+        blockScrollOnMount={false}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <DisclosureHeader title={"Ubah Password"} />
+          </ModalHeader>
+          <ModalBody>
+            <form id="changePasswordForm" onSubmit={formik.handleSubmit}>
+              <FormControl mb={4} isInvalid={!!formik.errors.current_password}>
+                <FormLabel>
+                  Password Lama/Sekarang
+                  <RequiredForm />
+                </FormLabel>
+                <PasswordInput
+                  name="current_password"
+                  onChangeSetter={(input) => {
+                    formik.setFieldValue("current_password", input);
+                  }}
+                  inputValue={formik.values.current_password}
+                />
+                <FormErrorMessage>
+                  {formik.errors.current_password as string}
+                </FormErrorMessage>
+              </FormControl>
+
+              <FormControl mb={4} isInvalid={!!formik.errors.password}>
+                <FormLabel>
+                  Password Baru
+                  <RequiredForm />
+                </FormLabel>
+                <PasswordInput
+                  name="password"
+                  onChangeSetter={(input) => {
+                    formik.setFieldValue("password", input);
+                  }}
+                  inputValue={formik.values.password}
+                />
+                <FormErrorMessage>
+                  {formik.errors.password as string}
+                </FormErrorMessage>
+              </FormControl>
+
+              <FormControl
+                mb={2}
+                isInvalid={!!formik.errors.password_confirmation}
+              >
+                <FormLabel>
+                  Konfirmasi Password Baru
+                  <RequiredForm />
+                </FormLabel>
+                <PasswordInput
+                  name="password_confirmation"
+                  onChangeSetter={(input) => {
+                    formik.setFieldValue("password_confirmation", input);
+                  }}
+                  inputValue={formik.values.password_confirmation}
+                />
+                <FormErrorMessage>
+                  {formik.errors.password_confirmation as string}
+                </FormErrorMessage>
+              </FormControl>
+            </form>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              type="submit"
+              form="changePasswordForm"
+              w={"100%"}
+              colorScheme="ap"
+              className="btn-ap clicky"
+              isLoading={loading}
+            >
+              Simpan
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
 
 const Logout = () => {
   const { onCloseManageUsers } = useManageUsers();
@@ -133,9 +274,11 @@ export default function Profile() {
           </HStack>
         </CContainer>
 
-        <ButtonGroup p={5}>
+        <CContainer p={5} gap={2}>
+          <ChangePassword />
+
           <Logout />
-        </ButtonGroup>
+        </CContainer>
       </FloatingContainer>
     </>
   );

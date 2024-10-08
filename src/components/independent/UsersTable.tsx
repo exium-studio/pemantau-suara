@@ -207,7 +207,7 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
         </UserFormModalDisclosure>
       );
     },
-    isUserSuperAdmin && resetPasswordRowOption,
+    ...(isUserSuperAdmin ? [resetPasswordRowOption] : []),
   ];
 
   const formattedHeader = [

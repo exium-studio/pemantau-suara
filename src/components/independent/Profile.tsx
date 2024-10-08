@@ -41,7 +41,7 @@ const ChangePassword = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   useBackOnClose("change-password-modal", isOpen, onOpen, onClose);
 
-  const { req, loading } = useRequest();
+  const { req, loading, status } = useRequest();
 
   const formik = useFormik({
     validateOnChange: false,
@@ -53,7 +53,11 @@ const ChangePassword = () => {
     validationSchema: yup.object().shape({
       current_password: yup.string().required("harus diisi"),
       password: yup.string().required("harus diisi"),
-      password_confirmation: yup.string().required("harus diisi"),
+      password_confirmation: yup
+        .string()
+        .required("harus diisi")
+        //@ts-ignore
+        .oneOf([yup.ref("password"), null], "Password tidak cocok"), // Validasi cocok dengan password
     }),
     onSubmit: (values, { resetForm }) => {
       const payload = {
@@ -70,6 +74,12 @@ const ChangePassword = () => {
       req({ config });
     },
   });
+
+  useEffect(() => {
+    if (status === 200) {
+      backOnClose();
+    }
+  }, [status]);
 
   return (
     <>

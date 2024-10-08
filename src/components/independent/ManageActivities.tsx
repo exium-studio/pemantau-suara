@@ -57,7 +57,7 @@ export default function ManageActivities() {
         maxW={"550px"}
         top={"74px"}
         right={manageActivities ? "16px" : "-580px"}
-        h={"100%"}
+        // h={"100%"}
       >
         <DisclosureHeader
           title="Kelola Aktivitas Penggerak"

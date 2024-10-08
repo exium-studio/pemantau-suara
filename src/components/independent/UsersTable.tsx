@@ -199,7 +199,7 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
 
   // Render lateral
   const render = {
-    loading: <Skeleton minH={"300px"} flex={1} />,
+    loading: <Skeleton minH={"546px"} flex={1} />,
     error: <Retry retry={dataStates.retry} />,
     empty: <NoData />,
     loaded: (

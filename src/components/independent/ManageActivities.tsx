@@ -11,10 +11,14 @@ import ActivitiesTable from "./ActivitiesTable";
 import AddActivityModal from "./AddActivityModal";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
+import getUserData from "../../lib/getUserData";
 
 export default function ManageActivities() {
   // SX
   const lightDarkColor = useLightDarkColor();
+
+  // States
+  const isPenggerak = getUserData()?.role?.id === 3;
 
   // Utils
   const { manageActivities, toggleManageActivities, onCloseManageActivities } =
@@ -88,16 +92,18 @@ export default function ManageActivities() {
               zIndex={20}
               pb={4}
             >
-              <SearchComponent
-                name="search"
-                onChangeSetter={(input) => {
-                  setFilterConfig((ps: any) => ({
-                    ...ps,
-                    search: input,
-                  }));
-                }}
-                inputValue={filterConfig.search}
-              />
+              {!isPenggerak && (
+                <SearchComponent
+                  name="search"
+                  onChangeSetter={(input) => {
+                    setFilterConfig((ps: any) => ({
+                      ...ps,
+                      search: input,
+                    }));
+                  }}
+                  inputValue={filterConfig.search}
+                />
+              )}
 
               <AddActivityModal />
             </HStack>

@@ -55,15 +55,22 @@ const ResetPasswordConfirmationModalDisclosure = ({
     onClose
   );
 
-  const { req, loading } = useRequest();
+  const { req, loading, status } = useRequest();
 
   function handleConfirmResetPassword() {
     const config = {
       url: `/api/pemantau-suara/dashboard/credentials/reset-password-pengguna/${userId}`,
+      method: "post",
     };
 
     req({ config });
   }
+
+  useEffect(() => {
+    if (status === 200) {
+      backOnClose();
+    }
+  }, [status]);
 
   return (
     <>
@@ -116,8 +123,6 @@ interface TableProps {
 }
 
 const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
-  // console.log(dataStates?.data);
-
   // States
   const userData = getUserData();
   const isUserSuperAdmin = userData?.role?.id === 1;

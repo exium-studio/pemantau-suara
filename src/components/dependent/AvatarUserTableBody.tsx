@@ -1,5 +1,6 @@
 import { Avatar, HStack, StackProps, Text, Tooltip } from "@chakra-ui/react";
 import CContainer from "../independent/wrapper/CContainer";
+import UserProfileModalDisclosure from "../independent/wrapper/UserProfileModalDisclosure";
 
 interface Props extends StackProps {
   data: {
@@ -14,12 +15,14 @@ interface Props extends StackProps {
 export default function AvatarUserTableBody({ data, ...props }: Props) {
   return (
     <HStack w={"243px"} gap={3} {...props}>
-      <Avatar
-        // cursor={"pointer"}
-        src={data.foto_profil || ""}
-        name={data.nama}
-        size={data.avatarSize || "sm"}
-      />
+      <UserProfileModalDisclosure userId={data?.id}>
+        <Avatar
+          // cursor={"pointer"}
+          src={data.foto_profil || ""}
+          name={data.nama}
+          size={data.avatarSize || "sm"}
+        />
+      </UserProfileModalDisclosure>
 
       <CContainer gap={2} overflow={"hidden"}>
         <Tooltip label={data.nama} placement="right" openDelay={500}>

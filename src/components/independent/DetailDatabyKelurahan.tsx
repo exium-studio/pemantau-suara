@@ -645,7 +645,8 @@ export default function DetailDatabyKelurahan() {
             <DataCard
               kodeKelurahan={kodeKelurahan}
               isOpen={isOpen}
-              borderLeft={"1px solid var(--divider3)"}
+              pl={0}
+              // borderLeft={"1px solid var(--divider3)"}
             />
           )}
         </HStack>

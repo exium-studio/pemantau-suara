@@ -59,19 +59,19 @@ const TableComponent = ({ dataStates }: TableProps) => {
   ];
 
   const formattedHeader = [
-    {
-      th: "#",
-      props: {
-        position: "sticky",
-        left: 0,
-        zIndex: 3,
-        w: "50px",
-      },
-      cProps: {
-        borderRight: "1px solid var(--divider2)",
-        w: "50px",
-      },
-    },
+    // {
+    //   th: "#",
+    //   props: {
+    //     position: "sticky",
+    //     left: 0,
+    //     zIndex: 3,
+    //     w: "50px",
+    //   },
+    //   cProps: {
+    //     borderRight: "1px solid var(--divider2)",
+    //     w: "50px",
+    //   },
+    // },
     {
       th: "Penggerak",
       isSortable: true,
@@ -94,8 +94,26 @@ const TableComponent = ({ dataStates }: TableProps) => {
     //   },
     // },
     {
-      th: "Deskripsi",
+      th: "RW",
       isSortable: true,
+      isNumeric: true,
+      cProps: {
+        justify: "center",
+      },
+    },
+    // {
+    //   th: "Kelurahan",
+    //   isSortable: true,
+    // },
+    // {
+    //   th: "Kecamatan",
+    //   isSortable: true,
+    // },
+    {
+      th: "Foto Aktivitas",
+      cProps: {
+        justify: "center",
+      },
     },
     {
       th: "Tanggal Mulai",
@@ -110,17 +128,7 @@ const TableComponent = ({ dataStates }: TableProps) => {
       isSortable: true,
     },
     {
-      th: "Foto Aktivitas",
-      cProps: {
-        justify: "center",
-      },
-    },
-    {
-      th: "Kelurahan",
-      isSortable: true,
-    },
-    {
-      th: "Kecamatan",
+      th: "Deskripsi",
       isSortable: true,
     },
   ];
@@ -128,21 +136,21 @@ const TableComponent = ({ dataStates }: TableProps) => {
     id: item.id,
     originalData: item,
     columnsFormat: [
-      {
-        value: i + 1,
-        td: i + 1,
-        isNumeric: true,
-        props: {
-          position: "sticky",
-          left: 0,
-          zIndex: 2,
-          w: "50px",
-        },
-        cProps: {
-          borderRight: "1px solid var(--divider2)",
-          w: "50px",
-        },
-      },
+      // {
+      //   value: i + 1,
+      //   td: i + 1,
+      //   isNumeric: true,
+      //   props: {
+      //     position: "sticky",
+      //     left: 0,
+      //     zIndex: 2,
+      //     w: "50px",
+      //   },
+      //   cProps: {
+      //     borderRight: "1px solid var(--divider2)",
+      //     w: "50px",
+      //   },
+      // },
       {
         value: item?.pelaksana?.nama,
         td: (
@@ -176,23 +184,20 @@ const TableComponent = ({ dataStates }: TableProps) => {
       //   isNumeric: true,
       // },
       {
-        value: item?.deskripsi,
-        td: <NooflineText data={item?.deskripsi} />,
+        value: item?.rw,
+        td: item?.rw,
+        cProps: {
+          justify: "center",
+        },
       },
-      {
-        value: item?.tgl_mulai,
-        td: formatDate(item?.tgl_mulai),
-        isDate: true,
-      },
-      {
-        value: item?.tgl_selesai,
-        td: formatDate(item?.tgl_selesai),
-        isDate: true,
-      },
-      {
-        value: item?.tempat_aktivitas,
-        td: item?.tempat_aktivitas,
-      },
+      // {
+      //   value: item?.kelurahan?.nama_kelurahan,
+      //   td: item?.kelurahan?.nama_kelurahan,
+      // },
+      // {
+      //   value: item?.kelurahan?.kecamatan?.nama_kecamatan,
+      //   td: item?.kelurahan?.kecamatan?.nama_kecamatan,
+      // },
       {
         value: item?.foto_aktivitas,
         td: (
@@ -210,12 +215,22 @@ const TableComponent = ({ dataStates }: TableProps) => {
         },
       },
       {
-        value: item?.kelurahan?.nama_kelurahan,
-        td: item?.kelurahan?.nama_kelurahan,
+        value: item?.tgl_mulai,
+        td: formatDate(item?.tgl_mulai),
+        isDate: true,
       },
       {
-        value: item?.kelurahan?.kecamatan?.nama_kecamatan,
-        td: item?.kelurahan?.kecamatan?.nama_kecamatan,
+        value: item?.tgl_selesai,
+        td: formatDate(item?.tgl_selesai),
+        isDate: true,
+      },
+      {
+        value: item?.tempat_aktivitas,
+        td: item?.tempat_aktivitas,
+      },
+      {
+        value: item?.deskripsi,
+        td: <NooflineText data={item?.deskripsi} />,
       },
     ],
   }));

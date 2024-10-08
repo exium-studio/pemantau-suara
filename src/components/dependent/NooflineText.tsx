@@ -15,7 +15,7 @@ export default function NooflineText({
   return (
     <Tooltip openDelay={500} label={data} placement="right" {...tooltipProps}>
       <Text
-        w={"100%"}
+        w={"fit-content"}
         maxW={"243px"}
         overflow={"hidden"}
         whiteSpace={"nowrap"}

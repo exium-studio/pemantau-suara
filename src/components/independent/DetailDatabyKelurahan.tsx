@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   ButtonGroup,
   HStack,
@@ -536,11 +537,12 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
     <CContainer
       flex={1}
       flexShrink={0}
+      scrollSnapAlign={"center"}
       h={"100%"}
       w={"100%"}
       maxW={"444.67px"}
-      scrollSnapAlign={"center"}
       overflowY={"auto"}
+      overflowX={"clip"}
       className="scrollY"
       // border={"1px solid yellow"}
     >
@@ -664,27 +666,35 @@ export default function DetailDatabyKelurahan() {
       </CContainer>
 
       {/* Content Body */}
-      <CContainer overflowY={"auto"} className="scrollY">
-        <SimpleGrid
-          columns={gridColumns}
+      <CContainer
+        overflowY={"auto"}
+        className="scrollX"
+        scrollSnapType={"x mandatory"}
+      >
+        <Box
           flex={1}
-          h={"100%"}
-          // align={"stretch"}
-          gap={0}
-          overflowX={sw > 900 ? "clip" : "auto"}
-          className="noScroll"
-          scrollSnapType={"x mandatory"}
+          minW={"100%"}
+          w={"max-content"}
+          // maxW={"calc(444.67px + 444.67px)"}
         >
-          <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
+          <SimpleGrid
+            columns={gridColumns}
+            flex={1}
+            h={"100%"}
+            gap={0}
+            overflowX={sw > 900 ? "clip" : "auto"}
+          >
+            <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
 
-          {dataKelurahanComparaisonMode && gridColumns === 2 && (
-            <DataCard
-              kodeKelurahan={kodeKelurahan}
-              isOpen={isOpen}
-              // borderLeft={"1px solid var(--divider3)"}
-            />
-          )}
-        </SimpleGrid>
+            {dataKelurahanComparaisonMode && gridColumns === 2 && (
+              <DataCard
+                kodeKelurahan={kodeKelurahan}
+                isOpen={isOpen}
+                // borderLeft={"1px solid var(--divider3)"}
+              />
+            )}
+          </SimpleGrid>
+        </Box>
       </CContainer>
 
       <ButtonGroup p={5}>

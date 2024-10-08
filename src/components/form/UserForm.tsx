@@ -161,7 +161,19 @@ export default function UserForm({
   }, [formik.values.nama]);
 
   // Handle RWOptions by kelurahan
+  const prevKodeKelurahan = useRef<string | undefined>(
+    initialValues?.kelurahan?.kode_kelurahan
+  );
   useEffect(() => {
+    const currentKodeKelurahan = formik.values.kelurahan?.kode_kelurahan;
+    // Check if the kode_kelurahan has changed
+    if (prevKodeKelurahan.current !== currentKodeKelurahan) {
+      // Reset rw_pelaksana if there's a change in kelurahan
+      formikRef.current.setFieldValue("rw_pelaksana", undefined);
+    }
+    // Update the previous kode_kelurahan reference
+    prevKodeKelurahan.current = currentKodeKelurahan;
+    // Update RWOptions based on max_rw if available
     if (formik.values.kelurahan?.original_data?.max_rw) {
       const RWOptions = createNumberArraybyGivenMaxNumber(
         formik.values.kelurahan?.original_data?.max_rw
@@ -169,11 +181,8 @@ export default function UserForm({
         value: rw,
         label: rw.toString(),
       }));
-
       setRWOptions(RWOptions);
     }
-
-    formikRef.current.setFieldValue("rw_pelaksana", undefined);
   }, [formik.values.kelurahan]);
 
   // Handle role by user login

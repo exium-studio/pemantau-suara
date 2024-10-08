@@ -58,13 +58,8 @@ const ResetPasswordConfirmationModalDisclosure = ({
   const { req, loading } = useRequest();
 
   function handleConfirmResetPassword() {
-    const payload = {
-      user_id: userId,
-    };
-
     const config = {
-      url: `/api/pemantau-suara/dashboard/credentials/reset-password-pengguna`,
-      data: payload,
+      url: `/api/pemantau-suara/dashboard/credentials/reset-password-pengguna/${userId}`,
     };
 
     req({ config });

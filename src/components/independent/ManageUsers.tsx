@@ -56,6 +56,7 @@ export default function ManageUsers() {
         maxW={"550px"}
         top={"74px"}
         right={manageUsers ? "16px" : "-580px"}
+        h={"100%"}
       >
         <DisclosureHeader
           title="Kelola Pengguna"

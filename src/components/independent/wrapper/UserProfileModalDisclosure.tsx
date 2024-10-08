@@ -46,7 +46,6 @@ export default function UserProfileModalDisclosure({
   });
 
   const user = data?.[0];
-  console.log(user);
 
   // Render lateral
   const render = {

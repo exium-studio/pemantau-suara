@@ -18,6 +18,7 @@ import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
 import RoleBadge from "../dependent/RoleBadge";
 import TableFooterConfig from "../dependent/TableFooterConfig";
 import CContainer from "./wrapper/CContainer";
+import { useEffect, useRef } from "react";
 
 interface TableProps {
   dataStates: Interface__DataStates;
@@ -145,7 +146,10 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
     columnsFormat: [
       {
         value: i + 1,
-        td: i + 1,
+        td:
+          i +
+          1 +
+          (dataConfig?.page > 1 ? dataConfig?.limit * dataConfig?.page : 0),
         isNumeric: true,
         props: {
           position: "sticky",
@@ -231,6 +235,7 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
           )}
         </>
       )}
+      {/* {render.loading} */}
     </>
   );
 };
@@ -247,6 +252,13 @@ export default function UsersTable({ conditions, filterConfig }: Props) {
     conditions: conditions,
     dependencies: [filterConfig],
   });
+  const dataConfigRef = useRef(dataConfig);
+
+  useEffect(() => {
+    if (filterConfig?.search) {
+      dataConfigRef.current.setPage(1);
+    }
+  }, [filterConfig]);
 
   return (
     <CContainer id="manage-users-body" overflowY={"auto"}>

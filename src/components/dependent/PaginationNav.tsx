@@ -27,7 +27,7 @@ export default function PaginationNav({
             setPage(page - 1);
           }
         }}
-        isDisabled={page === 1 && !paginationData?.links?.prev}
+        isDisabled={page === 1 || !paginationData?.links?.prev}
       />
 
       <PaginationJump
@@ -46,7 +46,7 @@ export default function PaginationNav({
           setPage(page + 1);
         }}
         isDisabled={
-          page === paginationData?.meta?.last_page &&
+          page === paginationData?.meta?.last_page ||
           !paginationData?.links?.next
         }
       />

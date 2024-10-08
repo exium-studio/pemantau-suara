@@ -199,8 +199,12 @@ export default function ActivityForm({
 
   // Handle RWOptions by rw pelaksana
   useEffect(() => {
-    console.log(formik.values.pelaksana?.original_data?.rw_pelaksana);
-    const RWOptions = formik.values.pelaksana?.original_data?.rw_pelaksana;
+    const RWOptions = formik.values.pelaksana?.original_data?.rw_pelaksana?.map(
+      (item: any) => ({
+        value: item,
+        label: item,
+      })
+    );
     setRWOptions(RWOptions);
   }, [formik.values.pelaksana]);
 

@@ -125,7 +125,7 @@ export default function UserForm({
         kelurahan_id: isUserPj
           ? [values?.kelurahan?.value]
           : values?.kelurahan?.map((kelurahan: any) => kelurahan.value),
-        rw_pelaksana: values?.rw_pelaksana,
+        rw_pelaksana: values?.rw_pelaksana?.map((item) => item?.value),
         username: values?.newusername,
         password: values?.newpassword,
         _method: method,
@@ -166,14 +166,10 @@ export default function UserForm({
   );
   useEffect(() => {
     const currentKodeKelurahan = formik.values.kelurahan?.kode_kelurahan;
-    // Check if the kode_kelurahan has changed
     if (prevKodeKelurahan.current !== currentKodeKelurahan) {
-      // Reset rw_pelaksana if there's a change in kelurahan
       formikRef.current.setFieldValue("rw_pelaksana", undefined);
     }
-    // Update the previous kode_kelurahan reference
     prevKodeKelurahan.current = currentKodeKelurahan;
-    // Update RWOptions based on max_rw if available
     if (formik.values.kelurahan?.original_data?.max_rw) {
       const RWOptions = createNumberArraybyGivenMaxNumber(
         formik.values.kelurahan?.original_data?.max_rw

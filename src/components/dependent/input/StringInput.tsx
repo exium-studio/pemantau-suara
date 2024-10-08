@@ -8,6 +8,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { css, Global } from "@emotion/react";
+import useScreenWidth from "../../../hooks/useScreenWidth";
 
 interface Props extends InputProps {
   fRef?: any;
@@ -35,6 +36,7 @@ export default function StringInput({
     onChangeSetter(e.target.value);
   }
 
+  const sw = useScreenWidth();
   const { colorMode } = useColorMode();
   const darkLightColorManual = colorMode === "light" ? "white" : "var(--dark)";
 
@@ -83,7 +85,7 @@ export default function StringInput({
                 : "32px"
             })`}
             position={"absolute"}
-            top={"8px"}
+            top={sw < 768 ? "10px" : "8px"}
             left={props?.pl || 4}
             pr={props?.pr}
             whiteSpace={"nowrap"}

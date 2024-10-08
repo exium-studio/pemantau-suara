@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   ButtonGroup,
   HStack,
@@ -547,7 +546,7 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
       scrollSnapAlign={"center"}
       h={"100%"}
       w={"100%"}
-      maxW={"444.67px"}
+      maxW={"450px"}
       overflowY={"auto"}
       overflowX={"clip"}
       className="scrollY"
@@ -673,35 +672,27 @@ export default function DetailDatabyKelurahan() {
       </CContainer>
 
       {/* Content Body */}
-      <CContainer
-        overflowY={"auto"}
-        className="scrollX"
-        scrollSnapType={"x mandatory"}
-      >
-        <Box
+      <CContainer overflowY={"auto"} className="scrollX">
+        <SimpleGrid
+          columns={gridColumns}
           flex={1}
-          minW={"100%"}
-          w={"max-content"}
-          // maxW={"calc(444.67px + 444.67px)"}
+          h={"100%"}
+          w={gridColumns && sw < 900 ? "900px" : ""}
+          gap={0}
+          overflowX={sw > 900 ? "clip" : "auto"}
+          className="noScroll"
+          scrollSnapType={"x mandatory"}
         >
-          <SimpleGrid
-            columns={gridColumns}
-            flex={1}
-            h={"100%"}
-            gap={0}
-            overflowX={sw > 900 ? "clip" : "auto"}
-          >
-            <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
+          <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
 
-            {dataKelurahanComparaisonMode && gridColumns === 2 && (
-              <DataCard
-                kodeKelurahan={kodeKelurahan}
-                isOpen={isOpen}
-                // borderLeft={"1px solid var(--divider3)"}
-              />
-            )}
-          </SimpleGrid>
-        </Box>
+          {dataKelurahanComparaisonMode && gridColumns === 2 && (
+            <DataCard
+              kodeKelurahan={kodeKelurahan}
+              isOpen={isOpen}
+              // borderLeft={"1px solid var(--divider3)"}
+            />
+          )}
+        </SimpleGrid>
       </CContainer>
 
       <ButtonGroup p={5}>

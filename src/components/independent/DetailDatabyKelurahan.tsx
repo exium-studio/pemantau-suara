@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   ButtonGroup,
   HStack,
@@ -11,12 +10,13 @@ import {
   SimpleGrid,
   Switch,
   Text,
+  Tooltip,
   useDisclosure,
   VStack,
   Wrap,
 } from "@chakra-ui/react";
 import { CaretDown, Circle } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import chartColors from "../../constant/chartColors";
 import { useLightDarkColor } from "../../constant/colors";
 import useDataKelurahanComparisonMode from "../../global/useDataKelurahanComparisonMode";
@@ -109,7 +109,7 @@ const PotensiSuaraChart = ({ data }: any) => {
   );
 
   return (
-    <Wrap spacing={6} px={4} mb={6}>
+    <CContainer flex={0} gap={6} px={4} mb={6}>
       <VStack flex={"1 0 0"} position={"relative"}>
         <VStack w={"100%"} className="doughnutChartContainer">
           <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
@@ -131,22 +131,19 @@ const PotensiSuaraChart = ({ data }: any) => {
         </VStack>
       </VStack>
 
-      <SimpleGrid
-        m={"auto"}
-        h={"fit-content"}
-        columns={2}
-        px={2}
-        spacingX={4}
-        spacingY={1}
-      >
+      <Wrap m={"auto"} h={"fit-content"} px={2} spacingX={4} spacingY={1}>
         {data?.map((item: any, i: number) => (
-          <HStack key={i}>
-            <Icon as={Circle} weight="fill" color={colors[i]} fontSize={8} />
-            <Text fontSize={"sm"}>{formatNumber(item?.potensi_suara)}</Text>
-          </HStack>
+          <Tooltip label={formatNumber(item?.potensi_suara)}>
+            <HStack key={i} cursor={"default"}>
+              <Icon as={Circle} weight="fill" color={colors[i]} fontSize={8} />
+              <Text fontSize={"sm"} opacity={0.6}>
+                {`RW ${item?.rw}`}
+              </Text>
+            </HStack>
+          </Tooltip>
         ))}
-      </SimpleGrid>
-    </Wrap>
+      </Wrap>
+    </CContainer>
   );
 };
 const PotensiSuaraTable = ({ dataStates }: any) => {
@@ -330,7 +327,7 @@ const PotensiSuaraTable = ({ dataStates }: any) => {
   );
 
   return (
-    <CustomTableContainer maxH={"400px"}>
+    <CustomTableContainer flex={0} maxH={"400px"}>
       <CustomTable
         formattedHeader={formattedHeader}
         formattedBody={formattedBody}
@@ -361,7 +358,7 @@ const SuaraKPUChart = ({ data, dataStates }: any) => {
 
   return (
     <>
-      <Wrap spacing={6} px={4} mb={6}>
+      <CContainer flex={0} gap={6} px={4} mb={6}>
         <VStack flex={"1 0 0"} position={"relative"}>
           <VStack w={"100%"} className="doughnutChartContainer">
             <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
@@ -383,24 +380,34 @@ const SuaraKPUChart = ({ data, dataStates }: any) => {
           </VStack>
         </VStack>
 
-        <SimpleGrid
+        <Wrap
           m={"auto"}
           h={"fit-content"}
-          columns={2}
+          justify={"center"}
+          // columns={[5]}
           px={2}
           spacingX={4}
           spacingY={1}
         >
           {data?.map((item: any, i: number) => (
-            <HStack key={i}>
-              <Icon as={Circle} weight="fill" color={colors[i]} fontSize={8} />
-              <Text fontSize={"sm"}>{formatNumber(item?.jumlah_suara)}</Text>
-            </HStack>
+            <Tooltip label={formatNumber(item?.jumlah_suara)}>
+              <HStack key={i} cursor={"default"}>
+                <Icon
+                  as={Circle}
+                  weight="fill"
+                  color={colors[i]}
+                  fontSize={8}
+                />
+                <Text fontSize={"sm"} opacity={0.6}>
+                  {item?.partai?.nama}
+                </Text>
+              </HStack>
+            </Tooltip>
           ))}
-        </SimpleGrid>
-      </Wrap>
+        </Wrap>
+      </CContainer>
 
-      <HStack mb={2} ml={2}>
+      <HStack mb={2} ml={2} justify={"center"}>
         <Text fontSize={"sm"}>{upcomingTotalTPS}</Text>
         <Text fontSize={"sm"} opacity={0.4}>
           Total TPS yang akan datang
@@ -526,12 +533,15 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
   };
 
   return (
-    <Box
+    <CContainer
+      flex={1}
       flexShrink={0}
+      h={"100%"}
       w={"100%"}
       maxW={"444.67px"}
       scrollSnapAlign={"center"}
-      // w={dataKelurahanComparaisonMode ? (sw > 900 ? "50%" : "100%") : "100%"}
+      overflowY={"auto"}
+      className="scrollY"
       // border={"1px solid yellow"}
     >
       <Wrap px={5} mb={6} align={"center"} justify={"space-between"}>
@@ -561,7 +571,7 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
         </>
       )}
       {/* {render.loading} */}
-    </Box>
+    </CContainer>
   );
 };
 
@@ -574,6 +584,30 @@ export default function DetailDatabyKelurahan() {
   const kodeKelurahan =
     detailGeoJSONData?.geoJSONData?.properties?.village_code;
   const { dataKelurahanComparaisonMode } = useDataKelurahanComparisonMode();
+  const [gridColumns, setGridColumns] = useState<number>(1);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  useEffect(() => {
+    // Clear the timeout if it exists before setting a new one
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // Set a new timeout to change gridColumns
+    if (dataKelurahanComparaisonMode) {
+      timeoutRef.current = setTimeout(() => {
+        setGridColumns(2);
+      }, 200);
+    } else {
+      setGridColumns(1);
+    }
+
+    // Cleanup function to clear the timeout if the component unmounts
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [dataKelurahanComparaisonMode]);
 
   // Utils
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -631,9 +665,11 @@ export default function DetailDatabyKelurahan() {
 
       {/* Content Body */}
       <CContainer overflowY={"auto"} className="scrollY">
-        <HStack
+        <SimpleGrid
+          columns={gridColumns}
           flex={1}
-          align={"stretch"}
+          h={"100%"}
+          // align={"stretch"}
           gap={0}
           overflowX={sw > 900 ? "clip" : "auto"}
           className="noScroll"
@@ -641,15 +677,14 @@ export default function DetailDatabyKelurahan() {
         >
           <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
 
-          {dataKelurahanComparaisonMode && (
+          {dataKelurahanComparaisonMode && gridColumns === 2 && (
             <DataCard
               kodeKelurahan={kodeKelurahan}
               isOpen={isOpen}
-              pl={0}
               // borderLeft={"1px solid var(--divider3)"}
             />
           )}
-        </HStack>
+        </SimpleGrid>
       </CContainer>
 
       <ButtonGroup p={5}>

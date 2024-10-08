@@ -11,8 +11,10 @@ import {
   Interface__SelectOption,
   Type__ActivityInitialValues,
 } from "../../constant/interfaces";
+import useRenderTrigger from "../../hooks/useRenderTrigger";
 import useRequest from "../../hooks/useRequest";
-import createNumberArraybyGivenMaxNumber from "../../lib/createNumberArraybyGivenMaxNumber";
+import backOnClose from "../../lib/backOnClose";
+import formatDate from "../../lib/formatDate";
 import getUserData from "../../lib/getUserData";
 import request from "../../lib/request";
 import validateFileExtension from "../../lib/validateFIleExtension";
@@ -21,13 +23,10 @@ import SelectPenggerak from "../dependent/dedicated/SelectPenggerak";
 import SelectRW from "../dependent/dedicated/SelectRW";
 import DatePickerModal from "../dependent/input/DatePickerModal";
 import FileInputLarge from "../dependent/input/FileInputLarge";
+import NumberInput from "../dependent/input/NumberInput";
 import StringInput from "../dependent/input/StringInput";
 import Textarea from "../dependent/input/Textarea";
 import RequiredForm from "./RequiredForm";
-import formatDate from "../../lib/formatDate";
-import NumberInput from "../dependent/input/NumberInput";
-import useRenderTrigger from "../../hooks/useRenderTrigger";
-import backOnClose from "../../lib/backOnClose";
 
 const defaultValues = {
   pelaksana: undefined,
@@ -65,6 +64,7 @@ export default function ActivityForm({
   // Utils
   const { req, loading, status } = useRequest();
   const { rt, setRt } = useRenderTrigger();
+  const rtRef = useRef(rt);
 
   const formik = useFormik({
     validateOnChange: false,
@@ -156,16 +156,14 @@ export default function ActivityForm({
   const formikRef = useRef(formik);
 
   // Handle response status
-  const prevStatus = useRef<number | null>(null);
   useEffect(() => {
-    if ((status === 200 || status === 201) && prevStatus.current !== status) {
-      setRt(!rt);
-      prevStatus.current = status;
+    if (status === 200 || status === 201) {
+      setRt(!rtRef.current);
       backOnClose();
     }
-  }, [status, setRt, rt]);
+  }, [status, setRt]);
 
-  // Handle pelaksana by user login (pelaksana/penggerak)
+  // Handle pelaksana jika user login adalah pelaksana/penggerak
   useEffect(() => {
     // Check is user penggerak
     if (userDataRef.current?.role?.id === 3) {
@@ -198,16 +196,11 @@ export default function ActivityForm({
     }
   }, [formik.values.pelaksana]);
 
-  // Handle RWOptions by kelurahan
+  // Handle RWOptions by rw pelaksana
   useEffect(() => {
-    const RWOptions = createNumberArraybyGivenMaxNumber(
-      formik.values?.kelurahan?.original_data?.max_rw
-    )?.map((rw) => ({
-      value: rw,
-      label: rw.toString(),
-    }));
+    const RWOptions = formik.values.pelaksana?.original_data?.rw_pelaksana;
     setRWOptions(RWOptions);
-  }, [formik.values.kelurahan]);
+  }, [formik.values.pelaksana]);
 
   return (
     <>
@@ -272,7 +265,7 @@ export default function ActivityForm({
               inputValue={formik.values.rw}
               optionsDisplay="chip"
               options={RWOptions}
-              isDisabled={!!!formik.values.kelurahan}
+              isDisabled={!!!formik.values.pelaksana}
             />
             <FormErrorMessage>{formik.errors.rw as string}</FormErrorMessage>
           </FormControl>

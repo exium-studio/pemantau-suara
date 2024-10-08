@@ -170,6 +170,7 @@ export default function ActivityForm({
       formikRef?.current?.setFieldValue("pelaksana", {
         value: userDataRef.current?.id,
         label: userDataRef.current?.nama,
+        original_data: userDataRef.current,
       });
     }
   }, []);
@@ -198,6 +199,7 @@ export default function ActivityForm({
 
   // Handle RWOptions by rw pelaksana
   useEffect(() => {
+    console.log(formik.values.pelaksana?.original_data?.rw_pelaksana);
     const RWOptions = formik.values.pelaksana?.original_data?.rw_pelaksana;
     setRWOptions(RWOptions);
   }, [formik.values.pelaksana]);

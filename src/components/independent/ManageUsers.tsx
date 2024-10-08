@@ -11,6 +11,8 @@ import UsersTable from "./UsersTable";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
 import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
+import ExportData from "../dependent/ExportData";
+import getUserData from "../../lib/getUserData";
 
 export default function ManageUsers() {
   // SX
@@ -20,6 +22,7 @@ export default function ManageUsers() {
   const { manageUsers, toggleManageUsers, onCloseManageUsers } =
     useManageUsers();
   const { onCloseManageActivities } = useManageActivities();
+  const isPenggerak = getUserData()?.role?.id === 3;
 
   // Filter Config
   const [filterConfig, setFilterConfig] = useState<any>({
@@ -91,6 +94,15 @@ export default function ManageUsers() {
                 }}
                 inputValue={filterConfig.search}
               />
+
+              {!isPenggerak && (
+                <ExportData
+                  tooltipLabel="Export Pengguna"
+                  url={`/api/pemantau-suara/dashboard/management/export-pengguna`}
+                  fileName="Aktivitas"
+                  ext="xls"
+                />
+              )}
 
               <UserFormModalDisclosure
                 id="tambah-pengguna"

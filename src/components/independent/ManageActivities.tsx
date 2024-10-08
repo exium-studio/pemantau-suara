@@ -5,13 +5,14 @@ import { useLightDarkColor } from "../../constant/colors";
 import { iconSize } from "../../constant/sizes";
 import useManageActivities from "../../global/useManageActivities";
 import useManageUsers from "../../global/useManageUsers";
+import getUserData from "../../lib/getUserData";
 import DisclosureHeader from "../dependent/DisclosureHeader";
+import ExportData from "../dependent/ExportData";
 import SearchComponent from "../dependent/input/SearchComponent";
 import ActivitiesTable from "./ActivitiesTable";
 import AddActivityModal from "./AddActivityModal";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
-import getUserData from "../../lib/getUserData";
 
 export default function ManageActivities() {
   // SX
@@ -104,6 +105,13 @@ export default function ManageActivities() {
                   inputValue={filterConfig.search}
                 />
               )}
+
+              <ExportData
+                tooltipLabel="Export Aktivitas"
+                url={`/api/pemantau-suara/dashboard/management/export-aktivitas`}
+                fileName="Aktivitas"
+                ext="xls"
+              />
 
               <AddActivityModal />
             </HStack>

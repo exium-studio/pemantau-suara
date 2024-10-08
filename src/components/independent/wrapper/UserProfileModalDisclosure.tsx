@@ -61,7 +61,7 @@ export default function UserProfileModalDisclosure({
         />
         <Skeleton h={"27px"} maxW={"300px"} mx={"auto"} mb={2} />
         <Skeleton h={"26px"} maxW={"120px"} mx={"auto"} mb={4} />
-        <Skeleton h={"146px"} />
+        <Skeleton h={"186px"} />
       </>
     ),
     error: (
@@ -100,18 +100,16 @@ export default function UserProfileModalDisclosure({
               <StatusAktifBadge data={user?.status_aktif?.id} />
             </HStack>
 
-            {user?.role?.id === 3 && (
-              <HStack>
-                <Text opacity={0.6} whiteSpace={"nowrap"}>
-                  Penanggung Jawab
-                </Text>
-                <FlexLine />
-                <NooflineText
-                  data={user?.pj_pelaksana?.nama}
-                  textAlign={"right"}
-                />
-              </HStack>
-            )}
+            <HStack>
+              <Text opacity={0.6} whiteSpace={"nowrap"}>
+                Penanggung Jawab
+              </Text>
+              <FlexLine />
+              <NooflineText
+                data={user?.pj_pelaksana?.nama}
+                textAlign={"right"}
+              />
+            </HStack>
 
             <HStack>
               <Text opacity={0.6} whiteSpace={"nowrap"}>

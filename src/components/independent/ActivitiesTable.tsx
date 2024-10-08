@@ -1,6 +1,9 @@
 import { Button, Icon, MenuItem, Text } from "@chakra-ui/react";
 import { Pencil } from "@phosphor-icons/react";
-import { Interface__DataStates } from "../../constant/interfaces";
+import {
+  Interface__DataConfig,
+  Interface__DataStates,
+} from "../../constant/interfaces";
 import { iconSize } from "../../constant/sizes";
 import useDataState from "../../hooks/useDataState";
 import formatDate from "../../lib/formatDate";
@@ -16,12 +19,16 @@ import Retry from "./feedback/Retry";
 import Skeleton from "./feedback/Skeleton";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 import PermissionTooltip from "./wrapper/PermissionTooltip";
+import { useEffect, useRef } from "react";
+import CContainer from "./wrapper/CContainer";
+import TableFooterConfig from "../dependent/TableFooterConfig";
 
 interface TableProps {
   dataStates: Interface__DataStates;
+  dataConfig: Interface__DataConfig;
 }
 
-const TableComponent = ({ dataStates }: TableProps) => {
+const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
   // States
   const userData = getUserData();
 
@@ -59,19 +66,19 @@ const TableComponent = ({ dataStates }: TableProps) => {
   ];
 
   const formattedHeader = [
-    // {
-    //   th: "#",
-    //   props: {
-    //     position: "sticky",
-    //     left: 0,
-    //     zIndex: 3,
-    //     w: "50px",
-    //   },
-    //   cProps: {
-    //     borderRight: "1px solid var(--divider2)",
-    //     w: "50px",
-    //   },
-    // },
+    {
+      th: "#",
+      props: {
+        position: "sticky",
+        left: 0,
+        zIndex: 3,
+        w: "50px",
+      },
+      cProps: {
+        borderRight: "1px solid var(--divider2)",
+        w: "50px",
+      },
+    },
     {
       th: "Penggerak",
       isSortable: true,
@@ -136,21 +143,21 @@ const TableComponent = ({ dataStates }: TableProps) => {
     id: item.id,
     originalData: item,
     columnsFormat: [
-      // {
-      //   value: i + 1,
-      //   td: i + 1,
-      //   isNumeric: true,
-      //   props: {
-      //     position: "sticky",
-      //     left: 0,
-      //     zIndex: 2,
-      //     w: "50px",
-      //   },
-      //   cProps: {
-      //     borderRight: "1px solid var(--divider2)",
-      //     w: "50px",
-      //   },
-      // },
+      {
+        value: i + 1,
+        td: i + 1 + dataConfig?.limit * (dataConfig?.page - 1),
+        isNumeric: true,
+        props: {
+          position: "sticky",
+          left: 0,
+          zIndex: 2,
+          w: "50px",
+        },
+        cProps: {
+          borderRight: "1px solid var(--divider2)",
+          w: "50px",
+        },
+      },
       {
         value: item?.pelaksana?.nama,
         td: (
@@ -285,7 +292,7 @@ export default function ActivitiesTable({ conditions, filterConfig }: Props) {
   const allowedKelurahan = userData?.kelurahan?.map(
     (kelurahan: any) => kelurahan?.kode_kelurahan
   );
-  const { dataStates } = useDataState<any>({
+  const { dataStates, dataConfig } = useDataState<any>({
     url: `/api/pemantau-suara/dashboard/management/get-aktivitas`,
     payload: {
       search: filterConfig?.search?.split(" "),
@@ -293,8 +300,31 @@ export default function ActivitiesTable({ conditions, filterConfig }: Props) {
       kode_kelurahan: allowedKelurahan,
     },
     conditions: conditions,
-    dependencies: [],
+    dependencies: [filterConfig],
   });
+  const dataConfigRef = useRef(dataConfig);
 
-  return <TableComponent dataStates={dataStates} />;
+  useEffect(() => {
+    if (filterConfig?.search) {
+      dataConfigRef.current.setPage(1);
+    }
+  }, [filterConfig]);
+
+  return (
+    <>
+      <CContainer id="manage-users-body" overflowY={"auto"}>
+        <CContainer overflowY={"auto"} className={"scrollY"}>
+          <TableComponent dataStates={dataStates} dataConfig={dataConfig} />
+        </CContainer>
+
+        <TableFooterConfig
+          limitConfig={dataConfig?.limit}
+          setLimitConfig={dataConfig?.setLimit}
+          pageConfig={dataConfig?.page}
+          setPageConfig={dataConfig?.setPage}
+          paginationData={dataConfig?.paginationData}
+        />
+      </CContainer>
+    </>
+  );
 }

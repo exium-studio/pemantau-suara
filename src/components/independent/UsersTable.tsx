@@ -146,10 +146,7 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
     columnsFormat: [
       {
         value: i + 1,
-        td:
-          i +
-          1 +
-          (dataConfig?.page > 1 ? dataConfig?.limit * dataConfig?.page : 0),
+        td: i + 1 + dataConfig?.limit * (dataConfig?.page - 1),
         isNumeric: true,
         props: {
           position: "sticky",

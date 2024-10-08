@@ -132,10 +132,17 @@ const PotensiSuaraChart = ({ data }: any) => {
         </VStack>
       </VStack>
 
-      <Wrap m={"auto"} h={"fit-content"} px={2} spacingX={4} spacingY={1}>
+      <Wrap
+        m={"auto"}
+        justify={"center"}
+        h={"fit-content"}
+        px={2}
+        spacingX={4}
+        spacingY={1}
+      >
         {data?.map((item: any, i: number) => (
-          <Tooltip label={formatNumber(item?.potensi_suara)}>
-            <HStack key={i} cursor={"default"}>
+          <Tooltip key={i} label={formatNumber(item?.potensi_suara)}>
+            <HStack cursor={"default"}>
               <Icon as={Circle} weight="fill" color={colors[i]} fontSize={8} />
               <Text fontSize={"sm"} opacity={0.6}>
                 {`RW ${item?.rw}`}
@@ -391,8 +398,8 @@ const SuaraKPUChart = ({ data, dataStates }: any) => {
           spacingY={1}
         >
           {data?.map((item: any, i: number) => (
-            <Tooltip label={formatNumber(item?.jumlah_suara)}>
-              <HStack key={i} cursor={"default"}>
+            <Tooltip key={i} label={formatNumber(item?.jumlah_suara)}>
+              <HStack cursor={"default"}>
                 <Icon
                   as={Circle}
                   weight="fill"

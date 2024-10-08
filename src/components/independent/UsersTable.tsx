@@ -176,11 +176,11 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
               original_data: item?.kelurahan?.[0],
             }
           : kelurahanList,
-        rw_pelaksana: item?.rw_pelaksana?.map((item: any) => item),
-        // rw_pelaksana: item?.rw_pelaksana?.map((rw: any) => ({
-        //   value: rw,
-        //   label: rw,
-        // })),
+        // rw_pelaksana: item?.rw_pelaksana?.map((item: any) => item),
+        rw_pelaksana: item?.rw_pelaksana?.map((rw: any) => ({
+          value: rw,
+          label: rw,
+        })),
       };
 
       return (

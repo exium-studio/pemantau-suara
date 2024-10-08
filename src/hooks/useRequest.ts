@@ -59,8 +59,11 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
           });
         }
 
-        // Set state error if request fails
-        setError(true);
+        // Check if the error is due to request cancellation
+        if (e.code !== "ERR_CANCELED") {
+          // Set error if the request fails and is not canceled
+          setError(true);
+        }
       })
       .finally(() => {
         setLoading(false);

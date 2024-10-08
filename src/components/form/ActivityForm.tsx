@@ -179,6 +179,7 @@ export default function ActivityForm({
   // Handle kelurahan by pelaksana/penggerak
   useEffect(() => {
     if (formik.values.pelaksana) {
+      formikRef?.current?.setFieldValue("kelurahan", undefined);
       request(
         `/api/pemantau-suara/publik-request/get-all-kelurahan-users/${formik.values.pelaksana?.value}`
       )

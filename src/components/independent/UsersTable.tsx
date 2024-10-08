@@ -38,6 +38,12 @@ const TableComponent = ({ dataStates }: TableProps) => {
         (isUserSuperAdmin && isItemPenanggungJawab) ||
         (isUserPenanggungJawab && isItemPelaksana);
 
+      const kelurahanList = item?.kelurahan?.map((item: any) => ({
+        value: item?.kode_kelurahan,
+        label: item?.nama_kelurahan,
+        original_data: item?.kelurahan,
+      }));
+
       const initialValues = {
         foto_profil: item?.foto_profil,
         nama: item?.nama,
@@ -51,11 +57,13 @@ const TableComponent = ({ dataStates }: TableProps) => {
           value: item?.role?.id,
           label: item?.role?.name,
         },
-        kelurahan: {
-          value: item?.kelurahan?.[0].kode_kelurahan,
-          label: item?.kelurahan?.[0].nama_kelurahan,
-          original_data: item?.kelurahan?.[0],
-        },
+        kelurahan: isUserPenanggungJawab
+          ? {
+              value: item?.kelurahan?.[0].kode_kelurahan,
+              label: item?.kelurahan?.[0].nama_kelurahan,
+              original_data: item?.kelurahan?.[0],
+            }
+          : kelurahanList,
         rw_pelaksana: item?.rw_pelaksana,
         // rw_pelaksana: item?.rw_pelaksana?.map((rw: any) => ({
         //   value: rw,

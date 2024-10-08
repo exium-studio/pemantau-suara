@@ -172,6 +172,8 @@ export default function UserForm({
 
       setRWOptions(RWOptions);
     }
+
+    formikRef.current.setFieldValue("rw_pelaksana", undefined);
   }, [formik.values.kelurahan]);
 
   // Handle role by user login

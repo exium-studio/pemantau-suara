@@ -1,24 +1,119 @@
-import { Icon, MenuItem, Text } from "@chakra-ui/react";
-import { Pencil } from "@phosphor-icons/react";
+import {
+  Box,
+  Button,
+  Icon,
+  MenuItem,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { LockOpen, Pencil } from "@phosphor-icons/react";
+import { useEffect, useRef } from "react";
 import {
   Interface__DataConfig,
   Interface__DataStates,
 } from "../../constant/interfaces";
 import { iconSize } from "../../constant/sizes";
+import useBackOnClose from "../../hooks/useBackOnClose";
 import useDataState from "../../hooks/useDataState";
+import backOnClose from "../../lib/backOnClose";
 import getUserData from "../../lib/getUserData";
 import AvatarUserTableBody from "../dependent/AvatarUserTableBody";
 import CustomTable from "../dependent/CustomTable";
+import DisclosureHeader from "../dependent/DisclosureHeader";
+import RoleBadge from "../dependent/RoleBadge";
+import TableFooterConfig from "../dependent/TableFooterConfig";
 import NoData from "./feedback/NoData";
 import Retry from "./feedback/Retry";
 import Skeleton from "./feedback/Skeleton";
+import CContainer from "./wrapper/CContainer";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 import PermissionTooltip from "./wrapper/PermissionTooltip";
 import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
-import RoleBadge from "../dependent/RoleBadge";
-import TableFooterConfig from "../dependent/TableFooterConfig";
-import CContainer from "./wrapper/CContainer";
-import { useEffect, useRef } from "react";
+import useRequest from "../../hooks/useRequest";
+
+interface ResetPasswordProps {
+  userId: number;
+  children?: any;
+  data: any;
+}
+const ResetPasswordConfirmationModalDisclosure = ({
+  userId,
+  children,
+  data,
+}: ResetPasswordProps) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  useBackOnClose(
+    `reset-password-confirmation-modal-${userId}`,
+    isOpen,
+    onOpen,
+    onClose
+  );
+
+  const { req, loading } = useRequest();
+
+  function handleConfirmResetPassword() {
+    const payload = {
+      user_id: userId,
+    };
+
+    const config = {
+      url: `/api/pemantau-suara/dashboard/credentials/reset-password-pengguna`,
+      data: payload,
+    };
+
+    req({ config });
+  }
+
+  return (
+    <>
+      <Box onClick={onOpen}>{children}</Box>
+
+      <Modal
+        isOpen={isOpen}
+        onClose={backOnClose}
+        isCentered
+        blockScrollOnMount={false}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <DisclosureHeader title={"Reset Password"} />
+          </ModalHeader>
+          <ModalBody>
+            <Text opacity={0.4}>
+              Password penguna <b>{data?.nama}</b> akan direset menjadi{" "}
+              <b>bocahe_dewe</b>
+            </Text>
+          </ModalBody>
+          <ModalFooter gap={2}>
+            <Button
+              w={"100%"}
+              className="btn-solid clicky"
+              isDisabled={loading}
+            >
+              Tidak
+            </Button>
+            <Button
+              w={"100%"}
+              colorScheme="red"
+              className="clicky"
+              onClick={handleConfirmResetPassword}
+              isLoading={loading}
+            >
+              Ya
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
 
 interface TableProps {
   dataStates: Interface__DataStates;
@@ -32,6 +127,21 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
   const userData = getUserData();
   const isUserSuperAdmin = userData?.role?.id === 1;
   const isUserPenanggungJawab = userData?.role?.id === 2;
+
+  const resetPasswordRowOption = (rowData: any) => {
+    const item = rowData?.originalData;
+
+    return (
+      <ResetPasswordConfirmationModalDisclosure userId={item.id} data={item}>
+        <PermissionTooltip permission={isUserSuperAdmin} placement="left">
+          <MenuItem isDisabled={!isUserSuperAdmin}>
+            <Text>Reset Password</Text>
+            <Icon as={LockOpen} fontSize={iconSize} opacity={0.4} />
+          </MenuItem>
+        </PermissionTooltip>
+      </ResetPasswordConfirmationModalDisclosure>
+    );
+  };
 
   // Row options
   const rowOptions = [
@@ -97,6 +207,7 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
         </UserFormModalDisclosure>
       );
     },
+    isUserSuperAdmin && resetPasswordRowOption,
   ];
 
   const formattedHeader = [

@@ -5,6 +5,9 @@ import getUserData from "../lib/getUserData";
 import request from "../lib/request";
 import useMiddleware from "../global/useMiddleware";
 import useFullscreenSpinner from "../global/useFullscreenSpinner";
+import useManageUsers from "../global/useManageUsers";
+import useManageActivities from "../global/useManageActivities";
+import useDetailAktivitasUser from "../global/useDetailAktivitasUser";
 
 const Middleware = () => {
   const authToken = getAuthToken();
@@ -14,6 +17,9 @@ const Middleware = () => {
 
   const { onFullscreenSpinnerOpen, onFullscreenSpinnerClose } =
     useFullscreenSpinner();
+  const { onCloseManageUsers } = useManageUsers();
+  const { onCloseManageActivities } = useManageActivities();
+  const { setDetailAktivitasUser } = useDetailAktivitasUser();
 
   useEffect(() => {
     if (authToken) {
@@ -41,11 +47,21 @@ const Middleware = () => {
 
   useEffect(() => {
     if (loading) {
+      onCloseManageUsers();
+      onCloseManageActivities();
+      setDetailAktivitasUser(undefined);
       onFullscreenSpinnerOpen();
     } else {
       onFullscreenSpinnerClose();
     }
-  }, [loading, onFullscreenSpinnerOpen, onFullscreenSpinnerClose]);
+  }, [
+    loading,
+    onFullscreenSpinnerOpen,
+    onFullscreenSpinnerClose,
+    onCloseManageActivities,
+    onCloseManageUsers,
+    setDetailAktivitasUser,
+  ]);
 
   if (!authToken || !userData) {
     return <Navigate to="/" replace />;

@@ -20,10 +20,12 @@ import DisclosureHeader from "../dependent/DisclosureHeader";
 import RoleBadge from "../dependent/RoleBadge";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
+import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
 
 const Logout = () => {
   const { onCloseManageUsers } = useManageUsers();
   const { onCloseManageActivities } = useManageActivities();
+  const { setDetailAktivitasUser } = useDetailAktivitasUser();
 
   // Utils
   const { onFullscreenSpinnerOpen, onFullscreenSpinnerClose } =
@@ -43,6 +45,7 @@ const Logout = () => {
       localStorage.removeItem("__user_data");
       onCloseManageUsers();
       onCloseManageActivities();
+      setDetailAktivitasUser(undefined);
       navigate("/");
     }
   }, [
@@ -51,6 +54,7 @@ const Logout = () => {
     onFullscreenSpinnerClose,
     onCloseManageUsers,
     onCloseManageActivities,
+    setDetailAktivitasUser,
   ]);
 
   return (

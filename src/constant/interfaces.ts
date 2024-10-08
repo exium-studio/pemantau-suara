@@ -40,7 +40,7 @@ export interface Interface__Credentials {
   password: string;
 }
 
-export interface Interface__dataStates {
+export interface Interface__DataStates {
   loading: boolean;
   error: boolean;
   data: any;
@@ -48,6 +48,14 @@ export interface Interface__dataStates {
   paginationData?: any;
   notFound?: boolean;
   loadingLoadMore?: boolean;
+}
+
+export interface Interface__DataConfig {
+  page: number;
+  setPage: (page: number) => void;
+  limit: number;
+  setLimit: (limit: number) => void;
+  paginationData?: any;
 }
 
 export interface Interface__SelectOption {

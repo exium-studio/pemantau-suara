@@ -1,6 +1,9 @@
 import { Icon, MenuItem, Text } from "@chakra-ui/react";
 import { Pencil } from "@phosphor-icons/react";
-import { Interface__dataStates } from "../../constant/interfaces";
+import {
+  Interface__DataConfig,
+  Interface__DataStates,
+} from "../../constant/interfaces";
 import { iconSize } from "../../constant/sizes";
 import useDataState from "../../hooks/useDataState";
 import getUserData from "../../lib/getUserData";
@@ -13,12 +16,15 @@ import CustomTableContainer from "./wrapper/CustomTableContainer";
 import PermissionTooltip from "./wrapper/PermissionTooltip";
 import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
 import RoleBadge from "../dependent/RoleBadge";
+import TableFooterConfig from "../dependent/TableFooterConfig";
+import CContainer from "./wrapper/CContainer";
 
 interface TableProps {
-  dataStates: Interface__dataStates;
+  dataStates: Interface__DataStates;
+  dataConfig: Interface__DataConfig;
 }
 
-const TableComponent = ({ dataStates }: TableProps) => {
+const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
   // console.log(dataStates?.data);
 
   // States
@@ -235,12 +241,26 @@ interface Props {
 }
 
 export default function UsersTable({ conditions, filterConfig }: Props) {
-  const { dataStates } = useDataState<any>({
+  const { dataStates, dataConfig } = useDataState<any>({
     url: `/api/pemantau-suara/dashboard/management/get-pengguna`,
-    payload: { search: filterConfig?.search?.split(" "), limit: 20 },
+    payload: { search: filterConfig?.search?.split(" ") },
     conditions: conditions,
     dependencies: [filterConfig],
   });
 
-  return <TableComponent dataStates={dataStates} />;
+  return (
+    <CContainer id="manage-users-body" overflowY={"auto"}>
+      <CContainer overflowY={"auto"} className={"scrollY"}>
+        <TableComponent dataStates={dataStates} dataConfig={dataConfig} />
+      </CContainer>
+
+      <TableFooterConfig
+        limitConfig={dataConfig?.limit}
+        setLimitConfig={dataConfig?.setLimit}
+        pageConfig={dataConfig?.page}
+        setPageConfig={dataConfig?.setPage}
+        paginationData={dataConfig?.paginationData}
+      />
+    </CContainer>
+  );
 }

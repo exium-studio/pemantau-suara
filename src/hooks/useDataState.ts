@@ -9,6 +9,8 @@ interface Props<T> {
   dependencies?: any[];
   conditions?: boolean;
   noRt?: boolean;
+  initialPage?: number;
+  initialLimit?: number;
 }
 
 const useDataState = <T>({
@@ -18,13 +20,21 @@ const useDataState = <T>({
   dependencies = [],
   conditions = true,
   noRt = false,
+  initialPage = 1,
+  initialLimit = 10,
 }: Props<T>) => {
   // States
   const [loadingLoadMore, setLoadingLoadMore] = useState<boolean>(false);
   const [data, setData] = useState<T | undefined>(initialData);
+
+  const [page, setPage] = useState(initialPage);
+  const [limit, setLimit] = useState(initialLimit);
   const [paginationData, setPaginationData] = useState<any>(undefined);
+
   const { rt } = useRenderTrigger();
+
   const abortControllerRef = useRef<AbortController | null>(null);
+
   const { req, response, loading, error, status } = useRequest({
     successToast: false,
   });
@@ -44,11 +54,12 @@ const useDataState = <T>({
       const method = payload ? "POST" : "GET";
       const data = {
         ...payload,
+        limit: limit,
       };
 
       const config = {
         method,
-        url,
+        url: `${url}?page=${page}`,
         data: method === "POST" ? data : undefined,
         signal: abortController.signal,
       };
@@ -57,7 +68,7 @@ const useDataState = <T>({
 
       req({ config });
     };
-  }, [payload, req, url]);
+  }, [payload, req, url, page, limit]);
 
   // Handle request via useEffect
   useEffect(() => {
@@ -71,7 +82,7 @@ const useDataState = <T>({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conditions, url, ...(noRt ? [] : [rt]), ...dependencies]);
+  }, [conditions, url, page, limit, ...(noRt ? [] : [rt]), ...dependencies]);
 
   // Handle response
   useEffect(() => {
@@ -98,6 +109,13 @@ const useDataState = <T>({
     data: data,
     paginationData: paginationData,
   };
+  const dataConfig = {
+    page: page,
+    setPage: setPage,
+    limit: limit,
+    setLimit: setLimit,
+    paginationData: paginationData,
+  };
 
   return {
     data,
@@ -110,6 +128,7 @@ const useDataState = <T>({
     setLoadingLoadMore,
     paginationData,
     dataStates,
+    dataConfig,
   };
 };
 

@@ -1,6 +1,6 @@
 import { Button, Icon, MenuItem, Text } from "@chakra-ui/react";
 import { Pencil } from "@phosphor-icons/react";
-import { Interface__dataStates } from "../../constant/interfaces";
+import { Interface__DataStates } from "../../constant/interfaces";
 import { iconSize } from "../../constant/sizes";
 import useDataState from "../../hooks/useDataState";
 import formatDate from "../../lib/formatDate";
@@ -18,7 +18,7 @@ import CustomTableContainer from "./wrapper/CustomTableContainer";
 import PermissionTooltip from "./wrapper/PermissionTooltip";
 
 interface TableProps {
-  dataStates: Interface__dataStates;
+  dataStates: Interface__DataStates;
 }
 
 const TableComponent = ({ dataStates }: TableProps) => {

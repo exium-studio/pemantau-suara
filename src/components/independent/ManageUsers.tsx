@@ -69,13 +69,7 @@ export default function ManageUsers() {
           bg={lightDarkColor}
           zIndex={20}
         />
-        <CContainer
-          flex={1}
-          px={5}
-          pb={5}
-          overflowY={"auto"}
-          className={"scrollY"}
-        >
+        <CContainer flex={1} px={5} pb={5} overflowY={"auto"}>
           <Box>
             <HStack
               overflowX={"auto"}

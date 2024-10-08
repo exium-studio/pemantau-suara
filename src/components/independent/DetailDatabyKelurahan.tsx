@@ -327,7 +327,7 @@ const PotensiSuaraTable = ({ dataStates }: any) => {
   );
 
   return (
-    <CustomTableContainer flex={0} maxH={"400px"}>
+    <CustomTableContainer flex={0} minH="fit-content" maxH={"400px"}>
       <CustomTable
         formattedHeader={formattedHeader}
         formattedBody={formattedBody}
@@ -468,7 +468,7 @@ const SuaraKPUTable = ({ dataStates }: any) => {
   });
 
   return (
-    <CustomTableContainer maxH={"400px"}>
+    <CustomTableContainer minH="fit-content" maxH={"400px"}>
       <CustomTable
         formattedHeader={formattedHeader}
         formattedBody={formattedBody}

@@ -506,6 +506,8 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
     conditions: isOpen,
     dependencies: [kodeKelurahan],
   });
+  const sw = useScreenWidth();
+  const isSmallScreen = sw < 768;
 
   // Render lateral
   const render = {
@@ -547,6 +549,7 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
       h={"100%"}
       w={"100%"}
       maxW={"450px"}
+      minW={isSmallScreen ? "300px" : ""}
       overflowY={"auto"}
       overflowX={"clip"}
       className="scrollY"
@@ -630,6 +633,7 @@ export default function DetailDatabyKelurahan() {
   const layerData = detailGeoJSONData?.layer;
   const { removeFromHighlightedKecamatanIndex } = useHighlighedKecamatan();
   const sw = useScreenWidth();
+  const isSmallScreen = sw < 480;
 
   return (
     <FloatingContainer
@@ -677,7 +681,6 @@ export default function DetailDatabyKelurahan() {
           columns={gridColumns}
           flex={1}
           h={"100%"}
-          w={gridColumns && sw < 900 ? "900px" : ""}
           gap={0}
           overflowX={sw > 900 ? "clip" : "auto"}
           className="noScroll"

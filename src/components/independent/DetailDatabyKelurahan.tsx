@@ -633,7 +633,7 @@ export default function DetailDatabyKelurahan() {
   const layerData = detailGeoJSONData?.layer;
   const { removeFromHighlightedKecamatanIndex } = useHighlighedKecamatan();
   const sw = useScreenWidth();
-  const isSmallScreen = sw < 480;
+  // const isSmallScreen = sw < 480;
 
   return (
     <FloatingContainer

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import geoJSONLayers from "../../constant/geoJSONLayers";
 import useGeoJSONKecamatan from "../../global/useGeoJSONKecamatan";
 import Maps from "../dependent/Maps";
+import geoJSONKelurahanSemarang from "../../constant/geoJSONKelurahanSemarang";
 
 export default function DashboardMap() {
   // Fetch all geoJSON data
@@ -26,10 +27,14 @@ export default function DashboardMap() {
     }
   }, [geoJSONKecamatan, setGeoJSONKecamatan]);
 
+  // console.log(
+  //   geoJSONKecamatan?.flatMap((kecamatan: any) => kecamatan.features)
+  // );
+
   return (
     <Box position={"relative"}>
       <Maps
-        geoJSONData={geoJSONKecamatan}
+        geoJSONData={geoJSONKelurahanSemarang}
         latitude={-7.02}
         longitude={110.38}
         zoom={11}

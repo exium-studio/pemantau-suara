@@ -24,12 +24,11 @@ export default function Dashboard() {
       align={"stretch"}
       overflow={"clip"}
     >
-      <CContainer justify={"center"} align={"center"}>
+      <CContainer justify={"center"} align={"center"} overflow={"clip"}>
         <DashboardMap />
       </CContainer>
 
       {/* Map Overlays */}
-
       {/* Left */}
       <HStack
         p={4}

@@ -2,8 +2,8 @@ import { Box, useColorMode } from "@chakra-ui/react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { Map, MapRef, Marker } from "react-map-gl";
 import useSearchAddress from "../../global/useSearchAddress";
-import LayerHoveredAndClicked from "../independent/mapLayer/LayerHoveredAndClicked";
-import LayerKecamaatanSemarang from "../independent/mapLayer/LayerKecamaatanSemarang";
+import LayerHoveredAndClickedKelurahan from "../independent/mapLayer/LayerHoveredAndClickedKelurahan";
+import LayerKelurahanSemarang from "../independent/mapLayer/LayerKelurahanSemarang";
 import getUserData from "../../lib/getUserData";
 
 interface Props {
@@ -36,17 +36,8 @@ export default function Maps({
   const isSuperAdmin = userData?.role?.id === 1;
   const filteredGeoJSON = isSuperAdmin
     ? geoJSONData
-    : geoJSONData?.map((kecamatan: any) => {
-        // Filter kelurahan berdasarkan allowedKelurahan
-        const filteredFeatures = kecamatan?.features?.filter((kelurahan: any) =>
-          allowedKelurahan?.includes(kelurahan?.properties?.village_code)
-        );
-
-        // Kembalikan objek kecamatan dengan fitur yang terfilter
-        return {
-          ...kecamatan,
-          features: filteredFeatures, // Ganti features dengan yang sudah difilter
-        };
+    : geoJSONData?.filter((kelurahan: any) => {
+        return allowedKelurahan?.includes(kelurahan?.properties?.village_code);
       }) || [];
 
   // Handle render map component
@@ -119,13 +110,13 @@ export default function Maps({
           )}
 
           {/* Layer all geoJSON data */}
-          <LayerKecamaatanSemarang geoJSONData={filteredGeoJSON} />
-
-          {/* Hovered & clicked layers */}
-          <LayerHoveredAndClicked
+          <LayerKelurahanSemarang
             mapRef={mapRef}
             geoJSONData={filteredGeoJSON}
           />
+
+          {/* Hovered & clicked layers */}
+          <LayerHoveredAndClickedKelurahan />
         </>
       )}
     </Map>

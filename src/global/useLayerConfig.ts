@@ -15,7 +15,7 @@ interface Actions {
 
 const useLayerConfig = create<State & Actions>((set) => ({
   tahun: new Date().getFullYear(),
-  kategoriSuara: { value: 1, label: "Pemilu" },
+  kategoriSuara: { value: 2, label: "Pemilu" },
   layer: { value: 1, label: "Aktivitas" },
 
   setTahun: (newState) =>

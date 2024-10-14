@@ -2,9 +2,9 @@ import { Box, useColorMode } from "@chakra-ui/react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { Map, MapRef, Marker } from "react-map-gl";
 import useSearchAddress from "../../global/useSearchAddress";
+import getUserData from "../../lib/getUserData";
 import LayerHoveredAndClickedKelurahan from "../independent/mapLayer/LayerHoveredAndClickedKelurahan";
 import LayerKelurahanSemarang from "../independent/mapLayer/LayerKelurahanSemarang";
-import getUserData from "../../lib/getUserData";
 
 interface Props {
   geoJSONData: any;
@@ -79,12 +79,12 @@ export default function Maps({
       doubleClickZoom={false}
       pitchWithRotate={false}
       dragRotate={false}
-      // {...viewState}
       pitch={0}
       style={{ width: "100vw", height: "100vh", ...style }}
       mapStyle={mapStyle}
-      // onMove={(evt) => setViewState(evt.viewState)}
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+      // onMove={(evt) => setViewState(evt.viewState)}
+      // {...viewState}
     >
       {isMapLoaded && (
         <>

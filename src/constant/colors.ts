@@ -54,7 +54,19 @@ const statusKaryawanColorScheme = {
   Training: "green",
 };
 
+const statusAktivitasColor = [
+  {
+    label: "Alat Peraga",
+    color: "#00CCFF",
+  },
+  {
+    label: "Sosialisasi",
+    color: "#0C6091",
+  },
+];
+
 export {
+  statusAktivitasColor,
   useLightDarkColorAlpha,
   useContentBgColor,
   useWhiteDarkColor,

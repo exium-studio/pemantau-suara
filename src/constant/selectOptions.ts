@@ -179,7 +179,10 @@ const optionsRole = [
   { value: 3, label: "Penggerak" },
 ];
 
-const optionsKategoriSuara = [{ value: 1, label: "Pemilu" }];
+const optionsKategoriSuara = [
+  { value: 1, label: "Pilkada" },
+  { value: 2, label: "Pemilu" },
+];
 
 const optionsLayer = [
   { value: 1, label: "Aktivitas" },

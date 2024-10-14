@@ -1,5 +1,5 @@
 import { useColorMode } from "@chakra-ui/react";
-import { RefObject, useCallback, useEffect } from "react";
+import { RefObject, useCallback, useEffect, useMemo } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
 import useselectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../../hooks/useDataState";
@@ -17,7 +17,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
 
   // Globals
   const { setSelectedGeoJSONKelurahan } = useselectedGeoJSONKelurahan();
-  const { tahun, kategoriSuara } = useLayerConfig();
+  const { tahun, kategoriSuara, layer } = useLayerConfig();
 
   // States
   const { loading, data } = useDataState<any>({
@@ -61,51 +61,56 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     const map = mapRef.current?.getMap();
     if (!map) return;
 
-    geoJSONData.forEach((layer: any, i: number) => {
+    geoJSONData.forEach((geoJSON: any, i: number) => {
       const layerId = `geojson-layer-${i}`;
-      map.on("click", layerId, handleLayerClick(layer));
+      map.on("click", layerId, handleLayerClick(geoJSON));
 
       return () => {
-        map.off("click", layerId, handleLayerClick(layer));
+        map.off("click", layerId, handleLayerClick(geoJSON));
       };
     });
   }, [mapRef, geoJSONData, handleLayerClick]);
 
-  return (
-    <>
-      {geoJSONData.map((layer: any, i: number) => {
-        const statusAktivitasColor = `#${
-          data?.[i]?.status_aktivitas_kelurahan?.color || "#fff"
-        }`;
-        const suaraKPUTerbanyakColor = `#${
-          data?.[i]?.suara_kpu_terbanyak?.color || "#fff"
-        }`;
+  const render = useMemo(
+    () => (
+      <>
+        {geoJSONData.map((geoJSON: any, i: number) => {
+          const statusAktivitasColor = `#${
+            data?.[i]?.status_aktivitas_kelurahan?.color || "fff"
+          }`;
+          const suaraKPUTerbanyakColor = `#${
+            data?.[i]?.suara_kpu_terbanyak?.partai?.color || "fff"
+          }`;
 
-        const fillColor = (() => {
-          switch (layer.value) {
-            case "Aktivitas":
-              return statusAktivitasColor;
-            case "Suara KPU":
-              return suaraKPUTerbanyakColor;
-            default:
-              return "#ffffff";
-          }
-        })();
+          const fillColor = (() => {
+            switch (layer?.label) {
+              case "Aktivitas":
+                return statusAktivitasColor;
+              case "Suara KPU":
+                return suaraKPUTerbanyakColor;
+              default:
+                return "#FFFFFF";
+            }
+          })();
 
-        return (
-          <Source key={i} type="geojson" data={layer}>
-            <Layer
-              id={`geojson-layer-${i}`}
-              type="fill"
-              paint={{
-                "fill-color": fillColor,
-                "fill-opacity": 0.6,
-                "fill-outline-color": colorMode === "dark" ? "#fff" : "#444",
-              }}
-            />
-          </Source>
-        );
-      })}
-    </>
+          return (
+            <Source key={i} type="geojson" data={geoJSON}>
+              <Layer
+                id={`geojson-layer-${i}`}
+                type="fill"
+                paint={{
+                  "fill-color": fillColor,
+                  "fill-opacity": 0.6,
+                  "fill-outline-color": colorMode === "dark" ? "#fff" : "#444",
+                }}
+              />
+            </Source>
+          );
+        })}
+      </>
+    ),
+    [colorMode, data, geoJSONData, layer]
   );
+
+  return render;
 }

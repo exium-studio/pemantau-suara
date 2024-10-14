@@ -1,4 +1,4 @@
-import useDetailGeoJSONData from "../global/useDetailGeoJSONData";
+import useselectedGeoJSONKelurahan from "../global/useSelectedGeoJSONKelurahan";
 import useHighlighedKecamatan from "../global/useHighlighedKecamatan";
 import useManageActivities from "../global/useManageActivities";
 import useManageUsers from "../global/useManageUsers";
@@ -14,7 +14,7 @@ const useAuth = () => {
     useRequest();
   const { onCloseManageUsers } = useManageUsers();
   const { onCloseManageActivities } = useManageActivities();
-  const { setDetailGeoJSONData } = useDetailGeoJSONData();
+  const { setSelectedGeoJSONKelurahan } = useselectedGeoJSONKelurahan();
   const { setHighlightedKecamatanIndex } = useHighlighedKecamatan();
 
   function login({ url, payload }: authParams) {
@@ -27,7 +27,7 @@ const useAuth = () => {
   }
 
   function logout({ url }: authParams) {
-    setDetailGeoJSONData(undefined);
+    setSelectedGeoJSONKelurahan(undefined);
     onCloseManageUsers();
     onCloseManageActivities();
     setHighlightedKecamatanIndex([]);

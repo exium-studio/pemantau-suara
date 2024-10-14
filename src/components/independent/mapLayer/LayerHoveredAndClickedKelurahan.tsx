@@ -1,10 +1,10 @@
 import { Layer, Source } from "react-map-gl";
-import useDetailGeoJSONData from "../../../global/useDetailGeoJSONData";
+import useselectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
 
 export default function LayerHoveredAndClicked() {
-  const { detailGeoJSONData } = useDetailGeoJSONData();
+  const { selectedGeoJSONKelurahan } = useselectedGeoJSONKelurahan();
 
-  console.log(detailGeoJSONData);
+  console.log(selectedGeoJSONKelurahan);
 
   return (
     <>
@@ -27,12 +27,12 @@ export default function LayerHoveredAndClicked() {
       )} */}
 
       {/* Layer clicked feature */}
-      {detailGeoJSONData && (
+      {selectedGeoJSONKelurahan && (
         <Source
           type="geojson"
           data={{
             type: "FeatureCollection",
-            features: [detailGeoJSONData?.geoJSONData],
+            features: [selectedGeoJSONKelurahan?.geoJSONData],
           }}
         >
           <Layer

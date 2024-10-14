@@ -20,7 +20,7 @@ import { useEffect, useRef, useState } from "react";
 import chartColors from "../../constant/chartColors";
 import { useLightDarkColor } from "../../constant/colors";
 import useDataKelurahanComparisonMode from "../../global/useDataKelurahanComparisonMode";
-import useDetailGeoJSONData from "../../global/useDetailGeoJSONData";
+import useselectedGeoJSONKelurahan from "../../global/useSelectedGeoJSONKelurahan";
 import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
 import useDataState from "../../hooks/useDataState";
 import useScreenWidth from "../../hooks/useScreenWidth";
@@ -591,9 +591,10 @@ export default function DetailDatabyKelurahan() {
   const lightDarkColor = useLightDarkColor();
 
   // States
-  const { detailGeoJSONData, setDetailGeoJSONData } = useDetailGeoJSONData();
+  const { selectedGeoJSONKelurahan, setSelectedGeoJSONKelurahan } =
+    useselectedGeoJSONKelurahan();
   const kodeKelurahan =
-    detailGeoJSONData?.geoJSONData?.properties?.village_code;
+    selectedGeoJSONKelurahan?.geoJSONData?.properties?.village_code;
   const { dataKelurahanComparaisonMode } = useDataKelurahanComparisonMode();
   const [gridColumns, setGridColumns] = useState<number>(1);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -623,14 +624,14 @@ export default function DetailDatabyKelurahan() {
   // Utils
   const { isOpen, onOpen, onClose } = useDisclosure();
   useEffect(() => {
-    if (detailGeoJSONData) {
+    if (selectedGeoJSONKelurahan) {
       onOpen();
     } else {
       onClose();
     }
-  }, [detailGeoJSONData, setDetailGeoJSONData, onOpen, onClose]);
-  const geoData = detailGeoJSONData?.geoJSONData?.properties;
-  const layerData = detailGeoJSONData?.layer;
+  }, [selectedGeoJSONKelurahan, setSelectedGeoJSONKelurahan, onOpen, onClose]);
+  const geoData = selectedGeoJSONKelurahan?.geoJSONData?.properties;
+  const layerData = selectedGeoJSONKelurahan?.layer;
   const { removeFromHighlightedKecamatanIndex } = useHighlighedKecamatan();
   const sw = useScreenWidth();
   // const isSmallScreen = sw < 480;
@@ -651,7 +652,7 @@ export default function DetailDatabyKelurahan() {
           onClose={() => {
             onClose();
             setTimeout(() => {
-              setDetailGeoJSONData(undefined);
+              setSelectedGeoJSONKelurahan(undefined);
               removeFromHighlightedKecamatanIndex(-1);
             }, 200);
           }}

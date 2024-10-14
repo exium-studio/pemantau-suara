@@ -1,7 +1,7 @@
 import { useColorMode } from "@chakra-ui/react";
 import { RefObject, useCallback, useEffect } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
-import useDetailGeoJSONData from "../../../global/useDetailGeoJSONData";
+import useselectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../../hooks/useDataState";
 import useFullscreenSpinner from "../../../global/useFullscreenSpinner";
 import useLayerConfig from "../../../global/useLayerConfig";
@@ -23,7 +23,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   });
 
   // Globals
-  const { setDetailGeoJSONData } = useDetailGeoJSONData();
+  const { setSelectedGeoJSONKelurahan } = useselectedGeoJSONKelurahan();
   const { tahun, kategoriSuara } = useLayerConfig();
 
   // Utils
@@ -44,10 +44,13 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     (layer: any) => (event: any) => {
       const clickedFeature = event.features[0];
       if (clickedFeature) {
-        setDetailGeoJSONData({ layer: layer, geoJSONData: clickedFeature });
+        setSelectedGeoJSONKelurahan({
+          layer: layer,
+          geoJSONData: clickedFeature,
+        });
       }
     },
-    [setDetailGeoJSONData]
+    [setSelectedGeoJSONKelurahan]
   );
 
   // Menambahkan event listener pada peta ketika komponen dirender

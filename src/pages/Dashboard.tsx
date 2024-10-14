@@ -14,6 +14,20 @@ import { useLightDarkColor } from "../constant/colors";
 import { iconSize } from "../constant/sizes";
 import useSearchMode from "../global/useSearchMode";
 import useIsSmScreen from "../hooks/useIsSmScreen";
+import useLayerConfig from "../global/useLayerConfig";
+
+const LayerConfig = () => {
+  const { toggleLayerConfig } = useLayerConfig();
+
+  return (
+    <IconButton
+      aria-label="Layer Config"
+      icon={<Icon as={Stack} fontSize={iconSize} />}
+      className="btn"
+      onClick={toggleLayerConfig}
+    />
+  );
+};
 
 export default function Dashboard() {
   // SX
@@ -35,6 +49,9 @@ export default function Dashboard() {
       </CContainer>
 
       {/* Map Overlays */}
+      {/* Layer Config */}
+      <LayerConfigDisclosure />
+
       {/* Left */}
       <HStack
         p={4}
@@ -74,6 +91,7 @@ export default function Dashboard() {
                 </Box>
               </Tooltip>
             </HStack>
+
             {/* Layer Config */}
             <HStack
               shadow={"sm"}
@@ -83,13 +101,7 @@ export default function Dashboard() {
               borderRadius={12}
               bg={lightDarkColor}
             >
-              <LayerConfigDisclosure>
-                <IconButton
-                  aria-label="Layer Config"
-                  icon={<Icon as={Stack} fontSize={iconSize} />}
-                  className="btn"
-                />
-              </LayerConfigDisclosure>
+              <LayerConfig />
             </HStack>
             {/* Navs */}
             <Navs />

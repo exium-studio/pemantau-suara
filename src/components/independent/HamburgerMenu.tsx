@@ -10,15 +10,30 @@ import {
   Text,
   useColorMode,
 } from "@chakra-ui/react";
-import { useLightDarkColor } from "../../constant/colors";
 import {
   ClockCounterClockwise,
   List,
   Moon,
+  Stack,
   Sun,
   User,
 } from "@phosphor-icons/react";
+import { useLightDarkColor } from "../../constant/colors";
 import { iconSize } from "../../constant/sizes";
+import useLayerConfig from "../../global/useLayerConfig";
+
+const LayerConfig = () => {
+  const { toggleLayerConfig } = useLayerConfig();
+
+  return (
+    <MenuItem onClick={toggleLayerConfig}>
+      <HStack w={"100%"} justify={"space-between"}>
+        <Text>Layer Config</Text>
+        <Icon as={Stack} fontSize={iconSize} />
+      </HStack>
+    </MenuItem>
+  );
+};
 
 export default function HamburgerMenu() {
   // SX
@@ -71,15 +86,7 @@ export default function HamburgerMenu() {
 
           <MenuDivider />
 
-          <MenuItem onClick={toggleColorMode}>
-            <HStack w={"100%"} justify={"space-between"}>
-              <Text>{colorMode === "dark" ? "Mode Terang" : "Mode Gelap"}</Text>
-              <Icon
-                as={colorMode === "dark" ? Sun : Moon}
-                fontSize={iconSize}
-              />
-            </HStack>
-          </MenuItem>
+          <LayerConfig />
         </MenuList>
       </Menu>
     </HStack>

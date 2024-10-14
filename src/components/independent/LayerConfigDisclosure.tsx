@@ -1,14 +1,10 @@
 import {
-  Box,
   Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Tooltip,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { cloneElement } from "react";
 import * as yup from "yup";
 import useLayerConfig from "../../global/useLayerConfig";
 import SelectKategoriSuara from "../dependent/dedicated/SelectKategoriSuara";
@@ -19,12 +15,8 @@ import RequiredForm from "../form/RequiredForm";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
 
-interface Props {
-  children?: any;
-}
-
-export default function LayerConfigDisclosure({ children }: Props) {
-  const { isOpen, onClose, onToggle } = useDisclosure();
+export default function LayerConfigDisclosure() {
+  const { layerConfig, onCloseLayerConfig } = useLayerConfig();
 
   // Globals
   const { tahun, setTahun, kategoriSuara, setKategoriSuara, layer, setLayer } =
@@ -51,95 +43,81 @@ export default function LayerConfigDisclosure({ children }: Props) {
   });
 
   return (
-    <>
-      <Tooltip label={"Layer Config"} placement="bottom" mt={1} openDelay={500}>
-        <Box onClick={onToggle} color={isOpen ? "p.500" : ""}>
-          {cloneElement(children, {
-            color: isOpen ? "p.500" : "",
-          })}
-        </Box>
-      </Tooltip>
+    <FloatingContainer
+      maxW={"264px"}
+      top={"74px"}
+      right={layerConfig ? "16px" : "calc(-264px + -30px)"}
+      // zIndex={3}
+    >
+      <DisclosureHeader
+        title="Layer Config"
+        disableBackOnClose
+        onClose={onCloseLayerConfig}
+        zIndex={20}
+      />
 
-      <FloatingContainer
-        maxW={"264px"}
-        top={"74px"}
-        right={isOpen ? "16px" : "calc(-264px + -30px)"}
-        zIndex={3}
-      >
-        <DisclosureHeader
-          title="Layer Config"
-          disableBackOnClose
-          onClose={onClose}
-          zIndex={20}
-        />
+      <CContainer px={5} pb={5} overflowY={"auto"} className={"scrollY"}>
+        <form id="layerConfigForm" onSubmit={formik.handleSubmit}>
+          <FormControl mb={4} isInvalid={!!formik.errors.tahun}>
+            <FormLabel>
+              Tahun
+              <RequiredForm />
+            </FormLabel>
+            <NumberInput
+              name="tahun"
+              placeholder={`${new Date().getFullYear()}`}
+              onChangeSetter={(input) => {
+                formik.setFieldValue("tahun", input);
+              }}
+              inputValue={formik.values.tahun}
+              noFormat
+            />
+            <FormErrorMessage>{formik.errors.tahun as string}</FormErrorMessage>
+          </FormControl>
 
-        <CContainer px={5} pb={5} overflowY={"auto"} className={"scrollY"}>
-          <form id="layerConfigForm" onSubmit={formik.handleSubmit}>
-            <FormControl mb={4} isInvalid={!!formik.errors.tahun}>
-              <FormLabel>
-                Tahun
-                <RequiredForm />
-              </FormLabel>
-              <NumberInput
-                name="tahun"
-                placeholder={`${new Date().getFullYear()}`}
-                onChangeSetter={(input) => {
-                  formik.setFieldValue("tahun", input);
-                }}
-                inputValue={formik.values.tahun}
-                noFormat
-              />
-              <FormErrorMessage>
-                {formik.errors.tahun as string}
-              </FormErrorMessage>
-            </FormControl>
+          <FormControl mb={4} isInvalid={!!formik.errors.kategori_suara}>
+            <FormLabel>
+              Kategori Suara
+              <RequiredForm />
+            </FormLabel>
+            <SelectKategoriSuara
+              name="kategori_suara"
+              onConfirm={(input) => {
+                formik.setFieldValue("kategori_suara", input);
+              }}
+              inputValue={formik.values.kategori_suara}
+            />
+            <FormErrorMessage>
+              {formik.errors.kategori_suara as string}
+            </FormErrorMessage>
+          </FormControl>
 
-            <FormControl mb={4} isInvalid={!!formik.errors.kategori_suara}>
-              <FormLabel>
-                Kategori Suara
-                <RequiredForm />
-              </FormLabel>
-              <SelectKategoriSuara
-                name="kategori_suara"
-                onConfirm={(input) => {
-                  formik.setFieldValue("kategori_suara", input);
-                }}
-                inputValue={formik.values.kategori_suara}
-              />
-              <FormErrorMessage>
-                {formik.errors.kategori_suara as string}
-              </FormErrorMessage>
-            </FormControl>
+          <FormControl mb={6} isInvalid={!!formik.errors.layer}>
+            <FormLabel>
+              Layer
+              <RequiredForm />
+            </FormLabel>
+            <SelectLayer
+              name="layer"
+              onConfirm={(input) => {
+                formik.setFieldValue("layer", input);
+              }}
+              inputValue={formik.values.layer}
+            />
+            <FormErrorMessage>{formik.errors.layer as string}</FormErrorMessage>
+          </FormControl>
+        </form>
 
-            <FormControl mb={6} isInvalid={!!formik.errors.layer}>
-              <FormLabel>
-                Layer
-                <RequiredForm />
-              </FormLabel>
-              <SelectLayer
-                name="layer"
-                onConfirm={(input) => {
-                  formik.setFieldValue("layer", input);
-                }}
-                inputValue={formik.values.layer}
-              />
-              <FormErrorMessage>
-                {formik.errors.layer as string}
-              </FormErrorMessage>
-            </FormControl>
-          </form>
-
-          <Button
-            type="submit"
-            form="layerConfigForm"
-            w={"100%"}
-            colorScheme="ap"
-            className="btn-ap clicky"
-          >
-            Terapkan
-          </Button>
-        </CContainer>
-      </FloatingContainer>
-    </>
+        <Button
+          type="submit"
+          form="layerConfigForm"
+          w={"100%"}
+          colorScheme="ap"
+          className="btn-ap clicky"
+        >
+          Terapkan
+        </Button>
+      </CContainer>
+    </FloatingContainer>
   );
 }

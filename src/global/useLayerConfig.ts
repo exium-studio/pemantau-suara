@@ -2,21 +2,33 @@ import { create } from "zustand";
 import { Interface__SelectOption } from "../constant/interfaces";
 
 interface State {
+  layerConfig: boolean;
+
   tahun: number | undefined;
   kategoriSuara: Interface__SelectOption | undefined;
   layer: Interface__SelectOption | undefined;
 }
 
 interface Actions {
+  toggleLayerConfig: () => void;
+  onCloseLayerConfig: () => void;
   setTahun: (newState: State["tahun"]) => void;
   setKategoriSuara: (newState: State["kategoriSuara"]) => void;
   setLayer: (newState: State["layer"]) => void;
 }
 
 const useLayerConfig = create<State & Actions>((set) => ({
+  layerConfig: false,
+
   tahun: new Date().getFullYear(),
   kategoriSuara: { value: 2, label: "Pemilu" },
   layer: { value: 1, label: "Aktivitas" },
+
+  toggleLayerConfig: () =>
+    set((ps) => ({
+      layerConfig: !ps.layerConfig,
+    })),
+  onCloseLayerConfig: () => set({ layerConfig: false }),
 
   setTahun: (newState) =>
     set(() => ({

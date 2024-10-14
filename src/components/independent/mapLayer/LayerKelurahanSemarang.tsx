@@ -129,7 +129,20 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
                       : kode_kelurahan
                       ? 0.2
                       : 0.6,
-                  "fill-outline-color": colorMode === "dark" ? "#fff" : "#444",
+                  // "fill-outline-color": colorMode === "dark" ? "#fff" : "#444",
+                }}
+              />
+
+              <Layer
+                id={`geojson-layer-line-${i}`}
+                type="line"
+                paint={{
+                  "line-color": colorMode === "dark" ? "#fff" : "#444", // Warna outline
+                  "line-width": 1, // Ketebalan garis outline
+                }}
+                layout={{
+                  "line-cap": "round",
+                  "line-join": "round",
                 }}
               />
             </Source>

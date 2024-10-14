@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   HStack,
   Icon,
@@ -13,7 +14,7 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { CaretDown, Circle } from "@phosphor-icons/react";
+import { CaretDown } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import chartColors from "../../constant/chartColors";
 import { useLightDarkColor } from "../../constant/colors";
@@ -86,7 +87,7 @@ const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
 //   );
 // };
 
-const PotensiSuaraChart = ({ data }: any) => {
+const AktivitasChart = ({ data }: any) => {
   const labels = data?.map((item: any) => `RW ${item.rw}`);
   const colors = Array.from({ length: data?.length }).map(
     (_, i) => chartColors[i % chartColors.length]
@@ -140,7 +141,13 @@ const PotensiSuaraChart = ({ data }: any) => {
         {data?.map((item: any, i: number) => (
           <Tooltip key={i} label={formatNumber(item?.potensi_suara)}>
             <HStack cursor={"default"}>
-              <Icon as={Circle} weight="fill" color={colors[i]} fontSize={8} />
+              <Box
+                w={"8px"}
+                h={"8px"}
+                bg={colors[i]}
+                borderRadius={"full"}
+                border={"1px solid var(--divider3)"}
+              />
               <Text fontSize={"sm"} opacity={0.6}>
                 {`RW ${item?.rw}`}
               </Text>
@@ -151,7 +158,7 @@ const PotensiSuaraChart = ({ data }: any) => {
     </CContainer>
   );
 };
-const PotensiSuaraTable = ({ dataStates }: any) => {
+const AktivitasTable = ({ dataStates }: any) => {
   const formattedHeader = [
     // {
     //   th: "#",
@@ -397,11 +404,12 @@ const SuaraKPUChart = ({ data, dataStates }: any) => {
           {data?.map((item: any, i: number) => (
             <Tooltip key={i} label={formatNumber(item?.jumlah_suara)}>
               <HStack cursor={"default"}>
-                <Icon
-                  as={Circle}
-                  weight="fill"
-                  color={colors[i]}
-                  fontSize={8}
+                <Box
+                  w={"8px"}
+                  h={"8px"}
+                  bg={colors[i]}
+                  borderRadius={"full"}
+                  border={"1px solid var(--divider3)"}
                 />
                 <Text fontSize={"sm"} opacity={0.6}>
                   {item?.partai?.nama}
@@ -521,8 +529,8 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
       <CContainer px={5} {...props}>
         {jenisData === "potensi_suara" && (
           <>
-            <PotensiSuaraChart data={dataStates?.data?.chart} />
-            <PotensiSuaraTable dataStates={dataStates} />
+            <AktivitasChart data={dataStates?.data?.chart} />
+            <AktivitasTable dataStates={dataStates} />
           </>
         )}
 
@@ -553,7 +561,7 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
       className="scrollY"
       // border={"1px solid yellow"}
     >
-      <Wrap px={5} mb={6} align={"center"} justify={"space-between"}>
+      <Wrap px={5} mb={2} align={"center"} justify={"space-between"}>
         <JenisDataMenu
           jenisDataProps={jenisDataProps}
           jenisData={jenisData}

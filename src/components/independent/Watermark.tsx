@@ -18,7 +18,7 @@ export default function Watermark() {
       gap={0}
       justify={sw < 500 && pathname !== "/" ? "start" : "center"}
       px={4}
-      // border={"1px solid red"}
+      pr={"calc(40px + 32px)"}
     >
       <Image src="/asset/logo.png" w={"30px"} />
       <Wrap spacingY={0}>

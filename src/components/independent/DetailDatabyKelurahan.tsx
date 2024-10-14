@@ -56,7 +56,7 @@ const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
           }}
           color={jenisData === "potensi_suara" ? "p.500" : ""}
         >
-          Potensi Suara
+          Aktivitas
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -486,7 +486,7 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
   // States
   const jenisDataProps: Record<string, any> = {
     potensi_suara: {
-      title: "Potensi Suara",
+      title: "Aktivitas",
       url: `/api/pemantau-suara/dashboard/monitoring/potensi-suara`,
     },
     suara_kpu: {

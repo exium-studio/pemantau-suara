@@ -63,6 +63,7 @@ const LegendComponent: React.FC = () => {
             zIndex={2}
             onClick={onToggle}
             className="btn"
+            color={isOpen ? "p.500" : ""}
           />
         </Box>
       </Box>

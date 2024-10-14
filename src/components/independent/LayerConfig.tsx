@@ -58,6 +58,7 @@ export default function LayerConfig() {
           icon={<Icon as={Stack} fontSize={iconSize} />}
           className="btn"
           onClick={onToggle}
+          color={isOpen ? "p.500" : ""}
         />
       </Tooltip>
 

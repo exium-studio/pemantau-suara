@@ -596,8 +596,6 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
     conditions: isOpen,
     dependencies: [kodeKelurahan],
   });
-  const sw = useScreenWidth();
-  const isSmallScreen = sw < 768;
 
   // Render lateral
   const render = {
@@ -638,11 +636,9 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
       h={"100%"}
       w={"100%"}
       maxW={"450px"}
-      minW={isSmallScreen ? "300px" : ""}
       overflowY={"auto"}
       overflowX={"clip"}
       className="scrollY"
-      // border={"1px solid yellow"}
     >
       <Wrap px={5} mb={2} align={"center"} justify={"space-between"}>
         <JenisDataMenu

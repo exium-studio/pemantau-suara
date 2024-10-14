@@ -1,6 +1,5 @@
 import {
   Button,
-  ButtonGroup,
   HStack,
   Icon,
   Menu,
@@ -8,7 +7,6 @@ import {
   MenuItem,
   MenuList,
   SimpleGrid,
-  Switch,
   Text,
   Tooltip,
   useDisclosure,
@@ -20,8 +18,8 @@ import { useEffect, useRef, useState } from "react";
 import chartColors from "../../constant/chartColors";
 import { useLightDarkColor } from "../../constant/colors";
 import useDataKelurahanComparisonMode from "../../global/useDataKelurahanComparisonMode";
-import useselectedGeoJSONKelurahan from "../../global/useSelectedGeoJSONKelurahan";
 import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
+import useselectedGeoJSONKelurahan from "../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../hooks/useDataState";
 import useScreenWidth from "../../hooks/useScreenWidth";
 import formatDate from "../../lib/formatDate";
@@ -72,21 +70,21 @@ const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
     </Menu>
   );
 };
-const ToggleComparisonMode = () => {
-  const { dataKelurahanComparaisonMode, toggleDataKelurahanComparisonMode } =
-    useDataKelurahanComparisonMode();
+// const ToggleComparisonMode = () => {
+//   const { dataKelurahanComparaisonMode, toggleDataKelurahanComparisonMode } =
+//     useDataKelurahanComparisonMode();
 
-  return (
-    <HStack>
-      <Switch
-        isChecked={dataKelurahanComparaisonMode}
-        onChange={toggleDataKelurahanComparisonMode}
-        colorScheme="ap"
-      ></Switch>
-      <Text>Bandingkan</Text>
-    </HStack>
-  );
-};
+//   return (
+//     <HStack>
+//       <Switch
+//         isChecked={dataKelurahanComparaisonMode}
+//         onChange={toggleDataKelurahanComparisonMode}
+//         colorScheme="ap"
+//       ></Switch>
+//       <Text>Bandingkan</Text>
+//     </HStack>
+//   );
+// };
 
 const PotensiSuaraChart = ({ data }: any) => {
   const labels = data?.map((item: any) => `RW ${item.rw}`);
@@ -630,8 +628,7 @@ export default function DetailDatabyKelurahan() {
       onClose();
     }
   }, [selectedGeoJSONKelurahan, setSelectedGeoJSONKelurahan, onOpen, onClose]);
-  const geoData = selectedGeoJSONKelurahan?.geoJSONData?.properties;
-  const layerData = selectedGeoJSONKelurahan?.layer;
+  const geoData = selectedGeoJSONKelurahan?.geoJSON?.properties;
   const { removeFromHighlightedKecamatanIndex } = useHighlighedKecamatan();
   const sw = useScreenWidth();
   // const isSmallScreen = sw < 480;
@@ -665,19 +662,19 @@ export default function DetailDatabyKelurahan() {
 
         <HStack>
           <HStack px={5}>
-            <Icon
+            {/* <Icon
               as={Circle}
               weight="fill"
               color={layerData?.color}
               fontSize={12}
-            />
+            /> */}
             <Text opacity={0.6}>{geoData?.district}</Text>
           </HStack>
         </HStack>
       </CContainer>
 
       {/* Content Body */}
-      <CContainer overflowY={"auto"} className="scrollX">
+      <CContainer overflowY={"auto"} className="scrollX" pb={5}>
         <SimpleGrid
           columns={gridColumns}
           flex={1}
@@ -699,9 +696,9 @@ export default function DetailDatabyKelurahan() {
         </SimpleGrid>
       </CContainer>
 
-      <ButtonGroup p={5}>
+      {/* <ButtonGroup p={5}>
         <ToggleComparisonMode />
-      </ButtonGroup>
+      </ButtonGroup> */}
     </FloatingContainer>
   );
 }

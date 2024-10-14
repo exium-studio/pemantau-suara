@@ -123,7 +123,7 @@ const AktivitasChart = ({ data }: any) => {
         </Text>
 
         <VStack flex={"1 0 0"} position={"relative"}>
-          <VStack w={"100%"} className="doughnutChartContainer">
+          <VStack zIndex={2} w={"100%"} className="doughnutChartContainer">
             <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
           </VStack>
 
@@ -453,7 +453,7 @@ const SuaraKPUChart = ({ data, dataStates }: any) => {
         </Text>
 
         <VStack flex={"1 0 0"} position={"relative"}>
-          <VStack w={"100%"} className="doughnutChartContainer">
+          <VStack zIndex={2} w={"100%"} className="doughnutChartContainer">
             <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
           </VStack>
 

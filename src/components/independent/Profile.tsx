@@ -266,26 +266,27 @@ export default function Profile() {
           zIndex={20}
         />
 
-        <CContainer px={5}>
-          <Avatar
-            src={userData?.foto_profil || ""}
-            name={userData?.nama}
-            size={"xl"}
-            mx={"auto"}
-            mt={-10}
-            mb={4}
-          />
-          <Text fontWeight={600} fontSize={18} textAlign={"center"} mb={1}>
-            {userData?.nama}
-          </Text>
-
-          <HStack justify={"center"}>
-            <RoleBadge
-              data={userData?.role?.id}
-              fontSize={10}
-              py={"2px"}
-              px={2}
+        <CContainer px={6}>
+          <HStack mt={-10} gap={4}>
+            <Avatar
+              src={userData?.foto_profil || ""}
+              name={userData?.nama}
+              size={"xl"}
+              mx={"auto"}
             />
+            <CContainer>
+              <Text fontWeight={600} fontSize={18} mb={1}>
+                {userData?.nama}
+              </Text>
+              <HStack>
+                <RoleBadge
+                  data={userData?.role?.id}
+                  fontSize={10}
+                  py={"2px"}
+                  px={2}
+                />
+              </HStack>
+            </CContainer>
           </HStack>
 
           {/* Biodata */}

@@ -4,8 +4,6 @@ import useselectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelur
 export default function LayerHoveredAndClicked() {
   const { selectedGeoJSONKelurahan } = useselectedGeoJSONKelurahan();
 
-  console.log(selectedGeoJSONKelurahan);
-
   return (
     <>
       {/* Layer hovered feature */}

@@ -62,9 +62,9 @@ export default function LayerConfig() {
       </Tooltip>
 
       <FloatingContainer
-        maxW={"300px"}
+        maxW={"264px"}
         top={"74px"}
-        right={isOpen ? "16px" : "calc(-300px + -30px)"}
+        right={isOpen ? "16px" : "calc(-264px + -30px)"}
         zIndex={3}
       >
         <DisclosureHeader
@@ -130,7 +130,13 @@ export default function LayerConfig() {
             </FormControl>
           </form>
 
-          <Button w={"100%"} colorScheme="ap" className="btn-ap clicky">
+          <Button
+            type="submit"
+            form="layerConfigForm"
+            w={"100%"}
+            colorScheme="ap"
+            className="btn-ap clicky"
+          >
             Terapkan
           </Button>
         </CContainer>

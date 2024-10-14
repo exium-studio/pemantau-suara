@@ -16,7 +16,10 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   const { colorMode } = useColorMode();
 
   // Globals
-  const { setSelectedGeoJSONKelurahan } = useselectedGeoJSONKelurahan();
+  const { selectedGeoJSONKelurahan, setSelectedGeoJSONKelurahan } =
+    useselectedGeoJSONKelurahan();
+  const kode_kelurahan =
+    selectedGeoJSONKelurahan?.geoJSON?.properties?.village_code;
   const { tahun, kategoriSuara, layer } = useLayerConfig();
 
   // States
@@ -44,16 +47,33 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
 
   // Fungsi untuk menangani klik pada layer
   const handleLayerClick = useCallback(
-    (layer: any) => (event: any) => {
+    (index: number) => (event: any) => {
       const clickedFeature = event.features[0];
+      const statusAktivitasColor = `#${
+        data?.[index]?.status_aktivitas_kelurahan?.color || "FFFFFF"
+      }`;
+      const suaraKPUTerbanyakColor = `#${
+        data?.[index]?.suara_kpu_terbanyak?.partai?.color || "FFFFFF"
+      }`;
+      const fillColor = (() => {
+        switch (layer?.label) {
+          case "Aktivitas":
+            return statusAktivitasColor;
+          case "Suara KPU":
+            return suaraKPUTerbanyakColor;
+          default:
+            return "#FFFFFF";
+        }
+      })();
+
       if (clickedFeature) {
         setSelectedGeoJSONKelurahan({
-          layer: layer,
-          geoJSONData: clickedFeature,
+          geoJSON: clickedFeature,
+          color: fillColor,
         });
       }
     },
-    [setSelectedGeoJSONKelurahan]
+    [setSelectedGeoJSONKelurahan, data, layer?.label]
   );
 
   // Menambahkan event listener pada peta ketika komponen dirender
@@ -61,12 +81,12 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     const map = mapRef.current?.getMap();
     if (!map) return;
 
-    geoJSONData.forEach((geoJSON: any, i: number) => {
+    geoJSONData.forEach((_: any, i: number) => {
       const layerId = `geojson-layer-${i}`;
-      map.on("click", layerId, handleLayerClick(geoJSON));
+      map.on("click", layerId, handleLayerClick(i));
 
       return () => {
-        map.off("click", layerId, handleLayerClick(geoJSON));
+        map.off("click", layerId, handleLayerClick(i));
       };
     });
   }, [mapRef, geoJSONData, handleLayerClick]);
@@ -76,12 +96,11 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
       <>
         {geoJSONData.map((geoJSON: any, i: number) => {
           const statusAktivitasColor = `#${
-            data?.[i]?.status_aktivitas_kelurahan?.color || "fff"
+            data?.[i]?.status_aktivitas_kelurahan?.color || "FFFFFF"
           }`;
           const suaraKPUTerbanyakColor = `#${
-            data?.[i]?.suara_kpu_terbanyak?.partai?.color || "fff"
+            data?.[i]?.suara_kpu_terbanyak?.partai?.color || "FFFFFF"
           }`;
-
           const fillColor = (() => {
             switch (layer?.label) {
               case "Aktivitas":
@@ -93,6 +112,10 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
             }
           })();
 
+          // console.log(geoJSON?.properties?.village_code === kode_kelurahan);
+          // console.log(geoJSON?.properties?.village_code);
+          // console.log(kode_kelurahan);
+
           return (
             <Source key={i} type="geojson" data={geoJSON}>
               <Layer
@@ -100,7 +123,12 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
                 type="fill"
                 paint={{
                   "fill-color": fillColor,
-                  "fill-opacity": 0.6,
+                  "fill-opacity":
+                    geoJSON?.properties?.village_code === kode_kelurahan
+                      ? 1
+                      : kode_kelurahan
+                      ? 0.2
+                      : 0.6,
                   "fill-outline-color": colorMode === "dark" ? "#fff" : "#444",
                 }}
               />
@@ -109,7 +137,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
         })}
       </>
     ),
-    [colorMode, data, geoJSONData, layer]
+    [colorMode, data, geoJSONData, layer, kode_kelurahan]
   );
 
   return render;

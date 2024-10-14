@@ -9,9 +9,13 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { MapPinArea } from "@phosphor-icons/react";
-import { useLightDarkColor } from "../../constant/colors";
-import geoJSONLayers from "../../constant/geoJSONLayers";
+import {
+  partaisColor,
+  statusAktivitasColor,
+  useLightDarkColor,
+} from "../../constant/colors";
 import { iconSize } from "../../constant/sizes";
+import useLayerConfig from "../../global/useLayerConfig";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
@@ -19,6 +23,19 @@ import FloatingContainer from "./wrapper/FloatingContainer";
 const LegendComponent: React.FC = () => {
   // SX
   const lightDarkColor = useLightDarkColor();
+
+  // Globals
+  const { layer } = useLayerConfig();
+  const legend = (() => {
+    switch (layer?.label) {
+      case "Aktivitas":
+        return statusAktivitasColor;
+      case "Suara KPU":
+        return partaisColor;
+      default:
+        return [];
+    }
+  })();
 
   // Utils
   const { isOpen, onClose, onToggle } = useDisclosure();
@@ -60,7 +77,7 @@ const LegendComponent: React.FC = () => {
 
         <CContainer px={5} pb={5} overflowY={"auto"} className={"scrollY"}>
           <SimpleGrid columns={[2]} gap={2} spacingX={4} w={"100%"}>
-            {geoJSONLayers.map((layer, i) => {
+            {legend.map((item, i) => {
               return (
                 <Button
                   key={i}
@@ -69,13 +86,8 @@ const LegendComponent: React.FC = () => {
                   className="btn noofline1 legend-btn"
                 >
                   <HStack w={"100%"}>
-                    <Box
-                      w={"8px"}
-                      h={"8px"}
-                      borderRadius={8}
-                      bg={layer.color}
-                    />
-                    <Text className="noofline1">{layer.name}</Text>
+                    <Box w={"8px"} h={"8px"} borderRadius={8} bg={item.color} />
+                    <Text className="noofline1">{item.label}</Text>
                   </HStack>
                 </Button>
               );

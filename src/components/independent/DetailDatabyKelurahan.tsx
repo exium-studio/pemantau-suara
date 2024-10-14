@@ -594,7 +594,7 @@ export default function DetailDatabyKelurahan() {
   const { selectedGeoJSONKelurahan, setSelectedGeoJSONKelurahan } =
     useselectedGeoJSONKelurahan();
   const kodeKelurahan =
-    selectedGeoJSONKelurahan?.geoJSONData?.properties?.village_code;
+    selectedGeoJSONKelurahan?.geoJSON?.properties?.village_code;
   const { dataKelurahanComparaisonMode } = useDataKelurahanComparisonMode();
   const [gridColumns, setGridColumns] = useState<number>(1);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);

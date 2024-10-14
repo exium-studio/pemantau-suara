@@ -3,7 +3,6 @@ import { CSSProperties, useEffect, useRef, useState } from "react";
 import { Map, MapRef, Marker } from "react-map-gl";
 import useSearchAddress from "../../global/useSearchAddress";
 import getUserData from "../../lib/getUserData";
-import LayerHoveredAndClickedKelurahan from "../independent/mapLayer/LayerHoveredAndClickedKelurahan";
 import LayerKelurahanSemarang from "../independent/mapLayer/LayerKelurahanSemarang";
 
 interface Props {
@@ -116,7 +115,7 @@ export default function Maps({
           />
 
           {/* Hovered & clicked layers */}
-          <LayerHoveredAndClickedKelurahan />
+          {/* <LayerHoveredAndClickedKelurahan /> */}
         </>
       )}
     </Map>

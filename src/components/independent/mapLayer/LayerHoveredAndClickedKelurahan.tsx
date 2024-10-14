@@ -30,14 +30,14 @@ export default function LayerHoveredAndClicked() {
           type="geojson"
           data={{
             type: "FeatureCollection",
-            features: [selectedGeoJSONKelurahan?.geoJSONData],
+            features: [selectedGeoJSONKelurahan?.geoJSON],
           }}
         >
           <Layer
             id="clicked-feature-layer"
             type="fill"
             paint={{
-              "fill-color": "#ff0000",
+              "fill-color": selectedGeoJSONKelurahan?.color || "#FFFFFF",
               "fill-opacity": 1,
               "fill-outline-color": "#000000",
             }}

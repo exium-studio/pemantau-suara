@@ -31,13 +31,13 @@ import CustomTable from "../dependent/CustomTable";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import ImageViewModalDisclosure from "../dependent/ImageViewModalDisclosure";
 import NooflineText from "../dependent/NooflineText";
+import StatusAktivitasBadge from "../dependent/StatusAktivitasBadge";
 import NoData from "./feedback/NoData";
 import Retry from "./feedback/Retry";
 import Skeleton from "./feedback/Skeleton";
 import CContainer from "./wrapper/CContainer";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
-import StatusAktivitasBadge from "../dependent/StatusAktivitasBadge";
 
 const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
   return (
@@ -109,54 +109,127 @@ const AktivitasChart = ({ data }: any) => {
   );
 
   return (
-    <CContainer flex={0} gap={6} px={4} mb={6}>
-      <VStack flex={"1 0 0"} position={"relative"}>
-        <VStack w={"100%"} className="doughnutChartContainer">
-          <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
-        </VStack>
-
-        <VStack
-          position={"absolute"}
-          left={"50%"}
-          top={"50%"}
-          transform={"translate(-50%, -50%)"}
-          gap={0}
-        >
-          <Text textAlign={"center"} opacity={0.6}>
-            Total
-          </Text>
-          <Text fontSize={30} fontWeight={600} lineHeight={1.2} mb={4}>
-            {formatNumber(totalPotensiSuara)}
-          </Text>
-        </VStack>
-      </VStack>
-
-      <Wrap
-        m={"auto"}
-        justify={"center"}
-        h={"fit-content"}
-        px={2}
-        spacingX={4}
-        spacingY={1}
+    <>
+      <CContainer
+        border={"1px solid var(--divider3)"}
+        borderRadius={8}
+        flex={0}
+        gap={6}
+        p={5}
+        mb={4}
       >
-        {data?.map((item: any, i: number) => (
-          <Tooltip key={i} label={formatNumber(item?.potensi_suara)}>
-            <HStack cursor={"default"}>
-              <Box
-                w={"8px"}
-                h={"8px"}
-                bg={colors[i]}
-                borderRadius={"full"}
-                border={"1px solid var(--divider3)"}
-              />
-              <Text fontSize={"sm"} opacity={0.6}>
-                {`RW ${item?.rw}`}
-              </Text>
-            </HStack>
-          </Tooltip>
-        ))}
-      </Wrap>
-    </CContainer>
+        <Text fontSize={18} fontWeight={500} textAlign={"center"}>
+          Status Aktivitas
+        </Text>
+
+        <VStack flex={"1 0 0"} position={"relative"}>
+          <VStack w={"100%"} className="doughnutChartContainer">
+            <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
+          </VStack>
+
+          <VStack
+            position={"absolute"}
+            left={"50%"}
+            top={"50%"}
+            transform={"translate(-50%, -50%)"}
+            gap={0}
+          >
+            <Text textAlign={"center"} opacity={0.6}>
+              Total
+            </Text>
+            <Text fontSize={30} fontWeight={600} lineHeight={1.2} mb={4}>
+              {formatNumber(totalPotensiSuara)}
+            </Text>
+          </VStack>
+        </VStack>
+
+        <Wrap
+          m={"auto"}
+          justify={"center"}
+          h={"fit-content"}
+          px={2}
+          spacingX={4}
+          spacingY={1}
+        >
+          {data?.map((item: any, i: number) => (
+            <Tooltip key={i} label={formatNumber(item?.potensi_suara)}>
+              <HStack cursor={"default"}>
+                <Box
+                  w={"8px"}
+                  h={"8px"}
+                  bg={colors[i]}
+                  borderRadius={"full"}
+                  border={"1px solid var(--divider3)"}
+                />
+                <Text fontSize={"sm"} opacity={0.6}>
+                  {`RW ${item?.rw}`}
+                </Text>
+              </HStack>
+            </Tooltip>
+          ))}
+        </Wrap>
+      </CContainer>
+
+      <CContainer
+        border={"1px solid var(--divider3)"}
+        borderRadius={8}
+        flex={0}
+        gap={6}
+        p={5}
+        mb={4}
+      >
+        <Text fontSize={18} fontWeight={500} textAlign={"center"}>
+          Potensi Suara
+        </Text>
+
+        <VStack flex={"1 0 0"} position={"relative"}>
+          <VStack w={"100%"} className="doughnutChartContainer">
+            <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
+          </VStack>
+
+          <VStack
+            position={"absolute"}
+            left={"50%"}
+            top={"50%"}
+            transform={"translate(-50%, -50%)"}
+            gap={0}
+          >
+            <Text textAlign={"center"} opacity={0.6}>
+              Total
+            </Text>
+            <Text fontSize={30} fontWeight={600} lineHeight={1.2} mb={4}>
+              {formatNumber(totalPotensiSuara)}
+            </Text>
+          </VStack>
+        </VStack>
+
+        <Wrap
+          m={"auto"}
+          justify={"center"}
+          h={"fit-content"}
+          px={2}
+          spacingX={4}
+          spacingY={1}
+        >
+          {data?.map((item: any, i: number) => (
+            <Tooltip key={i} label={formatNumber(item?.potensi_suara)}>
+              <HStack cursor={"default"}>
+                <Box
+                  w={"8px"}
+                  h={"8px"}
+                  bg={colors[i]}
+                  borderRadius={"full"}
+                  border={"1px solid var(--divider3)"}
+                />
+                <Text fontSize={"sm"} opacity={0.6}>
+                  {`RW ${item?.rw}`}
+                </Text>
+              </HStack>
+            </Tooltip>
+          ))}
+        </Wrap>
+      </CContainer>
+    </>
   );
 };
 const AktivitasTable = ({ dataStates }: any) => {
@@ -367,7 +440,18 @@ const SuaraKPUChart = ({ data, dataStates }: any) => {
 
   return (
     <>
-      <CContainer flex={0} gap={6} px={4} mb={6}>
+      <CContainer
+        border={"1px solid var(--divider3)"}
+        borderRadius={8}
+        flex={0}
+        gap={6}
+        p={5}
+        mb={4}
+      >
+        <Text fontSize={18} fontWeight={500} textAlign={"center"}>
+          Perolehan Suara KPU
+        </Text>
+
         <VStack flex={"1 0 0"} position={"relative"}>
           <VStack w={"100%"} className="doughnutChartContainer">
             <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
@@ -418,14 +502,14 @@ const SuaraKPUChart = ({ data, dataStates }: any) => {
             </Tooltip>
           ))}
         </Wrap>
-      </CContainer>
 
-      <HStack mb={2} ml={2} justify={"center"}>
-        <Text fontSize={"sm"}>{upcomingTotalTPS}</Text>
-        <Text fontSize={"sm"} opacity={0.4}>
-          Total TPS yang akan datang
-        </Text>
-      </HStack>
+        <HStack mb={2} ml={2} justify={"center"}>
+          <Text fontSize={"sm"}>{upcomingTotalTPS}</Text>
+          <Text fontSize={"sm"} opacity={0.4}>
+            Total TPS yang akan datang
+          </Text>
+        </HStack>
+      </CContainer>
     </>
   );
 };
@@ -519,7 +603,6 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
   const render = {
     loading: (
       <CContainer px={5} gap={4} {...props}>
-        <Skeleton minH={"200px"} flex={1} />
         <Skeleton minH={"300px"} flex={1} />
       </CContainer>
     ),

@@ -86,7 +86,13 @@ const LegendComponent: React.FC = () => {
                   className="btn noofline1 legend-btn"
                 >
                   <HStack w={"100%"}>
-                    <Box w={"8px"} h={"8px"} borderRadius={8} bg={item.color} />
+                    <Box
+                      w={"8px"}
+                      h={"8px"}
+                      borderRadius={8}
+                      bg={item.color}
+                      border={"1px solid var(--divider3)"}
+                    />
                     <Text className="noofline1">{item.label}</Text>
                   </HStack>
                 </Button>

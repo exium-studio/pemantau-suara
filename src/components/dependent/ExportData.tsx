@@ -43,7 +43,7 @@ export default function ExportData({
     <Tooltip label={tooltipLabel || `Export`} openDelay={500}>
       <IconButton
         aria-label="add-activity"
-        icon={<Icon as={Export} fontSize={iconSize} />}
+        icon={<Icon as={Export} fontSize={iconSize} weight="bold" />}
         colorScheme="ap"
         variant={"outline"}
         className="clicky"

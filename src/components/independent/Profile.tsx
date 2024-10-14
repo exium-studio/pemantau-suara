@@ -36,6 +36,10 @@ import RoleBadge from "../dependent/RoleBadge";
 import RequiredForm from "../form/RequiredForm";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
+import FlexLine from "./FlexLine";
+import StatusAktifBadge from "../dependent/StatusAktifBadge";
+import NooflineText from "../dependent/NooflineText";
+import formatDate from "../../lib/formatDate";
 
 const ChangePassword = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -248,9 +252,10 @@ export default function Profile() {
       />
 
       <FloatingContainer
-        maxW={"300px"}
+        maxW={"400px"}
         top={"74px"}
-        right={isOpen ? "16px" : "calc(-300px + -16px)"}
+        right={isOpen ? "16px" : "calc(-400px + -16px)"}
+        zIndex={4}
       >
         <DisclosureHeader
           title=""
@@ -282,6 +287,52 @@ export default function Profile() {
               px={2}
             />
           </HStack>
+
+          {/* Biodata */}
+          <CContainer mt={6} gap={4}>
+            <HStack>
+              <Text opacity={0.6} whiteSpace={"nowrap"}>
+                Status Aktif
+              </Text>
+              <FlexLine />
+              <StatusAktifBadge data={userData?.status_aktif?.id} />
+            </HStack>
+
+            <HStack>
+              <Text opacity={0.6} whiteSpace={"nowrap"}>
+                Penanggung Jawab
+              </Text>
+              <FlexLine />
+              <NooflineText
+                data={userData?.pj_pelaksana?.nama}
+                textAlign={"right"}
+              />
+            </HStack>
+
+            <HStack>
+              <Text opacity={0.6} whiteSpace={"nowrap"}>
+                No.Telp
+              </Text>
+              <FlexLine />
+              <Text>{userData?.no_hp}</Text>
+            </HStack>
+
+            <HStack>
+              <Text opacity={0.6} whiteSpace={"nowrap"}>
+                Tanggal Diangkat
+              </Text>
+              <FlexLine />
+              <Text>{formatDate(userData?.tgl_diangkat)}</Text>
+            </HStack>
+
+            <HStack>
+              <Text opacity={0.6} whiteSpace={"nowrap"}>
+                NIK
+              </Text>
+              <FlexLine />
+              <Text>{userData?.nik_ktp}</Text>
+            </HStack>
+          </CContainer>
         </CContainer>
 
         <CContainer p={5} gap={2}>

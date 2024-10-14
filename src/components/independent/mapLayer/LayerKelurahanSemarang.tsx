@@ -2,6 +2,9 @@ import { useColorMode } from "@chakra-ui/react";
 import { RefObject, useCallback, useEffect } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
 import useDetailGeoJSONData from "../../../global/useDetailGeoJSONData";
+import useDataState from "../../../hooks/useDataState";
+import useFullscreenSpinner from "../../../global/useFullscreenSpinner";
+import useLayerConfig from "../../../global/useLayerConfig";
 
 interface Props {
   geoJSONData: any;
@@ -12,10 +15,29 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   // SX
   const { colorMode } = useColorMode();
 
-  const { setDetailGeoJSONData } = useDetailGeoJSONData();
+  // States
+  const { loading, data } = useDataState<any>({
+    url: `/api/pemantau-suara/publik-request/get-map-kelurahan`,
+    payload: {},
+    dependencies: [],
+  });
 
-  // Handle highlighted geoJSON kecamatan index
-  // const { highlightedKecamatanIndex } = useHighlighedKecamatan();
+  // Globals
+  const { setDetailGeoJSONData } = useDetailGeoJSONData();
+  const { tahun, kategoriSuara } = useLayerConfig();
+
+  // Utils
+  const { onFullscreenSpinnerOpen, onFullscreenSpinnerClose } =
+    useFullscreenSpinner();
+
+  // Handle loading
+  useEffect(() => {
+    if (loading) {
+      onFullscreenSpinnerOpen();
+    } else {
+      onFullscreenSpinnerClose();
+    }
+  }, [loading, onFullscreenSpinnerOpen, onFullscreenSpinnerClose]);
 
   // Fungsi untuk menangani klik pada layer
   const handleLayerClick = useCallback(
@@ -23,11 +45,6 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
       const clickedFeature = event.features[0];
       if (clickedFeature) {
         setDetailGeoJSONData({ layer: layer, geoJSONData: clickedFeature });
-
-        // if (!highlightedKecamatanIndex?.includes(-1)) {
-        //   // console.log([...highlightedKecamatanIndex, -1]);
-        //   setHighlightedKecamatanIndex([...highlightedKecamatanIndex, -1]);
-        // }
       }
     },
     [setDetailGeoJSONData]
@@ -40,7 +57,6 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
 
     geoJSONData.forEach((layer: any, i: number) => {
       const layerId = `geojson-layer-${i}`;
-
       map.on("click", layerId, handleLayerClick(layer));
 
       return () => {

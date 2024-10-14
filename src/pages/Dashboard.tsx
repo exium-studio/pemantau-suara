@@ -2,6 +2,7 @@ import { Box, HStack, Tooltip } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import DashboardMap from "../components/independent/DashboardMap";
 import DetailGeoJSONData from "../components/independent/DetailDatabyKelurahan";
+import LayerConfig from "../components/independent/LayerConfig";
 import Legend from "../components/independent/Legend";
 import Navs from "../components/independent/Navs";
 import Profile from "../components/independent/Profile";
@@ -16,6 +17,7 @@ export default function Dashboard() {
 
   // Utils
   const { searchMode } = useSearchMode();
+  // const sw = useScreenWidth();
 
   return (
     <CContainer
@@ -53,11 +55,28 @@ export default function Dashboard() {
           borderRadius={12}
           bg={lightDarkColor}
         >
-          <Tooltip label={"Dark Mode"} placement="bottom" mt={1}>
+          <Tooltip
+            label={"Dark Mode"}
+            placement="bottom"
+            mt={1}
+            openDelay={500}
+          >
             <Box>
               <ColorModeSwitcher mt={"auto"} className="btn" />
             </Box>
           </Tooltip>
+        </HStack>
+
+        {/* Layer Config */}
+        <HStack
+          shadow={"sm"}
+          border={"1px solid var(--divider)"}
+          p={1}
+          gap={2}
+          borderRadius={12}
+          bg={lightDarkColor}
+        >
+          <LayerConfig />
         </HStack>
 
         {/* Navs */}

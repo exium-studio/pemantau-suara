@@ -27,10 +27,6 @@ export default function DashboardMap() {
     }
   }, [geoJSONKecamatan, setGeoJSONKecamatan]);
 
-  // console.log(
-  //   geoJSONKecamatan?.flatMap((kecamatan: any) => kecamatan.features)
-  // );
-
   return (
     <Box position={"relative"}>
       <Maps

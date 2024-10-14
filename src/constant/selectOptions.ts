@@ -179,7 +179,16 @@ const optionsRole = [
   { value: 3, label: "Penggerak" },
 ];
 
+const optionsKategoriSuara = [{ value: 1, label: "Pemilu" }];
+
+const optionsLayer = [
+  { value: 1, label: "Aktivitas" },
+  { value: 2, label: "Suara KPU" },
+];
+
 export {
+  optionsLayer,
+  optionsKategoriSuara,
   optionsRole,
   optionsGoldar,
   optionsStatusAktif,

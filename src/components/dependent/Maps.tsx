@@ -109,7 +109,7 @@ export default function Maps({
             </Marker>
           )}
 
-          {/* Layer all geoJSON data */}
+          {/* Layer all kelurahan */}
           <LayerKelurahanSemarang
             mapRef={mapRef}
             geoJSONData={filteredGeoJSON}

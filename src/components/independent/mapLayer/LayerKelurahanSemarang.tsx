@@ -15,16 +15,19 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   // SX
   const { colorMode } = useColorMode();
 
-  // States
-  const { loading, data } = useDataState<any>({
-    url: `/api/pemantau-suara/publik-request/get-map-kelurahan`,
-    payload: {},
-    dependencies: [],
-  });
-
   // Globals
   const { setSelectedGeoJSONKelurahan } = useselectedGeoJSONKelurahan();
   const { tahun, kategoriSuara } = useLayerConfig();
+
+  // States
+  const { loading, data } = useDataState<any>({
+    url: `/api/pemantau-suara/publik-request/get-map-kelurahan`,
+    payload: {
+      tahun: [tahun],
+      kategori_suara: [kategoriSuara?.value],
+    },
+    dependencies: [tahun, kategoriSuara],
+  });
 
   // Utils
   const { onFullscreenSpinnerOpen, onFullscreenSpinnerClose } =
@@ -71,7 +74,23 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   return (
     <>
       {geoJSONData.map((layer: any, i: number) => {
-        // const isHighlighted = highlightedKecamatanIndex.includes(i);
+        const statusAktivitasColor = `#${
+          data?.[i]?.status_aktivitas_kelurahan?.color || "#fff"
+        }`;
+        const suaraKPUTerbanyakColor = `#${
+          data?.[i]?.suara_kpu_terbanyak?.color || "#fff"
+        }`;
+
+        const fillColor = (() => {
+          switch (layer.value) {
+            case "Aktivitas":
+              return statusAktivitasColor;
+            case "Suara KPU":
+              return suaraKPUTerbanyakColor;
+            default:
+              return "#ffffff";
+          }
+        })();
 
         return (
           <Source key={i} type="geojson" data={layer}>
@@ -79,7 +98,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
               id={`geojson-layer-${i}`}
               type="fill"
               paint={{
-                "fill-color": "#fff",
+                "fill-color": fillColor,
                 "fill-opacity": 0.6,
                 "fill-outline-color": colorMode === "dark" ? "#fff" : "#444",
               }}

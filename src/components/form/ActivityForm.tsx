@@ -27,12 +27,14 @@ import NumberInput from "../dependent/input/NumberInput";
 import StringInput from "../dependent/input/StringInput";
 import Textarea from "../dependent/input/Textarea";
 import RequiredForm from "./RequiredForm";
+import SelectStatusAktivitas from "../dependent/dedicated/SelectStatusAktivitas";
 
 const defaultValues = {
   pelaksana: undefined,
   kelurahan: undefined,
   rw: undefined,
   potensi_suara: undefined,
+  status_aktivitas: undefined,
   deskripsi: "",
   tgl_mulai: undefined,
   tgl_selesai: undefined,
@@ -88,6 +90,8 @@ export default function ActivityForm({
               return true; // If role.value is 2, skip the required check
             })
         : yup.mixed(),
+      status_aktivitas: yup.object().required("Harus diisi"),
+      potensi_suara: yup.number().required("Harus diisi"),
       deskripsi: yup.string().required("Harus diisi"),
       tgl_mulai: yup.date().required("Harus diisi"),
       tgl_selesai: yup.date().required("Harus diisi"),
@@ -132,6 +136,7 @@ export default function ActivityForm({
       payload.append("pelaksana_id", `${values.pelaksana?.value}`);
       payload.append("kelurahan_id", `${values.kelurahan?.value}`);
       payload.append("rw", `${values.rw?.value}`);
+      payload.append("status_aktivitas", `${values?.status_aktivitas?.value}`);
       payload.append("potensi_suara", `${values.potensi_suara}`);
       payload.append("deskripsi", `${values.deskripsi}`);
       payload.append("tgl_mulai", formatDate(values.tgl_mulai, "short2"));
@@ -274,6 +279,27 @@ export default function ActivityForm({
               isDisabled={!!!formik.values.pelaksana}
             />
             <FormErrorMessage>{formik.errors.rw as string}</FormErrorMessage>
+          </FormControl>
+        )}
+
+        {/* Status Aktivitas */}
+        {!excludeFields?.includes("status_aktivitas") && (
+          <FormControl mb={4} isInvalid={!!formik.errors?.status_aktivitas}>
+            <FormLabel>
+              Status Aktivitas
+              <RequiredForm />
+            </FormLabel>
+            <SelectStatusAktivitas
+              name="status_aktivitas"
+              onConfirm={(input) => {
+                formik.setFieldValue("status_aktivitas", input);
+              }}
+              isError={!!formik.errors.status_aktivitas}
+              inputValue={formik.values.status_aktivitas}
+            />
+            <FormErrorMessage>
+              {formik.errors.status_aktivitas as string}
+            </FormErrorMessage>
           </FormControl>
         )}
 

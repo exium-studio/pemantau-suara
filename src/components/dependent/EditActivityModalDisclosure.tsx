@@ -40,12 +40,17 @@ export default function EditActivityModalDisclosure({
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <DisclosureHeader title={"Tambah Aktivitas"} />
+            <DisclosureHeader title={"Edit Aktivitas"} />
           </ModalHeader>
           <ModalBody pb={6}>
             <ActivityForm
               initialValues={initialValues}
-              excludeFields={["pelaksana", "kelurahan", "rw"]}
+              excludeFields={[
+                "pelaksana",
+                "kelurahan",
+                "rw",
+                "status_aktivitas",
+              ]}
               submitUrl={`/api/pemantau-suara/dashboard/management/aktivitas/${id}`}
               submitLabel="Simpan"
               method={"patch"}

@@ -189,7 +189,13 @@ const optionsLayer = [
   { value: 2, label: "Suara KPU" },
 ];
 
+const optionsStatusAktivitas = [
+  { value: 1, label: "Alat Peraga" },
+  { value: 2, label: "Sosialisasi" },
+];
+
 export {
+  optionsStatusAktivitas,
   optionsLayer,
   optionsKategoriSuara,
   optionsRole,

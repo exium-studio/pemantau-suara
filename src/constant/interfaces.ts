@@ -5,6 +5,7 @@ export type Type__ActivityInitialValues = {
   pelaksana?: Interface__SelectOption;
   kelurahan?: Interface__SelectOption;
   rw?: Interface__SelectOption;
+  status_aktivitas?: Interface__SelectOption;
   potensi_suara?: number;
   deskripsi?: string;
   tgl_mulai?: Date;

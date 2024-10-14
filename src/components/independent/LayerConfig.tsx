@@ -13,7 +13,6 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { iconSize } from "../../constant/sizes";
 import useLayerConfig from "../../global/useLayerConfig";
-import useBackOnClose from "../../hooks/useBackOnClose";
 import SelectKategoriSuara from "../dependent/dedicated/SelectKategoriSuara";
 import SelectLayer from "../dependent/dedicated/SelectLayer";
 import DisclosureHeader from "../dependent/DisclosureHeader";
@@ -23,8 +22,7 @@ import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
 
 export default function LayerConfig() {
-  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
-  useBackOnClose("layer-config-modal", isOpen, onOpen, onClose);
+  const { isOpen, onClose, onToggle } = useDisclosure();
 
   // Globals
   const { tahun, setTahun, kategoriSuara, setKategoriSuara, layer, setLayer } =

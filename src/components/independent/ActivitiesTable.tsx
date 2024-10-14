@@ -22,6 +22,7 @@ import PermissionTooltip from "./wrapper/PermissionTooltip";
 import { useEffect, useRef } from "react";
 import CContainer from "./wrapper/CContainer";
 import TableFooterConfig from "../dependent/TableFooterConfig";
+import StatusAktivitasBadge from "../dependent/StatusAktivitasBadge";
 
 interface TableProps {
   dataStates: Interface__DataStates;
@@ -87,19 +88,19 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
       },
     },
     {
+      th: "Status Aktivitas",
+      isSortable: true,
+      cProps: {
+        justify: "center",
+      },
+    },
+    {
       th: "Potensi Suara",
       isSortable: true,
       cProps: {
         justify: "center",
       },
     },
-    // {
-    //   th: "Status Aktivitas",
-    //   isSortable: true,
-    //   cProps: {
-    //     justify: "center",
-    //   },
-    // },
     {
       th: "RW",
       isSortable: true,
@@ -112,14 +113,6 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
       th: "Kelurahan/Kecamatan",
       isSortable: true,
     },
-    // {
-    //   th: "Kelurahan",
-    //   isSortable: true,
-    // },
-    // {
-    //   th: "Kecamatan",
-    //   isSortable: true,
-    // },
     {
       th: "Foto Aktivitas",
       cProps: {
@@ -179,6 +172,16 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
         },
       },
       {
+        value: item?.status_aktivitas?.label,
+        td: (
+          <StatusAktivitasBadge data={item?.status_aktivitas?.id} w={"120px"} />
+        ),
+        cProps: {
+          justify: "center",
+        },
+        isNumeric: true,
+      },
+      {
         value: item?.potensi_suara,
         td: formatNumber(item?.potensi_suara),
         cProps: {
@@ -186,14 +189,6 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
         },
         isNumeric: true,
       },
-      // {
-      //   value: item?.status_aktivitas,
-      //   td: <StatusAktivitasBadge data={item?.status_aktivitas} w={"200px"} />,
-      //   cProps: {
-      //     justify: "center",
-      //   },
-      //   isNumeric: true,
-      // },
       {
         value: item?.rw,
         td: item?.rw,
@@ -205,14 +200,6 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
         value: `${item?.kelurahan?.nama_kelurahan}, ${item?.kelurahan?.kecamatan?.nama_kecamatan}`,
         td: `${item?.kelurahan?.nama_kelurahan}, ${item?.kelurahan?.kecamatan?.nama_kecamatan}`,
       },
-      // {
-      //   value: item?.kelurahan?.nama_kelurahan,
-      //   td: item?.kelurahan?.nama_kelurahan,
-      // },
-      // {
-      //   value: item?.kelurahan?.kecamatan?.nama_kecamatan,
-      //   td: item?.kelurahan?.kecamatan?.nama_kecamatan,
-      // },
       {
         value: item?.foto_aktivitas,
         td: (

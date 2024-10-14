@@ -8,11 +8,9 @@ export default function StatusAktivitasBadge({ data, ...restProps }: Props) {
   const props = () => {
     switch (data) {
       case 1:
-        return { label: "Belum Dilaksanakan", coloShceme: "red" };
+        return { label: "Alat Peraga", coloShceme: "cyan" };
       case 2:
-        return { label: "Sedang Dilaksanakan", coloShceme: "orange" };
-      case 3:
-        return { label: "Sudah Dilaksanakan", coloShceme: "green" };
+        return { label: "Sosialisasi", coloShceme: "blue" };
     }
   };
 

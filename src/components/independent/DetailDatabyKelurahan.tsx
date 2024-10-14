@@ -402,7 +402,10 @@ const SuaraKPUChart = ({ data, dataStates }: any) => {
           spacingY={1}
         >
           {data?.map((item: any, i: number) => (
-            <Tooltip key={i} label={formatNumber(item?.jumlah_suara)}>
+            <Tooltip
+              key={i}
+              label={`Total Suara ${formatNumber(item?.jumlah_suara)}`}
+            >
               <HStack cursor={"default"}>
                 <Box
                   w={"8px"}

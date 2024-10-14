@@ -1,17 +1,15 @@
 import {
+  Box,
   Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Icon,
-  IconButton,
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Stack } from "@phosphor-icons/react";
 import { useFormik } from "formik";
+import { cloneElement } from "react";
 import * as yup from "yup";
-import { iconSize } from "../../constant/sizes";
 import useLayerConfig from "../../global/useLayerConfig";
 import SelectKategoriSuara from "../dependent/dedicated/SelectKategoriSuara";
 import SelectLayer from "../dependent/dedicated/SelectLayer";
@@ -21,7 +19,11 @@ import RequiredForm from "../form/RequiredForm";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
 
-export default function LayerConfig() {
+interface Props {
+  children?: any;
+}
+
+export default function LayerConfigDisclosure({ children }: Props) {
   const { isOpen, onClose, onToggle } = useDisclosure();
 
   // Globals
@@ -51,13 +53,11 @@ export default function LayerConfig() {
   return (
     <>
       <Tooltip label={"Layer Config"} placement="bottom" mt={1} openDelay={500}>
-        <IconButton
-          aria-label="Layer Config"
-          icon={<Icon as={Stack} fontSize={iconSize} />}
-          className="btn"
-          onClick={onToggle}
-          color={isOpen ? "p.500" : ""}
-        />
+        <Box onClick={onToggle} color={isOpen ? "p.500" : ""}>
+          {cloneElement(children, {
+            color: isOpen ? "p.500" : "",
+          })}
+        </Box>
       </Tooltip>
 
       <FloatingContainer
@@ -140,80 +140,6 @@ export default function LayerConfig() {
           </Button>
         </CContainer>
       </FloatingContainer>
-
-      {/* <Modal
-        isOpen={isOpen}
-        onClose={backOnClose}
-        isCentered
-        blockScrollOnMount={false}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            <DisclosureHeader title={"Layer Config"} />
-          </ModalHeader>
-          <ModalBody>
-            <form id="layerConfigForm" onSubmit={formik.handleSubmit}>
-              <FormControl mb={4} isInvalid={!!formik.errors.tahun}>
-                <FormLabel>
-                  Tahun
-                  <RequiredForm />
-                </FormLabel>
-                <NumberInput
-                  name="tahun"
-                  placeholder={`${new Date().getFullYear()}`}
-                  onChangeSetter={(input) => {
-                    formik.setFieldValue("tahun", input);
-                  }}
-                  inputValue={formik.values.tahun}
-                  noFormat
-                />
-                <FormErrorMessage>
-                  {formik.errors.tahun as string}
-                </FormErrorMessage>
-              </FormControl>
-
-              <FormControl mb={4} isInvalid={!!formik.errors.kategori_suara}>
-                <FormLabel>
-                  Kategori Suara
-                  <RequiredForm />
-                </FormLabel>
-                <SelectKategoriSuara
-                  name="kategori_suara"
-                  onConfirm={(input) => {
-                    formik.setFieldValue("kategori_suara", input);
-                  }}
-                  inputValue={formik.values.kategori_suara}
-                />
-                <FormErrorMessage>
-                  {formik.errors.kategori_suara as string}
-                </FormErrorMessage>
-              </FormControl>
-
-              <FormControl mb={6} isInvalid={!!formik.errors.layer}>
-                <FormLabel>
-                  Layer
-                  <RequiredForm />
-                </FormLabel>
-                <SelectLayer
-                  name="layer"
-                  onConfirm={(input) => {
-                    formik.setFieldValue("layer", input);
-                  }}
-                  inputValue={formik.values.layer}
-                />
-                <FormErrorMessage>
-                  {formik.errors.layer as string}
-                </FormErrorMessage>
-              </FormControl>
-            </form>
-
-            <Button w={"100%"} colorScheme="ap" className="btn-ap clicky">
-              Terapkan
-            </Button>
-          </ModalBody>
-        </ModalContent>
-      </Modal> */}
     </>
   );
 }

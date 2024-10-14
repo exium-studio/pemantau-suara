@@ -34,7 +34,7 @@ export default function ManageActivities() {
   return (
     <>
       <Tooltip
-        label={"Kelola Aktivitas Penggerak"}
+        label={"Kelola Aktivitas"}
         openDelay={500}
         placement="bottom"
         mt={1}

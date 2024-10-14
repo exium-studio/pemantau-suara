@@ -5,24 +5,26 @@ import { useLightDarkColor } from "../../constant/colors";
 import { iconSize } from "../../constant/sizes";
 import useManageActivities from "../../global/useManageActivities";
 import useManageUsers from "../../global/useManageUsers";
+import getUserData from "../../lib/getUserData";
 import DisclosureHeader from "../dependent/DisclosureHeader";
+import ExportData from "../dependent/ExportData";
 import SearchComponent from "../dependent/input/SearchComponent";
 import UsersTable from "./UsersTable";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
 import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
-import ExportData from "../dependent/ExportData";
-import getUserData from "../../lib/getUserData";
 
 export default function ManageUsers() {
   // SX
   const lightDarkColor = useLightDarkColor();
 
+  // States
+  const isPenggerak = getUserData()?.role?.id === 3;
+
   // Utils
   const { manageUsers, toggleManageUsers, onCloseManageUsers } =
     useManageUsers();
   const { onCloseManageActivities } = useManageActivities();
-  const isPenggerak = getUserData()?.role?.id === 3;
 
   // Filter Config
   const [filterConfig, setFilterConfig] = useState<any>({
@@ -32,7 +34,7 @@ export default function ManageUsers() {
   return (
     <>
       <Tooltip
-        label={"Kelola Pengguna"}
+        label={isPenggerak ? "Tidak ada akses" : "Kelola Pengguna"}
         openDelay={500}
         placement="bottom"
         mt={1}
@@ -48,6 +50,7 @@ export default function ManageUsers() {
             />
           }
           className="btn"
+          isDisabled={isPenggerak}
           onClick={() => {
             onCloseManageActivities();
             toggleManageUsers();

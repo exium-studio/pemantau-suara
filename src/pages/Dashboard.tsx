@@ -1,15 +1,19 @@
-import { Box, HStack, Tooltip } from "@chakra-ui/react";
+import { Box, HStack, Icon, IconButton, Tooltip } from "@chakra-ui/react";
+import { Stack } from "@phosphor-icons/react";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import DashboardMap from "../components/independent/DashboardMap";
 import DetailDatabyKelurahan from "../components/independent/DetailDatabyKelurahan";
-import LayerConfig from "../components/independent/LayerConfig";
+import HamburgerMenu from "../components/independent/HamburgerMenu";
+import LayerConfigDisclosure from "../components/independent/LayerConfigDisclosure";
 import Legend from "../components/independent/Legend";
 import Navs from "../components/independent/Navs";
 import Profile from "../components/independent/Profile";
 import SearchAddress from "../components/independent/SearchAddress";
 import CContainer from "../components/independent/wrapper/CContainer";
 import { useLightDarkColor } from "../constant/colors";
+import { iconSize } from "../constant/sizes";
 import useSearchMode from "../global/useSearchMode";
+import useIsSmScreen from "../hooks/useIsSmScreen";
 
 export default function Dashboard() {
   // SX
@@ -17,7 +21,7 @@ export default function Dashboard() {
 
   // Utils
   const { searchMode } = useSearchMode();
-  // const sw = useScreenWidth();
+  const ss = useIsSmScreen();
 
   return (
     <CContainer
@@ -46,41 +50,51 @@ export default function Dashboard() {
 
       {/* Right */}
       <HStack p={4} position={"fixed"} top={0} right={0} zIndex={2}>
-        {/* Color Mode */}
-        <HStack
-          shadow={"sm"}
-          border={"1px solid var(--divider)"}
-          p={1}
-          gap={2}
-          borderRadius={12}
-          bg={lightDarkColor}
-        >
-          <Tooltip
-            label={"Dark Mode"}
-            placement="bottom"
-            mt={1}
-            openDelay={500}
-          >
-            <Box>
-              <ColorModeSwitcher mt={"auto"} className="btn" />
-            </Box>
-          </Tooltip>
-        </HStack>
+        {ss && <HamburgerMenu />}
 
-        {/* Layer Config */}
-        <HStack
-          shadow={"sm"}
-          border={"1px solid var(--divider)"}
-          p={1}
-          gap={2}
-          borderRadius={12}
-          bg={lightDarkColor}
-        >
-          <LayerConfig />
-        </HStack>
-
-        {/* Navs */}
-        <Navs />
+        {!ss && (
+          <>
+            {/* Color Mode */}
+            <HStack
+              shadow={"sm"}
+              border={"1px solid var(--divider)"}
+              p={1}
+              gap={2}
+              borderRadius={12}
+              bg={lightDarkColor}
+            >
+              <Tooltip
+                label={"Dark Mode"}
+                placement="bottom"
+                mt={1}
+                openDelay={500}
+              >
+                <Box>
+                  <ColorModeSwitcher mt={"auto"} className="btn" />
+                </Box>
+              </Tooltip>
+            </HStack>
+            {/* Layer Config */}
+            <HStack
+              shadow={"sm"}
+              border={"1px solid var(--divider)"}
+              p={1}
+              gap={2}
+              borderRadius={12}
+              bg={lightDarkColor}
+            >
+              <LayerConfigDisclosure>
+                <IconButton
+                  aria-label="Layer Config"
+                  icon={<Icon as={Stack} fontSize={iconSize} />}
+                  className="btn"
+                />
+              </LayerConfigDisclosure>
+            </HStack>
+            {/* Navs */}
+            <Navs />
+          </>
+        )}
 
         {/* Profile */}
         <Profile />

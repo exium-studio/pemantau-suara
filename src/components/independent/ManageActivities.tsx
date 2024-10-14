@@ -1,10 +1,7 @@
-import { Box, HStack, Icon, IconButton, Tooltip } from "@chakra-ui/react";
-import { ClockCounterClockwise } from "@phosphor-icons/react";
+import { Box, HStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useLightDarkColor } from "../../constant/colors";
-import { iconSize } from "../../constant/sizes";
 import useManageActivities from "../../global/useManageActivities";
-import useManageUsers from "../../global/useManageUsers";
 import getUserData from "../../lib/getUserData";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import ExportData from "../dependent/ExportData";
@@ -22,9 +19,7 @@ export default function ManageActivities() {
   const isPenggerak = getUserData()?.role?.id === 3;
 
   // Utils
-  const { manageActivities, toggleManageActivities, onCloseManageActivities } =
-    useManageActivities();
-  const { onCloseManageUsers } = useManageUsers();
+  const { manageActivities, onCloseManageActivities } = useManageActivities();
 
   // Filter Config
   const [filterConfig, setFilterConfig] = useState<any>({
@@ -32,97 +27,70 @@ export default function ManageActivities() {
   });
 
   return (
-    <>
-      <Tooltip
-        label={"Kelola Aktivitas"}
-        openDelay={500}
-        placement="bottom"
-        mt={1}
-        mr={4}
+    <FloatingContainer
+      maxW={"550px"}
+      top={"74px"}
+      right={manageActivities ? "16px" : "-580px"}
+      h={"100%"}
+    >
+      <DisclosureHeader
+        title="Kelola Aktivitas Penggerak"
+        disableBackOnClose
+        onClose={onCloseManageActivities}
+        textProps={{ fontSize: [16, null, 18] }}
+        p={5}
+        pt={"16px !important"}
+        position={"sticky"}
+        top={0}
+        bg={lightDarkColor}
+        zIndex={20}
+      />
+      <CContainer
+        flex={1}
+        px={5}
+        pb={5}
+        overflowY={"auto"}
+        className={"scrollY"}
       >
-        <IconButton
-          aria-label={"Kelola Pengguna"}
-          icon={
-            <Icon
-              as={ClockCounterClockwise}
-              fontSize={iconSize}
-              weight={manageActivities ? "bold" : "regular"}
-              color={manageActivities ? "p.500" : ""}
-            />
-          }
-          className="btn"
-          onClick={() => {
-            onCloseManageUsers();
-            toggleManageActivities();
-          }}
-        />
-      </Tooltip>
-
-      <FloatingContainer
-        maxW={"550px"}
-        top={"74px"}
-        right={manageActivities ? "16px" : "-580px"}
-        h={"100%"}
-      >
-        <DisclosureHeader
-          title="Kelola Aktivitas Penggerak"
-          disableBackOnClose
-          onClose={onCloseManageActivities}
-          textProps={{ fontSize: [16, null, 18] }}
-          p={5}
-          pt={"16px !important"}
-          position={"sticky"}
-          top={0}
-          bg={lightDarkColor}
-          zIndex={20}
-        />
-        <CContainer
-          flex={1}
-          px={5}
-          pb={5}
-          overflowY={"auto"}
-          className={"scrollY"}
-        >
-          <Box>
-            <HStack
-              overflowX={"auto"}
-              className="scrollX"
-              position={"sticky"}
-              top={0}
-              bg={lightDarkColor}
-              zIndex={20}
-              pb={4}
-            >
-              {!isPenggerak && (
-                <SearchComponent
-                  name="search"
-                  onChangeSetter={(input) => {
-                    setFilterConfig((ps: any) => ({
-                      ...ps,
-                      search: input,
-                    }));
-                  }}
-                  inputValue={filterConfig.search}
-                />
-              )}
-
-              <ExportData
-                tooltipLabel="Export Aktivitas"
-                url={`/api/pemantau-suara/dashboard/management/export-aktivitas`}
-                fileName="Aktivitas"
-                ext="xls"
+        <Box>
+          <HStack
+            overflowX={"auto"}
+            className="scrollX"
+            position={"sticky"}
+            top={0}
+            bg={lightDarkColor}
+            zIndex={20}
+            pb={4}
+          >
+            {!isPenggerak && (
+              <SearchComponent
+                name="search"
+                onChangeSetter={(input) => {
+                  setFilterConfig((ps: any) => ({
+                    ...ps,
+                    search: input,
+                  }));
+                }}
+                inputValue={filterConfig.search}
               />
+            )}
 
-              <AddActivityModal />
-            </HStack>
-          </Box>
+            <ExportData
+              tooltipLabel="Export Aktivitas"
+              url={`/api/pemantau-suara/dashboard/management/export-aktivitas`}
+              fileName="Aktivitas"
+              ext="xls"
+            />
 
-          <ActivitiesTable
-            conditions={manageActivities}
-            filterConfig={filterConfig}
-          />
-        </CContainer>
-      </FloatingContainer>
-    </>
+            <AddActivityModal />
+          </HStack>
+        </Box>
+
+        <ActivitiesTable
+          conditions={manageActivities}
+          filterConfig={filterConfig}
+        />
+      </CContainer>
+    </FloatingContainer>
   );
 }

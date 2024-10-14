@@ -15,6 +15,8 @@ import { iconSize } from "../constant/sizes";
 import useSearchMode from "../global/useSearchMode";
 import useIsSmScreen from "../hooks/useIsSmScreen";
 import useLayerConfig from "../global/useLayerConfig";
+import ManageUsers from "../components/independent/ManageUsers";
+import ManageActivities from "../components/independent/ManageActivities";
 
 const LayerConfig = () => {
   const { toggleLayerConfig } = useLayerConfig();
@@ -51,6 +53,15 @@ export default function Dashboard() {
       {/* Map Overlays */}
       {/* Layer Config */}
       <LayerConfigDisclosure />
+
+      {/* Manage Users */}
+      <ManageUsers />
+
+      {/* Manage Activities */}
+      <ManageActivities />
+
+      {/* Legend Component */}
+      <Legend />
 
       {/* Left */}
       <HStack
@@ -103,6 +114,7 @@ export default function Dashboard() {
             >
               <LayerConfig />
             </HStack>
+
             {/* Navs */}
             <Navs />
           </>
@@ -114,9 +126,6 @@ export default function Dashboard() {
 
       {/* Detail GeoJSON Data */}
       <DetailDatabyKelurahan />
-
-      {/* Legend Component */}
-      <Legend />
     </CContainer>
   );
 }

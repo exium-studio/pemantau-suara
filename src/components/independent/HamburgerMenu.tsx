@@ -21,6 +21,36 @@ import {
 import { useLightDarkColor } from "../../constant/colors";
 import { iconSize } from "../../constant/sizes";
 import useLayerConfig from "../../global/useLayerConfig";
+import useManageUsers from "../../global/useManageUsers";
+import useManageActivities from "../../global/useManageActivities";
+import getUserData from "../../lib/getUserData";
+
+const ManageUsers = () => {
+  const { toggleManageUsers } = useManageUsers();
+  const isPenggerak = getUserData()?.role?.id === 3;
+
+  return (
+    <MenuItem onClick={toggleManageUsers} isDisabled={isPenggerak}>
+      <HStack w={"100%"} justify={"space-between"}>
+        <Text>Kelola Pengguna</Text>
+        <Icon as={User} fontSize={iconSize} />
+      </HStack>
+    </MenuItem>
+  );
+};
+
+const ManageActivities = () => {
+  const { toggleManageActivities } = useManageActivities();
+
+  return (
+    <MenuItem onClick={toggleManageActivities}>
+      <HStack w={"100%"} justify={"space-between"}>
+        <Text>Kelola Aktivitas</Text>
+        <Icon as={ClockCounterClockwise} fontSize={iconSize} />
+      </HStack>
+    </MenuItem>
+  );
+};
 
 const LayerConfig = () => {
   const { toggleLayerConfig } = useLayerConfig();
@@ -58,19 +88,9 @@ export default function HamburgerMenu() {
         />
 
         <MenuList mt={1}>
-          <MenuItem>
-            <HStack w={"100%"} justify={"space-between"}>
-              <Text>Kelola Pengguna</Text>
-              <Icon as={User} fontSize={iconSize} />
-            </HStack>
-          </MenuItem>
+          <ManageUsers />
 
-          <MenuItem>
-            <HStack w={"100%"} justify={"space-between"}>
-              <Text>Kelola Aktivitas</Text>
-              <Icon as={ClockCounterClockwise} fontSize={iconSize} />
-            </HStack>
-          </MenuItem>
+          <ManageActivities />
 
           <MenuDivider />
 

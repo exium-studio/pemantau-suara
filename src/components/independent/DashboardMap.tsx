@@ -33,7 +33,7 @@ export default function DashboardMap() {
         geoJSONData={geoJSONKelurahanSemarang}
         latitude={-7.02}
         longitude={110.38}
-        zoom={10}
+        zoom={11}
       />
     </Box>
   );

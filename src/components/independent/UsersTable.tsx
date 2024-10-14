@@ -36,6 +36,7 @@ import CustomTableContainer from "./wrapper/CustomTableContainer";
 import PermissionTooltip from "./wrapper/PermissionTooltip";
 import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
 import useRequest from "../../hooks/useRequest";
+import NooflineText from "../dependent/NooflineText";
 
 interface ResetPasswordProps {
   userId: number;
@@ -250,6 +251,14 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
       th: "NIK",
       isSortable: true,
     },
+    {
+      th: "Area Kelurahan",
+      isSortable: true,
+    },
+    {
+      th: "Penanggung Jawab",
+      isSortable: true,
+    },
   ];
   const formattedBody = dataStates?.data?.map((item: any, i: number) => ({
     id: item.id,
@@ -304,6 +313,22 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
       {
         value: item?.nik_ktp,
         td: item?.nik_ktp,
+      },
+      {
+        value: item?.kelurahan
+          .map((kelurahan: any) => kelurahan.nama_kelurahan)
+          .join(", "),
+        td: (
+          <NooflineText
+            data={item?.kelurahan
+              .map((kelurahan: any) => kelurahan.nama_kelurahan)
+              .join(", ")}
+          />
+        ),
+      },
+      {
+        value: item?.pj_pelaksana?.nama,
+        td: item?.pj_pelaksana?.nama,
       },
     ],
   }));

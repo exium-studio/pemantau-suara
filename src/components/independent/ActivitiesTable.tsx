@@ -108,6 +108,10 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
         justify: "center",
       },
     },
+    {
+      th: "Kelurahan/Kecamatan",
+      isSortable: true,
+    },
     // {
     //   th: "Kelurahan",
     //   isSortable: true,
@@ -196,6 +200,10 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
         cProps: {
           justify: "center",
         },
+      },
+      {
+        value: `${item?.kelurahan?.nama_kelurahan}, ${item?.kelurahan?.kecamatan?.nama_kecamatan}`,
+        td: `${item?.kelurahan?.nama_kelurahan}, ${item?.kelurahan?.kecamatan?.nama_kecamatan}`,
       },
       // {
       //   value: item?.kelurahan?.nama_kelurahan,

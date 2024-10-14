@@ -1,5 +1,5 @@
 import { useColorMode } from "@chakra-ui/react";
-import { RefObject, useCallback, useEffect, useMemo } from "react";
+import { RefObject, useCallback, useEffect, useMemo, useRef } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
 import useselectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../../hooks/useDataState";
@@ -22,6 +22,9 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     selectedGeoJSONKelurahan?.geoJSON?.properties?.village_code;
   const { tahun, kategoriSuara, layer } = useLayerConfig();
 
+  // Data ref untuk menyimpan data lama
+  const dataRef = useRef<any>(null);
+
   // States
   const { loading, data } = useDataState<any>({
     url: `/api/pemantau-suara/publik-request/get-map-kelurahan`,
@@ -29,8 +32,16 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
       tahun: [tahun],
       kategori_suara: [kategoriSuara?.value],
     },
+    conditions: !dataRef.current,
     dependencies: [tahun, kategoriSuara],
   });
+
+  // Menyimpan data terbaru di dalam dataRef.current
+  useEffect(() => {
+    if (data) {
+      dataRef.current = data;
+    }
+  }, [data]);
 
   // Utils
   const { onFullscreenSpinnerOpen, onFullscreenSpinnerClose } =
@@ -112,10 +123,6 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
             }
           })();
 
-          // console.log(geoJSON?.properties?.village_code === kode_kelurahan);
-          // console.log(geoJSON?.properties?.village_code);
-          // console.log(kode_kelurahan);
-
           return (
             <Source key={i} type="geojson" data={geoJSON}>
               <Layer
@@ -127,7 +134,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
                     geoJSON?.properties?.village_code === kode_kelurahan
                       ? 1
                       : kode_kelurahan
-                      ? 0.2
+                      ? 0.1
                       : 0.6,
                   // "fill-outline-color": colorMode === "dark" ? "#fff" : "#444",
                 }}
@@ -137,8 +144,8 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
                 id={`geojson-layer-line-${i}`}
                 type="line"
                 paint={{
-                  "line-color": colorMode === "dark" ? "#fff" : "#444", // Warna outline
-                  "line-width": 1, // Ketebalan garis outline
+                  "line-color": colorMode === "dark" ? "#ccc" : "#444",
+                  "line-width": 1,
                 }}
                 layout={{
                   "line-cap": "round",

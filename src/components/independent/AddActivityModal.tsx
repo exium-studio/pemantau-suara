@@ -27,7 +27,11 @@ export default function AddActivityModal() {
 
   return (
     <>
-      <Tooltip label="Tambah Aktivitas" openDelay={500} mr={9}>
+      <Tooltip
+        label={isSuperAdmin ? "Tidak ada akses" : "Tambah Aktivitas"}
+        openDelay={500}
+        mr={9}
+      >
         {!isPenggerak ? (
           <IconButton
             aria-label="add-activity"

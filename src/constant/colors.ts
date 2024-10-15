@@ -57,7 +57,7 @@ const statusKaryawanColorScheme = {
 const statusAktivitasColor = [
   {
     label: "Belum Ada Aktivitas",
-    color: "#FFFFFF",
+    color: "#DDDDDD",
   },
   {
     label: "Alat Peraga",

@@ -101,7 +101,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
       return acc;
     },
     [
-      { status_aktivitas: "Belum Ada Aktivitas", total: 0, color: "#FFFFFF" },
+      { status_aktivitas: "Belum Ada Aktivitas", total: 0, color: "#F0F0F0" },
       { status_aktivitas: "Alat Peraga", total: 0, color: "#00CCFF" },
       { status_aktivitas: "Sosialisasi", total: 0, color: "#0C6091" },
     ]
@@ -821,8 +821,8 @@ export default function DetailDatabyKelurahan() {
           )}
         </SimpleGrid>
       </CContainer>
-
-      {/* <ButtonGroup p={5}>
+      {/* 
+      <ButtonGroup p={5}>
         <ToggleComparisonMode />
       </ButtonGroup> */}
     </FloatingContainer>

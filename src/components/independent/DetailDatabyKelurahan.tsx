@@ -88,22 +88,53 @@ const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
 //   );
 // };
 
-const AktivitasChart = ({ data }: any) => {
-  const labels = data?.map((item: any) => `RW ${item.rw}`);
-  const colors = Array.from({ length: data?.length }).map(
-    (_, i) => chartColors[i % chartColors.length]
+const AktivitasChart = ({ data, data2 }: any) => {
+  const result = data.reduce(
+    (acc: any, item: any) => {
+      if (item.id === null) {
+        acc[0].total++;
+      } else if (item.id === 1) {
+        acc[1].total++;
+      } else if (item.id === 2) {
+        acc[2].total++;
+      }
+      return acc;
+    },
+    [
+      { status_aktivitas: "Belum Ada Aktivitas", total: 0, color: "#FFFFFF" },
+      { status_aktivitas: "Alat Peraga", total: 0, color: "#00CCFF" },
+      { status_aktivitas: "Sosialisasi", total: 0, color: "#0C6091" },
+    ]
   );
+
+  // Data Status Aktivitas
+  const labels = result?.map((item: any) => `${item.status_aktivitas}`);
+  const colors = result.map((item: any) => item?.color);
   const datasets = [
     {
-      customTooltipLabels: data?.map((item: any) => item?.potensi_suara),
+      customTooltipLabels: result?.map((item: any) => item?.total),
       label: "Nominal (N)",
-      data: data?.map((item: any) => item?.potensi_suara),
+      data: result?.map((item: any) => item?.total),
       backgroundColor: colors,
       borderWidth: 0,
     },
   ];
 
-  const totalPotensiSuara = data?.reduce(
+  // Data Potensi Suara
+  const labels2 = data2?.map((item: any) => `RW ${item.rw}`);
+  const colors2 = Array.from({ length: data2?.length }).map(
+    (_, i) => chartColors[i % chartColors.length]
+  );
+  const datasets2 = [
+    {
+      customTooltipLabels: data2?.map((item: any) => item?.potensi_suara),
+      label: "Nominal (N)",
+      data: data2?.map((item: any) => item?.potensi_suara),
+      backgroundColor: colors2,
+      borderWidth: 0,
+    },
+  ];
+  const totalPotensiSuara = data2?.reduce(
     (sum: any, item: any) => sum + item.potensi_suara,
     0
   );
@@ -120,66 +151,6 @@ const AktivitasChart = ({ data }: any) => {
       >
         <Text fontSize={18} fontWeight={500} textAlign={"center"}>
           Status Aktivitas
-        </Text>
-
-        <VStack flex={"1 0 0"} position={"relative"}>
-          <VStack zIndex={2} w={"100%"} className="doughnutChartContainer">
-            <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
-          </VStack>
-
-          <VStack
-            position={"absolute"}
-            left={"50%"}
-            top={"50%"}
-            transform={"translate(-50%, -50%)"}
-            gap={0}
-          >
-            <Text textAlign={"center"} opacity={0.6}>
-              Total
-            </Text>
-            <Text fontSize={30} fontWeight={600} lineHeight={1.2} mb={4}>
-              {formatNumber(totalPotensiSuara)}
-            </Text>
-          </VStack>
-        </VStack>
-
-        <Wrap
-          m={"auto"}
-          justify={"center"}
-          h={"fit-content"}
-          px={2}
-          spacingX={4}
-          spacingY={1}
-        >
-          {data?.map((item: any, i: number) => (
-            <Tooltip key={i} label={formatNumber(item?.potensi_suara)}>
-              <HStack cursor={"default"}>
-                <Box
-                  w={"8px"}
-                  h={"8px"}
-                  bg={colors[i]}
-                  borderRadius={"full"}
-                  border={"1px solid var(--divider3)"}
-                />
-                <Text fontSize={"sm"} opacity={0.6}>
-                  {`RW ${item?.rw}`}
-                </Text>
-              </HStack>
-            </Tooltip>
-          ))}
-        </Wrap>
-      </CContainer>
-
-      <CContainer
-        border={"1px solid var(--divider3)"}
-        borderRadius={8}
-        flex={0}
-        gap={6}
-        p={5}
-        mb={4}
-      >
-        <Text fontSize={18} fontWeight={500} textAlign={"center"}>
-          Potensi Suara
         </Text>
 
         <VStack flex={"1 0 0"} position={"relative"}>
@@ -211,13 +182,77 @@ const AktivitasChart = ({ data }: any) => {
           spacingX={4}
           spacingY={1}
         >
-          {data?.map((item: any, i: number) => (
-            <Tooltip key={i} label={formatNumber(item?.potensi_suara)}>
+          {result?.map((item: any, i: number) => (
+            <Tooltip key={i} label={formatNumber(item?.status_aktivitas)}>
               <HStack cursor={"default"}>
                 <Box
                   w={"8px"}
                   h={"8px"}
                   bg={colors[i]}
+                  borderRadius={"full"}
+                  border={"1px solid var(--divider3)"}
+                />
+                <Text fontSize={"sm"} opacity={0.6}>
+                  {`${item?.status_aktivitas}`}
+                </Text>
+              </HStack>
+            </Tooltip>
+          ))}
+        </Wrap>
+      </CContainer>
+
+      <CContainer
+        border={"1px solid var(--divider3)"}
+        borderRadius={8}
+        flex={0}
+        gap={6}
+        p={5}
+        mb={4}
+      >
+        <Text fontSize={18} fontWeight={500} textAlign={"center"}>
+          Potensi Suara
+        </Text>
+
+        <VStack flex={"1 0 0"} position={"relative"}>
+          <VStack zIndex={2} w={"100%"} className="doughnutChartContainer">
+            <ChartDoughnut
+              labels={labels2}
+              datasets={datasets2}
+              cutout={"70"}
+            />
+          </VStack>
+
+          <VStack
+            position={"absolute"}
+            left={"50%"}
+            top={"50%"}
+            transform={"translate(-50%, -50%)"}
+            gap={0}
+          >
+            <Text textAlign={"center"} opacity={0.6}>
+              Total
+            </Text>
+            <Text fontSize={30} fontWeight={600} lineHeight={1.2} mb={4}>
+              {formatNumber(totalPotensiSuara)}
+            </Text>
+          </VStack>
+        </VStack>
+
+        <Wrap
+          m={"auto"}
+          justify={"center"}
+          h={"fit-content"}
+          px={2}
+          spacingX={4}
+          spacingY={1}
+        >
+          {data2?.map((item: any, i: number) => (
+            <Tooltip key={i} label={formatNumber(item?.potensi_suara)}>
+              <HStack cursor={"default"}>
+                <Box
+                  w={"8px"}
+                  h={"8px"}
+                  bg={colors2[i]}
                   borderRadius={"full"}
                   border={"1px solid var(--divider3)"}
                 />
@@ -610,7 +645,10 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
       <CContainer px={5} {...props}>
         {jenisData === "potensi_suara" && (
           <>
-            <AktivitasChart data={dataStates?.data?.chart} />
+            <AktivitasChart
+              data={dataStates?.data?.chart}
+              data2={dataStates?.data?.chart_2}
+            />
             <AktivitasTable dataStates={dataStates} />
           </>
         )}
@@ -640,6 +678,7 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
       overflowX={"clip"}
       className="scrollY"
     >
+      {/* Jenis Data & Tahun */}
       <Wrap px={5} mb={2} align={"center"} justify={"space-between"}>
         <JenisDataMenu
           jenisDataProps={jenisDataProps}

@@ -77,7 +77,7 @@ export default function LayerConfig() {
 
           <FormControl mb={4} isInvalid={!!formik.errors.kategori_suara}>
             <FormLabel>
-              Kategori Suara
+              Jenis Pemilihan
               <RequiredForm />
             </FormLabel>
             <SelectKategoriSuara
@@ -86,6 +86,7 @@ export default function LayerConfig() {
                 formik.setFieldValue("kategori_suara", input);
               }}
               inputValue={formik.values.kategori_suara}
+              isDisabled
             />
             <FormErrorMessage>
               {formik.errors.kategori_suara as string}

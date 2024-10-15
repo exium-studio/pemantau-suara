@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   HStack,
   Icon,
   Menu,
@@ -89,6 +90,7 @@ const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
 // };
 
 const AktivitasChart = ({ data, data2 }: any) => {
+  // Data Status Aktivitas
   const result = data.reduce(
     (acc: any, item: any) => {
       if (item.id === null) {
@@ -106,8 +108,6 @@ const AktivitasChart = ({ data, data2 }: any) => {
       { status_aktivitas: "Sosialisasi", total: 0, color: "#0C6091" },
     ]
   );
-
-  // Data Status Aktivitas
   const labels = result?.map((item: any) => `${item.status_aktivitas}`);
   const colors = result.map((item: any) => item?.color);
   const datasets = [
@@ -166,10 +166,10 @@ const AktivitasChart = ({ data, data2 }: any) => {
             gap={0}
           >
             <Text textAlign={"center"} opacity={0.6}>
-              Total
+              Total RW
             </Text>
-            <Text fontSize={30} fontWeight={600} lineHeight={1.2} mb={4}>
-              {formatNumber(totalPotensiSuara)}
+            <Text fontSize={30} fontWeight={600} lineHeight={1.2}>
+              {formatNumber(data?.length)}
             </Text>
           </VStack>
         </VStack>
@@ -199,7 +199,36 @@ const AktivitasChart = ({ data, data2 }: any) => {
             </Tooltip>
           ))}
         </Wrap>
+
+        <SimpleGrid columns={3} gap={2} mt={4}>
+          {data?.map((item: any, i: number) => (
+            <Center
+              bg={`#${item?.color}`}
+              color={item?.id === null ? "black" : "white"}
+              borderRadius={6}
+              p={2}
+            >{`RW ${i + 1}`}</Center>
+          ))}
+        </SimpleGrid>
       </CContainer>
+
+      {/* <CContainer
+        border={"1px solid var(--divider3)"}
+        borderRadius={8}
+        flex={0}
+        gap={6}
+        p={5}
+        mb={4}
+      >
+        <SimpleGrid columns={3} gap={4}>
+          {data?.map((item: any, i: number) => (
+            <Center
+              bg={`#${item?.color}`}
+              color={item?.id === null ? "black" : "white"}
+            >{`RW ${i + 1}`}</Center>
+          ))}
+        </SimpleGrid>
+      </CContainer> */}
 
       <CContainer
         border={"1px solid var(--divider3)"}
@@ -232,7 +261,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
             <Text textAlign={"center"} opacity={0.6}>
               Total
             </Text>
-            <Text fontSize={30} fontWeight={600} lineHeight={1.2} mb={4}>
+            <Text fontSize={30} fontWeight={600} lineHeight={1.2}>
               {formatNumber(totalPotensiSuara)}
             </Text>
           </VStack>

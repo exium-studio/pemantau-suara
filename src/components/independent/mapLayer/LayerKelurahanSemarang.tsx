@@ -50,6 +50,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   // Handle loading
   useEffect(() => {
     if (loading) {
+      console.log(loading);
       onFullscreenSpinnerOpen();
     } else {
       onFullscreenSpinnerClose();

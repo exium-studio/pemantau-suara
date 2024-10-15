@@ -18,7 +18,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   // Globals
   const { selectedGeoJSONKelurahan, setSelectedGeoJSONKelurahan } =
     useselectedGeoJSONKelurahan();
-  const kode_kelurahan =
+  const selectedKodeKelurahan =
     selectedGeoJSONKelurahan?.geoJSON?.properties?.village_code;
   const { tahun, kategoriSuara, layer } = useLayerConfig();
 
@@ -110,7 +110,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
             data?.[i]?.status_aktivitas_kelurahan?.color || "FFFFFF"
           }`;
           const suaraKPUTerbanyakColor = `#${
-            data?.[i]?.suara_kpu_terbanyak?.partai?.color || "FFFFFF00"
+            data?.[i]?.suara_kpu_terbanyak?.partai?.color || "FFFFFF"
           }`;
           const fillColor = (() => {
             switch (layer?.label) {
@@ -131,10 +131,13 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
                 paint={{
                   "fill-color": fillColor,
                   "fill-opacity":
-                    geoJSON?.properties?.village_code === kode_kelurahan
+                    geoJSON?.properties?.village_code === selectedKodeKelurahan
                       ? 1
-                      : kode_kelurahan
+                      : selectedKodeKelurahan
                       ? 0.1
+                      : layer?.label === "Suara KPU" &&
+                        !data?.[i]?.suara_kpu_terbanyak
+                      ? 0
                       : 0.6,
                   // "fill-outline-color": colorMode === "dark" ? "#fff" : "#444",
                 }}
@@ -157,7 +160,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
         })}
       </>
     ),
-    [colorMode, data, geoJSONData, layer, kode_kelurahan]
+    [colorMode, data, geoJSONData, layer, selectedKodeKelurahan]
   );
 
   return render;

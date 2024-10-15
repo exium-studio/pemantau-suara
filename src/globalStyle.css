@@ -12,6 +12,10 @@
   opacity: 0;
 }
 
+html {
+  overflow: clip;
+}
+
 td {
   font-weight: 500 !important;
 }

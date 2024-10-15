@@ -47,7 +47,13 @@ export default function Dashboard() {
       align={"stretch"}
       overflow={"clip"}
     >
-      <CContainer justify={"center"} align={"center"} overflow={"clip"}>
+      <CContainer
+        w={"100vw"}
+        h={"100vh"}
+        justify={"center"}
+        align={"center"}
+        overflow={"clip"}
+      >
         <DashboardMap />
       </CContainer>
 

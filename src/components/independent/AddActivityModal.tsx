@@ -23,6 +23,7 @@ export default function AddActivityModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   useBackOnClose(`add-activity-modal`, isOpen, onOpen, onClose);
   const isPenggerak = getUserData()?.role?.id === 3;
+  const isSuperAdmin = getUserData()?.role?.id === 1;
 
   return (
     <>
@@ -34,6 +35,7 @@ export default function AddActivityModal() {
             colorScheme="ap"
             className="btn-ap clicky"
             onClick={onOpen}
+            isDisabled={isSuperAdmin}
           />
         ) : (
           <Button
@@ -43,6 +45,7 @@ export default function AddActivityModal() {
             className="btn-ap clicky"
             pl={5}
             onClick={onOpen}
+            isDisabled={isSuperAdmin}
           >
             Tambah Aktivitas
           </Button>

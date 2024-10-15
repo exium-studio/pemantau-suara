@@ -28,6 +28,7 @@ import StringInput from "../dependent/input/StringInput";
 import Textarea from "../dependent/input/Textarea";
 import RequiredForm from "./RequiredForm";
 import SelectStatusAktivitas from "../dependent/dedicated/SelectStatusAktivitas";
+import createNumberArraybyGivenMaxNumber from "../../lib/createNumberArraybyGivenMaxNumber";
 
 const defaultValues = {
   pelaksana: undefined,
@@ -62,6 +63,8 @@ export default function ActivityForm({
   >(undefined);
   const userData = getUserData();
   const userDataRef = useRef(userData);
+  const isPenggerak = getUserData()?.role?.id === 3;
+  const isPj = getUserData()?.role?.id === 2;
 
   // Utils
   const { req, loading, status } = useRequest();
@@ -160,6 +163,8 @@ export default function ActivityForm({
   });
   const formikRef = useRef(formik);
 
+  console.log(formik.values.kelurahan);
+
   // Handle response status
   useEffect(() => {
     if (status === 200 || status === 201) {
@@ -168,21 +173,21 @@ export default function ActivityForm({
     }
   }, [status, setRt]);
 
-  // Handle pelaksana jika user login adalah pelaksana/penggerak
+  // Handle pelaksana jika user login adalah pelaksana/penggerak or PJ
   useEffect(() => {
     // Check is user penggerak
-    if (userDataRef.current?.role?.id === 3) {
+    if (isPenggerak || isPj) {
       formikRef?.current?.setFieldValue("pelaksana", {
         value: userDataRef.current?.id,
         label: userDataRef.current?.nama,
         original_data: userDataRef.current,
       });
     }
-  }, []);
+  }, [isPenggerak, isPj]);
 
   // Handle kelurahan by pelaksana/penggerak
   useEffect(() => {
-    if (formik.values.pelaksana) {
+    if (isPenggerak && formik.values.pelaksana) {
       formikRef?.current?.setFieldValue("kelurahan", undefined);
       request(
         `/api/pemantau-suara/publik-request/get-all-kelurahan-users/${formik.values.pelaksana?.value}`
@@ -200,7 +205,7 @@ export default function ActivityForm({
           console.log(e);
         });
     }
-  }, [formik.values.pelaksana]);
+  }, [isPenggerak, formik.values.pelaksana]);
 
   // Handle RWOptions by rw pelaksana
   useEffect(() => {
@@ -210,8 +215,26 @@ export default function ActivityForm({
         label: item,
       })
     );
-    setRWOptions(RWOptions);
-  }, [formik.values.pelaksana]);
+
+    const RWOptions2 = createNumberArraybyGivenMaxNumber(
+      formik.values.kelurahan?.original_data?.max_rw
+    ).map((item) => ({
+      value: item,
+      label: item.toString(),
+    }));
+
+    if (isPenggerak) {
+      setRWOptions(RWOptions);
+    }
+    if (isPj) {
+      setRWOptions(RWOptions2);
+    }
+  }, [
+    isPenggerak,
+    isPj,
+    formik.values.pelaksana,
+    formik.values.kelurahan?.original_data?.max_rw,
+  ]);
 
   return (
     <>
@@ -220,7 +243,7 @@ export default function ActivityForm({
         {!excludeFields?.includes("pelaksana") && (
           <FormControl mb={4} isInvalid={!!formik.errors?.pelaksana}>
             <FormLabel>
-              Penggerak
+              Pelaku
               <RequiredForm />
             </FormLabel>
             <SelectPenggerak
@@ -228,7 +251,7 @@ export default function ActivityForm({
               onConfirm={(input) => {
                 formik.setFieldValue("pelaksana", input);
               }}
-              isDisabled={userData?.role?.id === 3}
+              isDisabled={isPenggerak || isPj}
               inputValue={formik.values.pelaksana}
             />
             <FormErrorMessage>
@@ -252,7 +275,7 @@ export default function ActivityForm({
               isError={!!formik.errors.kelurahan}
               inputValue={formik.values.kelurahan}
               optionsDisplay="chip"
-              isDisabled={true}
+              isDisabled={!formik.values.pelaksana || isPenggerak}
             />
             <FormErrorMessage>
               {formik.errors.kelurahan as string}

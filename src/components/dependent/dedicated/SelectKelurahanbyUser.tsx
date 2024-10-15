@@ -1,6 +1,9 @@
 import { ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { Interface__SelectOption } from "../../../constant/interfaces";
 import SingleSelectModal from "../input/SingleSelectModal";
+import { useEffect, useState } from "react";
+import useDataState from "../../../hooks/useDataState";
+import getUserData from "../../../lib/getUserData";
 
 interface Props extends ButtonProps {
   name: string;
@@ -27,23 +30,26 @@ export default function SelectKelurahanbyUser({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // States
-  // const [options, setOptions] = useState<any>(undefined);
-  // const { data } = useDataState<any>({
-  //   url: `/api/pemantau-suara/publik-request/get-all-kelurahan-loggedIn`,
-  // });
+  const [options, setOptions] = useState<any>(undefined);
+  const { data } = useDataState<any>({
+    url: `/api/pemantau-suara/publik-request/get-all-kelurahan-users/${
+      getUserData()?.id
+    }`,
+    conditions: isOpen,
+  });
 
   // Fetch list item options
-  // useEffect(() => {
-  //   if (isOpen && data) {
-  //     const getOptions = data?.map((item: any) => ({
-  //       value: item?.kode_kelurahan,
-  //       label: item?.nama_kelurahan,
-  //       original_data: item,
-  //     }));
+  useEffect(() => {
+    if (isOpen && data) {
+      const getOptions = data?.map((item: any) => ({
+        value: item?.kode_kelurahan,
+        label: item?.nama_kelurahan,
+        original_data: item,
+      }));
 
-  //     setOptions(getOptions);
-  //   }
-  // }, [isOpen, data]);
+      setOptions(getOptions);
+    }
+  }, [isOpen, data]);
 
   return (
     <SingleSelectModal
@@ -52,7 +58,7 @@ export default function SelectKelurahanbyUser({
       isOpen={isOpen}
       onOpen={onOpen}
       onClose={onClose}
-      options={[]}
+      options={options}
       onConfirm={(input) => {
         onConfirm(input);
       }}

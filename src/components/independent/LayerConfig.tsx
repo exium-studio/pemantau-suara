@@ -15,7 +15,7 @@ import RequiredForm from "../form/RequiredForm";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
 
-export default function LayerConfigDisclosure() {
+export default function LayerConfig() {
   const { layerConfig, onCloseLayerConfig } = useLayerConfig();
 
   // Globals

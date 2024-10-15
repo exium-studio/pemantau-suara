@@ -4,7 +4,7 @@ import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import DashboardMap from "../components/independent/DashboardMap";
 import DetailDatabyKelurahan from "../components/independent/DetailDatabyKelurahan";
 import HamburgerMenu from "../components/independent/HamburgerMenu";
-import LayerConfigDisclosure from "../components/independent/LayerConfigDisclosure";
+import LayerConfig from "../components/independent/LayerConfig";
 import Legend from "../components/independent/Legend";
 import Navs from "../components/independent/Navs";
 import Profile from "../components/independent/Profile";
@@ -18,7 +18,7 @@ import useLayerConfig from "../global/useLayerConfig";
 import ManageUsers from "../components/independent/ManageUsers";
 import ManageActivities from "../components/independent/ManageActivities";
 
-const LayerConfig = () => {
+const LayerConfigButton = () => {
   const { toggleLayerConfig } = useLayerConfig();
 
   return (
@@ -52,7 +52,7 @@ export default function Dashboard() {
 
       {/* Map Overlays */}
       {/* Layer Config */}
-      <LayerConfigDisclosure />
+      <LayerConfig />
 
       {/* Manage Users */}
       <ManageUsers />
@@ -82,7 +82,7 @@ export default function Dashboard() {
 
         {!ss && (
           <>
-            {/* Color Mode */}
+            {/* Color Mode Button */}
             <HStack
               shadow={"sm"}
               border={"1px solid var(--divider)"}
@@ -103,7 +103,7 @@ export default function Dashboard() {
               </Tooltip>
             </HStack>
 
-            {/* Layer Config */}
+            {/* Layer Config Button */}
             <HStack
               shadow={"sm"}
               border={"1px solid var(--divider)"}
@@ -112,7 +112,7 @@ export default function Dashboard() {
               borderRadius={12}
               bg={lightDarkColor}
             >
-              <LayerConfig />
+              <LayerConfigButton />
             </HStack>
 
             {/* Navs */}

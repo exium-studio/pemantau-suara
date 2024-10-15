@@ -266,8 +266,8 @@ export default function Profile() {
           zIndex={20}
         />
 
-        <CContainer px={6}>
-          <HStack mt={-10} gap={4}>
+        <CContainer px={8}>
+          <HStack mt={-8} gap={4}>
             <Avatar
               src={userData?.foto_profil || ""}
               name={userData?.nama}

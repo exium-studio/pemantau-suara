@@ -110,7 +110,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
             data?.[i]?.status_aktivitas_kelurahan?.color || "FFFFFF"
           }`;
           const suaraKPUTerbanyakColor = `#${
-            data?.[i]?.suara_kpu_terbanyak?.partai?.color || "FFFFFF"
+            data?.[i]?.suara_kpu_terbanyak?.partai?.color || "FFFFFF00"
           }`;
           const fillColor = (() => {
             switch (layer?.label) {

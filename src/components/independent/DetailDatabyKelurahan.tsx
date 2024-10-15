@@ -51,7 +51,7 @@ const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
       >
         {jenisDataProps[jenisData].title}
       </MenuButton>
-      <MenuList minW={"160px"}>
+      <MenuList minW={"160px"} zIndex={4}>
         <MenuItem
           onClick={() => {
             setJenisData("potensi_suara");

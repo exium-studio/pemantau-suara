@@ -183,7 +183,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
           spacingY={1}
         >
           {result?.map((item: any, i: number) => (
-            <Tooltip key={i} label={formatNumber(item?.status_aktivitas)}>
+            <Tooltip key={i} label={formatNumber(item?.total)}>
               <HStack cursor={"default"}>
                 <Box
                   w={"8px"}

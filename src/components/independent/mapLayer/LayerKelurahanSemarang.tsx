@@ -54,7 +54,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   // Handle loading
   useEffect(() => {
     if (loading) {
-      setLabelMapSpinner("Sedang Mendapatkan Data Peta");
+      setLabelMapSpinner("Sedang mendapatkan data peta");
       onOpenMapSpinner();
     } else {
       resetLabelMapSpinner();

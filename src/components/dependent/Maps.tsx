@@ -1,5 +1,5 @@
 import { Box, useColorMode } from "@chakra-ui/react";
-import { CSSProperties, useEffect, useRef, useState } from "react";
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { Map, MapRef, Marker } from "react-map-gl";
 import useSearchAddress from "../../global/useSearchAddress";
 import getUserData from "../../lib/getUserData";
@@ -33,16 +33,22 @@ export default function Maps({
     (kelurahan: any) => kelurahan?.kode_kelurahan
   );
   const isSuperAdmin = userData?.role?.id === 1;
-  const filteredGeoJSON = isSuperAdmin
-    ? geoJSONData
-    : geoJSONData?.filter((kelurahan: any) => {
-        return allowedKelurahan?.includes(kelurahan?.properties?.village_code);
-      }) || [];
+
+  // Filter GeoJSON based on user access
+  const filteredGeoJSON = useMemo(() => {
+    return isSuperAdmin
+      ? geoJSONData
+      : geoJSONData?.filter((kelurahan: any) => {
+          return allowedKelurahan?.includes(
+            kelurahan?.properties?.village_code
+          );
+        }) || [];
+  }, [geoJSONData, allowedKelurahan, isSuperAdmin]);
 
   // Handle render map component
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [mapStyle, setMapStyle] = useState("");
-  const [viewState] = useState({ latitude, longitude, zoom });
+  const [viewState, setViewState] = useState({ latitude, longitude, zoom });
   const mapRef = useRef<MapRef>(null);
 
   // Handle change style depend on dark mode
@@ -82,8 +88,7 @@ export default function Maps({
       style={{ width: "100vw", height: "100vh", ...style }}
       mapStyle={mapStyle}
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-      // onMove={(evt) => setViewState(evt.viewState)}
-      // {...viewState}
+      onMove={(evt) => setViewState(evt.viewState)}
     >
       {isMapLoaded && (
         <>
@@ -113,9 +118,6 @@ export default function Maps({
             mapRef={mapRef}
             geoJSONData={filteredGeoJSON}
           />
-
-          {/* Hovered & clicked layers */}
-          {/* <LayerHoveredAndClickedKelurahan /> */}
         </>
       )}
     </Map>

@@ -50,7 +50,6 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   // Handle loading
   useEffect(() => {
     if (loading) {
-      console.log(loading);
       onFullscreenSpinnerOpen();
     } else {
       onFullscreenSpinnerClose();
@@ -102,16 +101,6 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
       };
     });
   }, [mapRef, geoJSONData, handleLayerClick]);
-
-  // console.log(
-  //   data?.map((item: any) => {
-  //     const matchedGeoJSON = geoJSONData.find(
-  //       (geoJSON: any) =>
-  //         geoJSON?.properties?.village_code === item?.kode_kelurahan
-  //     );
-  //     return matchedGeoJSON || { message: "No match found", item: item };
-  //   })
-  // );
 
   const render = useMemo(
     () => (

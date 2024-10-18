@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { iconSize } from "../../constant/sizes";
 import useDetailAktivitasUser from "../../global/useDetailAktivitasUser";
-import useFullscreenSpinner from "../../global/useFullscreenSpinner";
+import useFullscreenSpinner from "../../global/useFixedFullscreenSpinner";
 import useManageActivities from "../../global/useManageActivities";
 import useManageUsers from "../../global/useManageUsers";
 import useAuth from "../../hooks/useAuth";
@@ -183,19 +183,19 @@ const Logout = () => {
   const { setDetailAktivitasUser } = useDetailAktivitasUser();
 
   // Utils
-  const { onFullscreenSpinnerOpen, onFullscreenSpinnerClose } =
+  const { onOpenFixedFullscreenSpinner, onCloseFixedFullscreenSpinner } =
     useFullscreenSpinner();
   const navigate = useNavigate();
   const { logout, loading, status } = useAuth();
   function onLogout() {
-    onFullscreenSpinnerOpen();
-    // setLabel("Sedang keluar, harap menunggu, jangan menutup halaman ini");
+    onOpenFixedFullscreenSpinner();
+    // setLabelFixedFullscreenSpinner("Sedang keluar, harap menunggu, jangan menutup halaman ini");
     logout({ url: `/api/logout` });
   }
   // Handle response
   useEffect(() => {
     if (status === 200) {
-      onFullscreenSpinnerClose();
+      onCloseFixedFullscreenSpinner();
       localStorage.removeItem("__auth_token");
       localStorage.removeItem("__user_data");
       onCloseManageUsers();
@@ -206,7 +206,7 @@ const Logout = () => {
   }, [
     status,
     navigate,
-    onFullscreenSpinnerClose,
+    onCloseFixedFullscreenSpinner,
     onCloseManageUsers,
     onCloseManageActivities,
     setDetailAktivitasUser,

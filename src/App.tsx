@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./globalStyle.css";
 // import "react-day-picker/style.css";
 
-import FullscreenSpinner from "./components/independent/FullscreenSpinner";
+import FixedFullscreenSpinner from "./components/independent/FixedFullscreenSpinner";
 import Watermark from "./components/independent/Watermark";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -14,7 +14,7 @@ import { globalTheme } from "./theme/globalTheme";
 export const App = () => {
   return (
     <ChakraProvider theme={globalTheme}>
-      <FullscreenSpinner />
+      <FixedFullscreenSpinner />
 
       <BrowserRouter>
         <Watermark />

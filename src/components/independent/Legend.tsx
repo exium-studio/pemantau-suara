@@ -99,6 +99,10 @@ const LegendComponent: React.FC = () => {
               );
             })}
           </SimpleGrid>
+
+          <Text mt={6} opacity={0.4} fontSize={"sm"}>
+            *Legenda menyesuaikan Layer di Layer Config
+          </Text>
         </CContainer>
       </FloatingContainer>
     </>

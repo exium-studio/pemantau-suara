@@ -4,7 +4,7 @@ import getAuthToken from "../lib/getAuthToken";
 import getUserData from "../lib/getUserData";
 import request from "../lib/request";
 import useMiddleware from "../global/useMiddleware";
-import useFullscreenSpinner from "../global/useFullscreenSpinner";
+import useFullscreenSpinner from "../global/useFixedFullscreenSpinner";
 import useManageUsers from "../global/useManageUsers";
 import useManageActivities from "../global/useManageActivities";
 import useDetailAktivitasUser from "../global/useDetailAktivitasUser";
@@ -15,7 +15,7 @@ const Middleware = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { role, setRole } = useMiddleware();
 
-  const { onFullscreenSpinnerOpen, onFullscreenSpinnerClose } =
+  const { onOpenFixedFullscreenSpinner, onCloseFixedFullscreenSpinner } =
     useFullscreenSpinner();
   const { onCloseManageUsers } = useManageUsers();
   const { onCloseManageActivities } = useManageActivities();
@@ -50,14 +50,14 @@ const Middleware = () => {
       onCloseManageUsers();
       onCloseManageActivities();
       setDetailAktivitasUser(undefined);
-      onFullscreenSpinnerOpen();
+      onOpenFixedFullscreenSpinner();
     } else {
-      onFullscreenSpinnerClose();
+      onCloseFixedFullscreenSpinner();
     }
   }, [
     loading,
-    onFullscreenSpinnerOpen,
-    onFullscreenSpinnerClose,
+    onOpenFixedFullscreenSpinner,
+    onCloseFixedFullscreenSpinner,
     onCloseManageActivities,
     onCloseManageUsers,
     setDetailAktivitasUser,

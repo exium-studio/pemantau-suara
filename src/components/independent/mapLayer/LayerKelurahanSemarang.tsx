@@ -1,10 +1,10 @@
 import { useColorMode } from "@chakra-ui/react";
 import { RefObject, useCallback, useEffect, useMemo, useRef } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
+import useLayerConfig from "../../../global/useLayerConfig";
+import useMapSpinner from "../../../global/useMapSpinner";
 import useselectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../../hooks/useDataState";
-import useFullscreenSpinner from "../../../global/useFullscreenSpinner";
-import useLayerConfig from "../../../global/useLayerConfig";
 
 interface Props {
   geoJSONData: any;
@@ -44,17 +44,16 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   }, [data]);
 
   // Utils
-  const { onFullscreenSpinnerOpen, onFullscreenSpinnerClose } =
-    useFullscreenSpinner();
+  const { onOpenMapSpinner, onCloseMapSpinner } = useMapSpinner();
 
   // Handle loading
   useEffect(() => {
     if (loading) {
-      onFullscreenSpinnerOpen();
+      onOpenMapSpinner();
     } else {
-      onFullscreenSpinnerClose();
+      onCloseMapSpinner();
     }
-  }, [loading, onFullscreenSpinnerOpen, onFullscreenSpinnerClose]);
+  }, [loading, onOpenMapSpinner, onCloseMapSpinner]);
 
   // Fungsi untuk menangani klik pada layer
   const handleLayerClick = useCallback(

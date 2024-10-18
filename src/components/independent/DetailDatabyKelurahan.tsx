@@ -134,10 +134,8 @@ const AktivitasChart = ({ data, data2 }: any) => {
       borderWidth: 0,
     },
   ];
-  const totalPotensiSuara = data2?.reduce(
-    (sum: any, item: any) => sum + item.potensi_suara,
-    0
-  );
+  const totalPotensiSuara =
+    data2?.reduce((sum: any, item: any) => sum + item.potensi_suara, 0) || 0;
 
   return (
     <>

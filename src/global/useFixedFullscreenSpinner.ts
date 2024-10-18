@@ -7,13 +7,17 @@ interface State {
 
 interface Actions {
   setLabelFixedFullscreenSpinner: (newState: State["label"]) => void;
+  resetLabelFixedFullscreenSpinner: (newState: State["label"]) => void;
   onOpenFixedFullscreenSpinner: () => void;
   onCloseFixedFullscreenSpinner: () => void;
 }
 
+const defaultLabel = "Mohon tunggu hingga proses selesai";
+
 const useFixedFullscreenSpinner = create<State & Actions>((set) => ({
-  label: "Mohon tunggu hingga proses selesai",
+  label: defaultLabel,
   setLabelFixedFullscreenSpinner: (newState) => set({ label: newState }),
+  resetLabelFixedFullscreenSpinner: () => set({ label: defaultLabel }),
   isOpen: false,
   onOpenFixedFullscreenSpinner: () =>
     set({

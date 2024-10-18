@@ -44,16 +44,29 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   }, [data]);
 
   // Utils
-  const { onOpenMapSpinner, onCloseMapSpinner } = useMapSpinner();
+  const {
+    onOpenMapSpinner,
+    onCloseMapSpinner,
+    setLabelMapSpinner,
+    resetLabelMapSpinner,
+  } = useMapSpinner();
 
   // Handle loading
   useEffect(() => {
     if (loading) {
+      setLabelMapSpinner("Sedang Mendapatkan Data Peta");
       onOpenMapSpinner();
     } else {
+      resetLabelMapSpinner();
       onCloseMapSpinner();
     }
-  }, [loading, onOpenMapSpinner, onCloseMapSpinner]);
+  }, [
+    loading,
+    onOpenMapSpinner,
+    onCloseMapSpinner,
+    setLabelMapSpinner,
+    resetLabelMapSpinner,
+  ]);
 
   // Fungsi untuk menangani klik pada layer
   const handleLayerClick = useCallback(

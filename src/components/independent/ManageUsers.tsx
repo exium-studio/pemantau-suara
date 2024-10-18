@@ -73,7 +73,7 @@ export default function ManageUsers() {
               <ExportData
                 tooltipLabel="Export Pengguna"
                 url={`/api/pemantau-suara/dashboard/management/export-pengguna`}
-                fileName="Aktivitas"
+                fileName="Pengguna"
                 ext="xls"
               />
             )}

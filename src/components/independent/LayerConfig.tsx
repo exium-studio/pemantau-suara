@@ -71,6 +71,7 @@ export default function LayerConfig() {
               }}
               inputValue={formik.values.tahun}
               noFormat
+              isDisabled
             />
             <FormErrorMessage>{formik.errors.tahun as string}</FormErrorMessage>
           </FormControl>

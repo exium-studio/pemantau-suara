@@ -20,7 +20,8 @@ interface Actions {
 const useLayerConfig = create<State & Actions>((set) => ({
   layerConfig: false,
 
-  tahun: new Date().getFullYear(),
+  // tahun: new Date().getFullYear(),
+  tahun: 2024,
   kategoriSuara: { value: 2, label: "Pemilu" },
   layer: { value: 1, label: "Aktivitas" },
 

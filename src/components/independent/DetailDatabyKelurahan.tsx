@@ -134,8 +134,9 @@ const AktivitasChart = ({ data, data2 }: any) => {
       borderWidth: 0,
     },
   ];
-  const totalPotensiSuara =
-    data2?.reduce((sum: any, item: any) => sum + item.potensi_suara, 0) || 0;
+  const totalPotensiSuara = data2
+    ?.map((item: any) => parseInt(item.potensi_suara, 10))
+    .reduce((acc: any, val: any) => acc + val, 0);
 
   return (
     <>
@@ -202,7 +203,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
           {data?.map((item: any, i: number) => (
             <Center
               bg={`#${item?.color}`}
-              color={item?.id === null ? "black" : "white"}
+              color={item?.id === 3 ? "white" : "dark"}
               borderRadius={6}
               p={2}
             >{`RW ${i + 1}`}</Center>

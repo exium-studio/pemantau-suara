@@ -6,12 +6,22 @@ interface Props extends BadgeProps {
 }
 
 export default function StatusAktivitasBadge({ data, ...restProps }: Props) {
+  // SX
+
   const props = () => {
     switch (data) {
       case 1:
-        return { label: "Alat Peraga", bg: statusAktivitasColor[1].color };
+        return {
+          label: "Alat Peraga",
+          bg: statusAktivitasColor[1].color,
+          color: "dark",
+        };
       case 2:
-        return { label: "Sosialisasi", bg: statusAktivitasColor[2].color };
+        return {
+          label: "Sosialisasi",
+          bg: statusAktivitasColor[2].color,
+          color: "white",
+        };
     }
   };
 
@@ -20,7 +30,7 @@ export default function StatusAktivitasBadge({ data, ...restProps }: Props) {
       bg={props()?.bg}
       borderRadius={"full"}
       textAlign={"center"}
-      color={"white"}
+      color={props()?.color}
       {...restProps}
     >
       {props()?.label}

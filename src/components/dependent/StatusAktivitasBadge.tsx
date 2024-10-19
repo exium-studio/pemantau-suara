@@ -20,6 +20,7 @@ export default function StatusAktivitasBadge({ data, ...restProps }: Props) {
       bg={props()?.bg}
       borderRadius={"full"}
       textAlign={"center"}
+      color={"white"}
       {...restProps}
     >
       {props()?.label}

@@ -8,7 +8,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { MapPinArea } from "@phosphor-icons/react";
+import { MapTrifold } from "@phosphor-icons/react";
 import {
   partaisColor,
   statusAktivitasColor,
@@ -54,7 +54,7 @@ const LegendComponent: React.FC = () => {
         >
           <IconButton
             aria-label="legend button"
-            icon={<Icon as={MapPinArea} fontSize={iconSize} />}
+            icon={<Icon as={MapTrifold} fontSize={iconSize} />}
             zIndex={2}
             onClick={onToggle}
             className="btn"

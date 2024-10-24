@@ -22,6 +22,7 @@ import useAuth from "../hooks/useAuth";
 import useRenderTrigger from "../hooks/useRenderTrigger";
 import getAuthToken from "../lib/getAuthToken";
 import getUserData from "../lib/getUserData";
+import useScreenWidth from "../hooks/useScreenWidth";
 
 const Logout = () => {
   // States
@@ -64,6 +65,7 @@ export default function Login() {
   const authToken = getAuthToken();
   const userData = getUserData();
   const [key, setKey] = useState(1);
+  const sw = useScreenWidth();
 
   // Utils
   const navigate = useNavigate();
@@ -128,8 +130,10 @@ export default function Login() {
       <CContainer
         key={key}
         flex={"1 1 300px"}
+        maxW={"400px"}
+        mx={"auto"}
         h={"100svh"}
-        border={"1px solid var(--divider)"}
+        // border={"1px solid var(--divider)"}
         p={8}
         bg={lightDarkColor}
         justify={"center"}
@@ -224,9 +228,11 @@ export default function Login() {
         )}
       </CContainer>
 
-      <CContainer flex={"1 0 300px"}>
-        <Image src="/asset/images/yoyokjoss2.png" w={"100vw"} m={"auto"} />
-      </CContainer>
+      {sw > 768 && (
+        <CContainer flex={"1 0 300px"}>
+          <Image src="/asset/images/yoyokjoss2.png" w={"100vw"} m={"auto"} />
+        </CContainer>
+      )}
     </Stack>
   );
 }

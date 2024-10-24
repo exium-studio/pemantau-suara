@@ -1,12 +1,11 @@
 import {
   Avatar,
-  Box,
   Button,
   ButtonGroup,
-  Center,
   FormControl,
   HStack,
   Image,
+  Stack,
   Text,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
@@ -16,7 +15,6 @@ import * as yup from "yup";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import PasswordInput from "../components/dependent/input/PasswordInput";
 import StringInput from "../components/dependent/input/StringInput";
-import MapboxMapLogin from "../components/dependent/MapboxMapLogin";
 import CContainer from "../components/independent/wrapper/CContainer";
 import { useLightDarkColor } from "../constant/colors";
 import { responsiveSpacing } from "../constant/sizes";
@@ -111,7 +109,13 @@ export default function Login() {
   }, [rt]);
 
   return (
-    <Center minH={"100vh"} p={responsiveSpacing}>
+    <Stack
+      minH={"100vh"}
+      align={"stretch"}
+      flexDir={["column", null, "row"]}
+      spacing={0}
+      overflow={"auto"}
+    >
       <ColorModeSwitcher
         className="btn"
         size={"sm"}
@@ -119,43 +123,25 @@ export default function Login() {
         top={2}
         left={2}
         zIndex={99}
-        color={"white"}
-      />
-
-      <Box position={"fixed"} left={0} top={0}>
-        <MapboxMapLogin latitude={-6.98445} longitude={110.408296} zoom={18} />
-      </Box>
-
-      <Box
-        w={"100vw"}
-        h={"100vh"}
-        position={"fixed"}
-        bg={"blackAlpha.500"}
-        pointerEvents={"none"}
       />
 
       <CContainer
         key={key}
-        maxW={"400px"}
+        flex={"1 1 300px"}
+        h={"100svh"}
         border={"1px solid var(--divider)"}
-        borderRadius={8}
         p={8}
         bg={lightDarkColor}
+        justify={"center"}
+        // bg={"red"}
         position={"relative"}
       >
-        <Image src="/asset/logo.png" w={"80px"} mx={"auto"} />
-
-        <CContainer align={"center"} mt={4} mb={8}>
-          <Text textAlign={"center"} fontSize={20} fontWeight={700} mb={2}>
-            Selamat Datang
-          </Text>
-
-          <Text textAlign={"center"} opacity={0.6} maxW={"300px"}>
-            {authToken
-              ? "Gunakan autentikasi yang sudah ada/login ulang"
-              : "Gunakan username dan password untuk masuk"}
-          </Text>
-        </CContainer>
+        <Image
+          src="/asset/images/yoyokjossmark.png"
+          w={"200px"}
+          mx={"auto"}
+          mb={8}
+        />
 
         {(!authToken || !userData) && (
           <>
@@ -185,7 +171,7 @@ export default function Login() {
               </FormControl>
             </form>
 
-            <ButtonGroup mb={4}>
+            <ButtonGroup>
               <Button
                 type="submit"
                 form="loginForm"
@@ -206,7 +192,7 @@ export default function Login() {
 
         {authToken && userData && (
           <>
-            <CContainer>
+            <CContainer flex={0}>
               <HStack
                 gap={4}
                 mb={2}
@@ -237,6 +223,10 @@ export default function Login() {
           </>
         )}
       </CContainer>
-    </Center>
+
+      <CContainer flex={"1 0 300px"}>
+        <Image src="/asset/images/yoyokjoss2.png" w={"100vw"} m={"auto"} />
+      </CContainer>
+    </Stack>
   );
 }

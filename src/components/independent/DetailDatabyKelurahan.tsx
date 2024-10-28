@@ -16,7 +16,7 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import { CaretDown } from "@phosphor-icons/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import chartColors from "../../constant/chartColors";
 import { useLightDarkColor } from "../../constant/colors";
 import useDataKelurahanComparisonMode from "../../global/useDataKelurahanComparisonMode";
@@ -740,121 +740,95 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
 };
 
 export default function DetailDatabyKelurahan() {
-  // SX
-  const lightDarkColor = useLightDarkColor();
-
-  // States
   const { selectedGeoJSONKelurahan, setSelectedGeoJSONKelurahan } =
     useselectedGeoJSONKelurahan();
   const kodeKelurahan =
     selectedGeoJSONKelurahan?.geoJSON?.properties?.village_code;
   const { dataKelurahanComparaisonMode } = useDataKelurahanComparisonMode();
+  const { removeFromHighlightedKecamatanIndex } = useHighlighedKecamatan();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const lightDarkColor = useLightDarkColor();
   const [gridColumns, setGridColumns] = useState<number>(1);
+  const sw = useScreenWidth();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Mengelola perubahan gridColumns dengan debounce
   useEffect(() => {
-    // Clear the timeout if it exists before setting a new one
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-    // Set a new timeout to change gridColumns
-    if (dataKelurahanComparaisonMode) {
-      timeoutRef.current = setTimeout(() => {
-        setGridColumns(2);
-      }, 200);
-    } else {
-      setGridColumns(1);
-    }
+    timeoutRef.current = setTimeout(() => {
+      setGridColumns(dataKelurahanComparaisonMode ? 2 : 1);
+    }, 200);
 
-    // Cleanup function to clear the timeout if the component unmounts
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, [dataKelurahanComparaisonMode]);
 
-  // Utils
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // Mengelola perubahan buka tutup berdasarkan kelurahan yang dipilih
   useEffect(() => {
-    if (selectedGeoJSONKelurahan) {
-      onOpen();
-    } else {
-      onClose();
-    }
-  }, [selectedGeoJSONKelurahan, setSelectedGeoJSONKelurahan, onOpen, onClose]);
+    selectedGeoJSONKelurahan ? onOpen() : onClose();
+  }, [selectedGeoJSONKelurahan, onOpen, onClose]);
+
+  const handleClose = useCallback(() => {
+    onClose();
+    setTimeout(() => {
+      setSelectedGeoJSONKelurahan(undefined);
+      removeFromHighlightedKecamatanIndex(-1);
+    }, 200);
+  }, [
+    onClose,
+    setSelectedGeoJSONKelurahan,
+    removeFromHighlightedKecamatanIndex,
+  ]);
+
   const geoData = selectedGeoJSONKelurahan?.geoJSON?.properties;
-  const { removeFromHighlightedKecamatanIndex } = useHighlighedKecamatan();
-  const sw = useScreenWidth();
-  // const isSmallScreen = sw < 480;
 
   return (
     <FloatingContainer
       id="DetailDataByKelurahan"
-      h={"100%"}
+      h="100%"
       maxW={dataKelurahanComparaisonMode ? "900px" : "450px"}
-      top={"74px"}
+      top="74px"
       left={isOpen ? "16px" : "-1030px"}
-      transition={"200ms"}
+      // display={isOpen ? "flex" : "none"}
+      transition="200ms"
     >
       <CContainer flex={0} pb={5}>
         <DisclosureHeader
           title={`Kelurahan ${geoData?.village}`}
           textProps={{ fontSize: [16, null, 18] }}
           disableBackOnClose
-          onClose={() => {
-            onClose();
-            setTimeout(() => {
-              setSelectedGeoJSONKelurahan(undefined);
-              removeFromHighlightedKecamatanIndex(-1);
-            }, 200);
-          }}
-          pt={"16px !important"}
-          position={"sticky"}
+          onClose={handleClose}
+          pt="16px !important"
+          position="sticky"
           top={0}
           bg={lightDarkColor}
           pb={0}
         />
 
-        <HStack>
-          <HStack px={5}>
-            {/* <Icon
-              as={Circle}
-              weight="fill"
-              color={layerData?.color}
-              fontSize={12}
-            /> */}
-            <Text opacity={0.6}>{geoData?.district}</Text>
-          </HStack>
+        <HStack px={5}>
+          <Text opacity={0.6}>{geoData?.district}</Text>
         </HStack>
       </CContainer>
 
-      {/* Content Body */}
-      <CContainer overflowY={"auto"} className="scrollX" pb={5}>
+      <CContainer overflowY="auto" className="scrollX" pb={5}>
         <SimpleGrid
           columns={gridColumns}
           flex={1}
-          h={"100%"}
+          h="100%"
           gap={0}
           overflowX={sw > 900 ? "clip" : "auto"}
           className="noScroll"
-          scrollSnapType={"x mandatory"}
+          scrollSnapType="x mandatory"
         >
           <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
 
           {dataKelurahanComparaisonMode && gridColumns === 2 && (
-            <DataCard
-              kodeKelurahan={kodeKelurahan}
-              isOpen={isOpen}
-              // borderLeft={"1px solid var(--divider3)"}
-            />
+            <DataCard kodeKelurahan={kodeKelurahan} isOpen={isOpen} />
           )}
         </SimpleGrid>
       </CContainer>
-      {/* 
-      <ButtonGroup p={5}>
-        <ToggleComparisonMode />
-      </ButtonGroup> */}
     </FloatingContainer>
   );
 }

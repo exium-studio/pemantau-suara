@@ -118,6 +118,9 @@ export default function Maps({
             mapRef={mapRef}
             geoJSONData={filteredGeoJSON}
           />
+
+          {/* Layer selected kelurahan */}
+          {/* <LayerHoveredAndClicked /> */}
         </>
       )}
     </Map>

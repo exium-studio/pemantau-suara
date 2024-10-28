@@ -3,7 +3,7 @@ import { RefObject, useCallback, useEffect, useMemo, useRef } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
 import useLayerConfig from "../../../global/useLayerConfig";
 import useMapSpinner from "../../../global/useMapSpinner";
-import useselectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
+import useSelectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../../hooks/useDataState";
 
 interface Props {
@@ -15,7 +15,8 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   const { colorMode } = useColorMode();
 
   // Globals
-  const { setSelectedGeoJSONKelurahan } = useselectedGeoJSONKelurahan();
+  const { selectedGeoJSONKelurahan, setSelectedGeoJSONKelurahan } =
+    useSelectedGeoJSONKelurahan();
   const { tahun, kategoriSuara, layer } = useLayerConfig();
 
   // States
@@ -114,20 +115,26 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
         (item: any) => item.kode_kelurahan === clickedVillageCode
       );
 
-      const fillColor = kelurahanData
-        ? `#${
-            kelurahanData.status_aktivitas_kelurahan?.color ||
-            kelurahanData.suara_kpu_terbanyak?.partai?.color ||
-            "F0F0F0"
-          }`
-        : "#F0F0F0";
+      const statusAktivitasColor = `#${
+        kelurahanData?.status_aktivitas_kelurahan?.color ?? "F0F0F0"
+      }`;
+      const suaraKPUTerbanyakColor = `#${
+        kelurahanData?.suara_kpu_terbanyak?.partai?.color ?? "F0F0F0"
+      }`;
+
+      const fillColor =
+        layer?.label === "Aktivitas"
+          ? statusAktivitasColor
+          : layer?.label === "Suara KPU"
+          ? suaraKPUTerbanyakColor
+          : "#F0F0F0";
 
       setSelectedGeoJSONKelurahan({
         geoJSON: clickedFeature,
         color: fillColor,
       });
     },
-    [setSelectedGeoJSONKelurahan]
+    [setSelectedGeoJSONKelurahan, layer?.label]
   );
 
   // Menggunakan useRef untuk menyimpan handleLayerClick agar tidak selalu diperbarui
@@ -150,6 +157,9 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   const render = useMemo(() => {
     if (!combinedGeoJSON) return null;
 
+    const selectedVillageCode =
+      selectedGeoJSONKelurahan?.geoJSON.properties?.village_code;
+
     return (
       <Source type="geojson" data={combinedGeoJSON}>
         <Layer
@@ -157,7 +167,19 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
           type="fill"
           paint={{
             "fill-color": ["get", "fillColor"],
-            "fill-opacity": 0.8,
+            // "fill-opacity": selectedGeoJSONKelurahan ? 0.1 : 0.8,
+            "fill-opacity": selectedVillageCode
+              ? [
+                  "case",
+                  [
+                    "boolean",
+                    ["==", ["get", "village_code"], selectedVillageCode],
+                    false,
+                  ],
+                  0.8,
+                  0.1,
+                ]
+              : 0.8,
           }}
         />
         <Layer
@@ -174,7 +196,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
         />
       </Source>
     );
-  }, [combinedGeoJSON, colorMode]);
+  }, [combinedGeoJSON, colorMode, selectedGeoJSONKelurahan]);
 
   return render;
 }

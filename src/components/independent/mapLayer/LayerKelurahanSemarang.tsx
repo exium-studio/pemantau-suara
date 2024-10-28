@@ -75,21 +75,22 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   }, [geoJSONData, layer]);
 
   // Handle loading
+  const { setIsDisabledLayerConfig } = useLayerConfig();
   const {
     onOpenMapSpinner,
     onCloseMapSpinner,
     setLabelMapSpinner,
     resetLabelMapSpinner,
   } = useMapSpinner();
-
-  // Tampilkan atau sembunyikan spinner berdasarkan loading
   useEffect(() => {
     if (loading) {
+      setIsDisabledLayerConfig(true);
       setLabelMapSpinner(
-        "Sedang mendapatkan data peta. Fitur lainnya tetap bisa diakses"
+        "Sedang mendapatkan data peta. Fitur lain selain Layer Config tetap bisa diakses"
       );
       onOpenMapSpinner();
     } else {
+      setIsDisabledLayerConfig(false);
       resetLabelMapSpinner();
       onCloseMapSpinner();
     }
@@ -99,6 +100,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     onCloseMapSpinner,
     setLabelMapSpinner,
     resetLabelMapSpinner,
+    setIsDisabledLayerConfig,
   ]);
 
   // Handle onclick geoJSON kelurahan

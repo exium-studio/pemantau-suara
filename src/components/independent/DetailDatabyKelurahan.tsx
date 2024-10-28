@@ -654,7 +654,8 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
     url: jenisDataProps[jenisData].url,
     payload: {
       kode_kelurahan: [kodeKelurahan],
-      tahun: [new Date().getFullYear()],
+      // tahun: [new Date().getFullYear()],
+      tahun: [2024],
     },
     conditions: isOpen,
     dependencies: [kodeKelurahan],
@@ -789,6 +790,7 @@ export default function DetailDatabyKelurahan() {
 
   return (
     <FloatingContainer
+      id="DetailDataByKelurahan"
       h={"100%"}
       maxW={dataKelurahanComparaisonMode ? "900px" : "450px"}
       top={"74px"}

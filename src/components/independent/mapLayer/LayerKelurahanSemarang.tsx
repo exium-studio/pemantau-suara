@@ -3,30 +3,25 @@ import { RefObject, useCallback, useEffect, useMemo, useRef } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
 import useLayerConfig from "../../../global/useLayerConfig";
 import useMapSpinner from "../../../global/useMapSpinner";
-import useselectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
+import useSelectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../../hooks/useDataState";
 
 interface Props {
-  geoJSONData: any;
+  geoJSONData: any[];
   mapRef: RefObject<MapRef>;
 }
 
 export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
-  // SX
   const { colorMode } = useColorMode();
 
   // Globals
   const { selectedGeoJSONKelurahan, setSelectedGeoJSONKelurahan } =
-    useselectedGeoJSONKelurahan();
-  const selectedKodeKelurahan =
-    selectedGeoJSONKelurahan?.geoJSON?.properties?.village_code;
+    useSelectedGeoJSONKelurahan();
   const { tahun, kategoriSuara, layer } = useLayerConfig();
 
-  // Data ref untuk menyimpan data lama
-  const dataRef = useRef<any>(null);
-
   // States
-  const { loading, data } = useDataState<any>({
+  const dataRef = useRef<any[] | null>(null);
+  const { data, loading } = useDataState<any>({
     url: `/api/pemantau-suara/publik-request/get-map-kelurahan`,
     payload: {
       tahun: [tahun],
@@ -36,29 +31,67 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     dependencies: [tahun, kategoriSuara],
   });
 
-  // Menyimpan data terbaru di dalam dataRef.current
+  // Update dataRef ketika data baru tersedia
   useEffect(() => {
-    if (data) {
+    if (data && (!dataRef.current || dataRef.current !== data)) {
       dataRef.current = data;
     }
   }, [data]);
 
-  // Utils
+  // Gabungkan semua GeoJSON menjadi satu FeatureCollection
+  const combinedGeoJSON = useMemo(() => {
+    return {
+      type: "FeatureCollection",
+      features: geoJSONData.map((geoJSON) => {
+        const kelurahanData = dataRef.current?.find(
+          (item: any) =>
+            item.kode_kelurahan === geoJSON?.properties?.village_code
+        );
+
+        const statusAktivitasColor = `#${
+          kelurahanData?.status_aktivitas_kelurahan?.color ?? "F0F0F0"
+        }`;
+        const suaraKPUTerbanyakColor = `#${
+          kelurahanData?.suara_kpu_terbanyak?.partai?.color ?? "F0F0F0"
+        }`;
+
+        const fillColor =
+          layer?.label === "Aktivitas"
+            ? statusAktivitasColor
+            : layer?.label === "Suara KPU"
+            ? suaraKPUTerbanyakColor
+            : "#F0F0F0";
+
+        // console.log(layer?.label, fillColor);
+
+        return {
+          ...geoJSON,
+          properties: {
+            ...geoJSON.properties,
+            fillColor,
+          },
+        };
+      }),
+    };
+  }, [geoJSONData, layer]);
+
+  // Handle loading
+  const { setIsDisabledLayerConfig } = useLayerConfig();
   const {
     onOpenMapSpinner,
     onCloseMapSpinner,
     setLabelMapSpinner,
     resetLabelMapSpinner,
   } = useMapSpinner();
-
-  // Handle loading
   useEffect(() => {
     if (loading) {
+      setIsDisabledLayerConfig(true);
       setLabelMapSpinner(
-        "Sedang mendapatkan data peta. Fitur lainnya tetap bisa diakses"
+        "Sedang mendapatkan data peta. Fitur lain selain Layer Config tetap bisa diakses"
       );
       onOpenMapSpinner();
     } else {
+      setIsDisabledLayerConfig(false);
       resetLabelMapSpinner();
       onCloseMapSpinner();
     }
@@ -68,114 +101,102 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     onCloseMapSpinner,
     setLabelMapSpinner,
     resetLabelMapSpinner,
+    setIsDisabledLayerConfig,
   ]);
 
-  // Fungsi untuk menangani klik pada layer
+  // Handle onclick geoJSON kelurahan
   const handleLayerClick = useCallback(
-    (index: number) => (event: any) => {
+    (event: any) => {
       const clickedFeature = event.features[0];
+      if (!clickedFeature) return;
+
+      const clickedVillageCode = clickedFeature.properties.village_code;
+      const kelurahanData = dataRef.current?.find(
+        (item: any) => item.kode_kelurahan === clickedVillageCode
+      );
+
       const statusAktivitasColor = `#${
-        data?.[index]?.status_aktivitas_kelurahan?.color || "FFFFFF"
+        kelurahanData?.status_aktivitas_kelurahan?.color ?? "F0F0F0"
       }`;
       const suaraKPUTerbanyakColor = `#${
-        data?.[index]?.suara_kpu_terbanyak?.partai?.color || "FFFFFF"
+        kelurahanData?.suara_kpu_terbanyak?.partai?.color ?? "F0F0F0"
       }`;
-      const fillColor = (() => {
-        switch (layer?.label) {
-          case "Aktivitas":
-            return statusAktivitasColor;
-          case "Suara KPU":
-            return suaraKPUTerbanyakColor;
-          default:
-            return "#FFFFFF";
-        }
-      })();
 
-      if (clickedFeature) {
-        setSelectedGeoJSONKelurahan({
-          geoJSON: clickedFeature,
-          color: fillColor,
-        });
-      }
+      const fillColor =
+        layer?.label === "Aktivitas"
+          ? statusAktivitasColor
+          : layer?.label === "Suara KPU"
+          ? suaraKPUTerbanyakColor
+          : "#F0F0F0";
+
+      setSelectedGeoJSONKelurahan({
+        geoJSON: clickedFeature,
+        color: fillColor,
+      });
     },
-    [setSelectedGeoJSONKelurahan, data, layer?.label]
+    [setSelectedGeoJSONKelurahan, layer?.label]
   );
 
-  // Menambahkan event listener pada peta ketika komponen dirender
+  // Menggunakan useRef untuk menyimpan handleLayerClick agar tidak selalu diperbarui
+  const handleLayerClickRef = useRef(handleLayerClick);
+  handleLayerClickRef.current = handleLayerClick;
   useEffect(() => {
     const map = mapRef.current?.getMap();
     if (!map) return;
 
-    geoJSONData.forEach((_: any, i: number) => {
-      const layerId = `geojson-layer-${i}`;
-      map.on("click", layerId, handleLayerClick(i));
+    const clickHandler = (event: any) => handleLayerClickRef.current(event);
 
-      return () => {
-        map.off("click", layerId, handleLayerClick(i));
-      };
-    });
-  }, [mapRef, geoJSONData, handleLayerClick]);
+    map.on("click", "all-kelurahan-layer-fill", clickHandler);
 
-  const render = useMemo(
-    () => (
-      <>
-        {geoJSONData.map((geoJSON: any, i: number) => {
-          const statusAktivitasColor = `#${
-            data?.[i]?.status_aktivitas_kelurahan?.color || "FFFFFF"
-          }`;
-          const suaraKPUTerbanyakColor = `#${
-            data?.[i]?.suara_kpu_terbanyak?.partai?.color || "FFFFFF"
-          }`;
-          const fillColor = (() => {
-            switch (layer?.label) {
-              case "Aktivitas":
-                return statusAktivitasColor;
-              case "Suara KPU":
-                return suaraKPUTerbanyakColor;
-              default:
-                return "#FFFFFF";
-            }
-          })();
+    return () => {
+      map.off("click", "all-kelurahan-layer-fill", clickHandler);
+    };
+  }, [mapRef]);
 
-          return (
-            <Source key={i} type="geojson" data={geoJSON}>
-              <Layer
-                id={`geojson-layer-${i}`}
-                type="fill"
-                paint={{
-                  "fill-color": fillColor,
-                  "fill-opacity":
-                    geoJSON?.properties?.village_code === selectedKodeKelurahan
-                      ? 1
-                      : selectedKodeKelurahan
-                      ? 0.1
-                      : layer?.label === "Suara KPU" &&
-                        !data?.[i]?.suara_kpu_terbanyak
-                      ? 0
-                      : 0.6,
-                  // "fill-outline-color": colorMode === "dark" ? "#fff" : "#444",
-                }}
-              />
+  // Render GeoJSON
+  const render = useMemo(() => {
+    if (!combinedGeoJSON) return null;
 
-              <Layer
-                id={`geojson-layer-line-${i}`}
-                type="line"
-                paint={{
-                  "line-color": colorMode === "dark" ? "#ccc" : "#444",
-                  "line-width": 1,
-                }}
-                layout={{
-                  "line-cap": "round",
-                  "line-join": "round",
-                }}
-              />
-            </Source>
-          );
-        })}
-      </>
-    ),
-    [colorMode, data, geoJSONData, layer, selectedKodeKelurahan]
-  );
+    const selectedVillageCode =
+      selectedGeoJSONKelurahan?.geoJSON.properties?.village_code;
+
+    return (
+      <Source type="geojson" data={combinedGeoJSON}>
+        <Layer
+          id="all-kelurahan-layer-fill"
+          type="fill"
+          paint={{
+            "fill-color": ["get", "fillColor"],
+            // "fill-opacity": selectedGeoJSONKelurahan ? 0.1 : 0.8,
+            "fill-opacity": selectedVillageCode
+              ? [
+                  "case",
+                  [
+                    "boolean",
+                    ["==", ["get", "village_code"], selectedVillageCode],
+                    false,
+                  ],
+                  0.8,
+                  0.1,
+                ]
+              : 0.8,
+          }}
+        />
+        <Layer
+          id="all-kelurahan-layer-line"
+          type="line"
+          paint={{
+            "line-color": colorMode === "dark" ? "#444" : "#444",
+            "line-width": 1,
+          }}
+          layout={{
+            "line-cap": "round",
+            "line-join": "round",
+          }}
+        />
+      </Source>
+    );
+  }, [combinedGeoJSON, colorMode, selectedGeoJSONKelurahan]);
 
   return render;
 }

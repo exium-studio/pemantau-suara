@@ -19,7 +19,8 @@ import ManageUsers from "../components/independent/ManageUsers";
 import ManageActivities from "../components/independent/ManageActivities";
 
 const LayerConfigButton = () => {
-  const { layerConfig, toggleLayerConfig } = useLayerConfig();
+  const { isDisabledLayerConfig, layerConfig, toggleLayerConfig } =
+    useLayerConfig();
 
   return (
     <IconButton
@@ -28,6 +29,7 @@ const LayerConfigButton = () => {
       className="btn"
       onClick={toggleLayerConfig}
       color={layerConfig ? "p.500" : ""}
+      isDisabled={isDisabledLayerConfig}
     />
   );
 };

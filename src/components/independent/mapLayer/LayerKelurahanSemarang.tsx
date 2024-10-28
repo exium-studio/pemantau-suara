@@ -1,17 +1,10 @@
 import { useColorMode } from "@chakra-ui/react";
-import {
-  RefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { RefObject, useCallback, useEffect, useMemo, useRef } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
 import useLayerConfig from "../../../global/useLayerConfig";
+import useMapSpinner from "../../../global/useMapSpinner";
 import useselectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../../hooks/useDataState";
-import useMapSpinner from "../../../global/useMapSpinner";
 
 interface Props {
   geoJSONData: any[];
@@ -27,7 +20,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
 
   // States
   const dataRef = useRef<any[] | null>(null);
-  const { data } = useDataState<any>({
+  const { data, loading } = useDataState<any>({
     url: `/api/pemantau-suara/publik-request/get-map-kelurahan`,
     payload: {
       tahun: [tahun],
@@ -79,11 +72,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
         };
       }),
     };
-  }, [geoJSONData, dataRef.current?.length, layer]);
-
-  // useEffect(() => {
-  //   console.log(combinedGeoJSON);
-  // }, [combinedGeoJSON]);
+  }, [geoJSONData, layer]);
 
   // Handle loading
   const {
@@ -92,16 +81,6 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     setLabelMapSpinner,
     resetLabelMapSpinner,
   } = useMapSpinner();
-  const [loading, setLoading] = useState<boolean>(true);
-
-  // Perbarui state loading berdasarkan combinedGeoJSON
-  useEffect(() => {
-    if (!combinedGeoJSON) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
-  }, [combinedGeoJSON]);
 
   // Tampilkan atau sembunyikan spinner berdasarkan loading
   useEffect(() => {

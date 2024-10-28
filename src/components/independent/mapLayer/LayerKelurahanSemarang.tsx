@@ -55,10 +55,10 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
         );
 
         const statusAktivitasColor = `#${
-          kelurahanData?.status_aktivitas_kelurahan?.color ?? "FFFFFF"
+          kelurahanData?.status_aktivitas_kelurahan?.color ?? "F0F0F0"
         }`;
         const suaraKPUTerbanyakColor = `#${
-          kelurahanData?.suara_kpu_terbanyak?.partai?.color ?? "FFFFFF"
+          kelurahanData?.suara_kpu_terbanyak?.partai?.color ?? "F0F0F0"
         }`;
 
         const fillColor =
@@ -66,7 +66,9 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
             ? statusAktivitasColor
             : layer?.label === "Suara KPU"
             ? suaraKPUTerbanyakColor
-            : "#FFFFFF";
+            : "#F0F0F0";
+
+        // console.log(layer?.label, fillColor);
 
         return {
           ...geoJSON,
@@ -78,6 +80,10 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
       }),
     };
   }, [geoJSONData, dataRef.current?.length, layer]);
+
+  // useEffect(() => {
+  //   console.log(combinedGeoJSON);
+  // }, [combinedGeoJSON]);
 
   // Handle loading
   const {
@@ -131,9 +137,9 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
         ? `#${
             kelurahanData.status_aktivitas_kelurahan?.color ||
             kelurahanData.suara_kpu_terbanyak?.partai?.color ||
-            "FFFFFF"
+            "F0F0F0"
           }`
-        : "#FFFFFF";
+        : "#F0F0F0";
 
       setSelectedGeoJSONKelurahan({
         geoJSON: clickedFeature,

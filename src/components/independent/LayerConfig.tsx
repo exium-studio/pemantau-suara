@@ -113,6 +113,7 @@ export default function LayerConfig() {
         <Button
           type="submit"
           form="layerConfigForm"
+          flexShrink={0}
           w={"100%"}
           colorScheme="ap"
           className="btn-ap clicky"

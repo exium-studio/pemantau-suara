@@ -7,6 +7,7 @@ import {
   MenuItem,
   MenuList,
   Portal,
+  Text,
 } from "@chakra-ui/react";
 import { RiArrowDownSLine } from "@remixicon/react";
 import { Interface__SelectOption } from "../../../constant/interfaces";
@@ -49,7 +50,9 @@ export default function SelectLayer({
         px={4}
         textAlign={"left"}
       >
-        {inputValue?.label || placeholder || "Select"}
+        <Text className="noofline1">
+          {inputValue?.label || placeholder || "Select"}
+        </Text>
       </MenuButton>
 
       <Portal>

@@ -10,8 +10,8 @@ import {
 } from "@chakra-ui/react";
 import { MapTrifold } from "@phosphor-icons/react";
 import {
-  partaisColor,
-  statusAktivitasColor,
+  partaisLegend,
+  statusAktivitasLegend,
   useLightDarkColor,
 } from "../../constant/colors";
 import { iconSize } from "../../constant/sizes";
@@ -29,9 +29,11 @@ const LegendComponent: React.FC = () => {
   const legend = (() => {
     switch (layer?.label) {
       case "Aktivitas":
-        return statusAktivitasColor;
+        return statusAktivitasLegend;
       case "Suara KPU":
-        return partaisColor;
+        return partaisLegend;
+      case "Quick Count Suara KPU":
+        return partaisLegend;
       default:
         return [];
     }

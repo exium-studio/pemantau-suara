@@ -1,5 +1,5 @@
 import { Badge, BadgeProps } from "@chakra-ui/react";
-import { statusAktivitasColor } from "../../constant/colors";
+import { statusAktivitasLegend } from "../../constant/colors";
 
 interface Props extends BadgeProps {
   data: number;
@@ -13,13 +13,13 @@ export default function StatusAktivitasBadge({ data, ...restProps }: Props) {
       case 1:
         return {
           label: "Alat Peraga",
-          bg: statusAktivitasColor[1].color,
+          bg: statusAktivitasLegend[1].color,
           color: "dark",
         };
       case 2:
         return {
           label: "Sosialisasi",
-          bg: statusAktivitasColor[2].color,
+          bg: statusAktivitasLegend[2].color,
           color: "white",
         };
     }

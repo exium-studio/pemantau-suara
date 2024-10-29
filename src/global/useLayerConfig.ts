@@ -10,6 +10,7 @@ interface State {
 }
 
 interface Actions {
+  setLayerConfigIsOpen: (newState: State["layerConfig"]) => void;
   toggleLayerConfig: () => void;
   setIsDisabledLayerConfig: (newState: State["isDisabledLayerConfig"]) => void;
   onCloseLayerConfig: () => void;
@@ -26,6 +27,11 @@ const useLayerConfig = create<State & Actions>((set) => ({
   tahun: 2024,
   kategoriSuara: { value: 2, label: "Pemilu" },
   layer: { value: 1, label: "Aktivitas" },
+
+  setLayerConfigIsOpen: (newState) =>
+    set(() => ({
+      layerConfig: newState,
+    })),
 
   setIsDisabledLayerConfig: (newState) =>
     set(() => ({

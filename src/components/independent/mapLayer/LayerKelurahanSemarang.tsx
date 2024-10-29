@@ -1,4 +1,4 @@
-import { useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { useColorMode } from "@chakra-ui/react";
 import { RefObject, useCallback, useEffect, useMemo, useRef } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
 import useLayerConfig from "../../../global/useLayerConfig";
@@ -76,7 +76,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   }, [geoJSONData, layer]);
 
   // Handle loading
-  const { setIsDisabledLayerConfig } = useLayerConfig();
+  const { setIsDisabledLayerConfig, setLayerConfigIsOpen } = useLayerConfig();
   const {
     onOpenMapSpinner,
     onCloseMapSpinner,
@@ -85,6 +85,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   } = useMapSpinner();
   useEffect(() => {
     if (loading) {
+      setLayerConfigIsOpen(false);
       setIsDisabledLayerConfig(true);
       setLabelMapSpinner(
         "Sedang mendapatkan data peta. Fitur lain selain Layer Config tetap bisa diakses"

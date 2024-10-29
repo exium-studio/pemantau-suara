@@ -54,7 +54,7 @@ const statusKaryawanColorScheme = {
   Training: "green",
 };
 
-const statusAktivitasColor = [
+const statusAktivitasLegend = [
   {
     label: "Belum Ada Aktivitas",
     color: "#DDDDDD",
@@ -69,7 +69,7 @@ const statusAktivitasColor = [
   },
 ];
 
-const partaisColor = [
+const partaisLegend = [
   { id: 1, label: "DEMOKRAT", color: "#002060" },
   { id: 2, label: "PKB", color: "#006600" },
   { id: 3, label: "GERINDRA", color: "#E26B0A" },
@@ -91,8 +91,8 @@ const partaisColor = [
 ];
 
 export {
-  partaisColor,
-  statusAktivitasColor,
+  partaisLegend,
+  statusAktivitasLegend,
   useLightDarkColorAlpha,
   useContentBgColor,
   useWhiteDarkColor,

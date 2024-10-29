@@ -330,6 +330,7 @@ export const globalTheme = extendTheme({
       baseStyle: {
         fontSize: [13, null, 15],
         borderRadius: 8,
+        zIndex: 999999999999,
       },
       container: {
         w: "100% !important",

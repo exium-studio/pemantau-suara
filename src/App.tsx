@@ -14,9 +14,9 @@ import { globalTheme } from "./theme/globalTheme";
 export const App = () => {
   return (
     <ChakraProvider theme={globalTheme}>
-      <FixedFullscreenSpinner />
-
       <BrowserRouter>
+        <FixedFullscreenSpinner />
+
         <Watermark />
 
         <Routes>

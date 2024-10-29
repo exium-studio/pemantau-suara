@@ -1,4 +1,4 @@
-import { useColorMode } from "@chakra-ui/react";
+import { useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { RefObject, useCallback, useEffect, useMemo, useRef } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
 import useLayerConfig from "../../../global/useLayerConfig";
@@ -160,6 +160,9 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     const selectedVillageCode =
       selectedGeoJSONKelurahan?.geoJSON.properties?.village_code;
 
+    const layerFillOpacity = colorMode === "dark" ? 0.8 : 0.8;
+    const layerLineColor = colorMode === "dark" ? "#fff" : "#444";
+
     return (
       <Source type="geojson" data={combinedGeoJSON}>
         <Layer
@@ -176,17 +179,17 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
                     ["==", ["get", "village_code"], selectedVillageCode],
                     false,
                   ],
-                  0.8,
+                  layerFillOpacity,
                   0.1,
                 ]
-              : 0.8,
+              : layerFillOpacity,
           }}
         />
         <Layer
           id="all-kelurahan-layer-line"
           type="line"
           paint={{
-            "line-color": colorMode === "dark" ? "#444" : "#444",
+            "line-color": layerLineColor,
             "line-width": 1,
           }}
           layout={{

@@ -10,7 +10,7 @@ export default function FixedFullscreenSpinner() {
       position={"fixed"}
       top={0}
       left={0}
-      zIndex={999999}
+      zIndex={99}
       visibility={isOpen ? "visible" : "hidden"}
       opacity={isOpen ? 1 : 0}
     />

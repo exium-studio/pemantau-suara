@@ -7,6 +7,7 @@ interface State {
   tahun: number | undefined;
   kategoriSuara: Interface__SelectOption | undefined;
   layer: Interface__SelectOption | undefined;
+  opacity: number;
 }
 
 interface Actions {
@@ -17,6 +18,7 @@ interface Actions {
   setTahun: (newState: State["tahun"]) => void;
   setKategoriSuara: (newState: State["kategoriSuara"]) => void;
   setLayer: (newState: State["layer"]) => void;
+  setOpacity: (newState: State["opacity"]) => void;
 }
 
 const useLayerConfig = create<State & Actions>((set) => ({
@@ -27,6 +29,12 @@ const useLayerConfig = create<State & Actions>((set) => ({
   tahun: 2024,
   kategoriSuara: { value: 2, label: "Pemilu" },
   layer: { value: 1, label: "Aktivitas" },
+  opacity: 100,
+
+  setOpacity: (newState) =>
+    set(() => ({
+      opacity: newState,
+    })),
 
   setLayerConfigIsOpen: (newState) =>
     set(() => ({

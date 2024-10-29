@@ -17,7 +17,14 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   // Globals
   const { selectedGeoJSONKelurahan, setSelectedGeoJSONKelurahan } =
     useSelectedGeoJSONKelurahan();
-  const { tahun, kategoriSuara, layer } = useLayerConfig();
+  const {
+    tahun,
+    kategoriSuara,
+    layer,
+    opacity,
+    setIsDisabledLayerConfig,
+    setLayerConfigIsOpen,
+  } = useLayerConfig();
 
   // States
   const dataRef = useRef<any[] | null>(null);
@@ -76,7 +83,6 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   }, [geoJSONData, layer]);
 
   // Handle loading
-  const { setIsDisabledLayerConfig, setLayerConfigIsOpen } = useLayerConfig();
   const {
     onOpenMapSpinner,
     onCloseMapSpinner,
@@ -162,7 +168,9 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     const selectedVillageCode =
       selectedGeoJSONKelurahan?.geoJSON.properties?.village_code;
 
-    const layerFillOpacity = colorMode === "dark" ? 0.8 : 0.8;
+    // const layerFillOpacity = colorMode === "dark" ? 0.8 : 0.8;
+    const layerFillOpacity = opacity * 0.01;
+    console.log(layerFillOpacity);
     const layerLineColor = colorMode === "dark" ? "#fff" : "#444";
 
     return (
@@ -182,7 +190,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
                     false,
                   ],
                   layerFillOpacity,
-                  0.1,
+                  0.1 * opacity * 0.01,
                 ]
               : layerFillOpacity,
           }}
@@ -201,7 +209,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
         />
       </Source>
     );
-  }, [combinedGeoJSON, colorMode, selectedGeoJSONKelurahan]);
+  }, [combinedGeoJSON, colorMode, selectedGeoJSONKelurahan, opacity]);
 
   return render;
 }

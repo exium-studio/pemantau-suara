@@ -3,6 +3,11 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -11,7 +16,6 @@ import SelectKategoriSuara from "../dependent/dedicated/SelectKategoriSuara";
 import SelectLayer from "../dependent/dedicated/SelectLayer";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import NumberInput from "../dependent/input/NumberInput";
-import RequiredForm from "../form/RequiredForm";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
 
@@ -19,8 +23,16 @@ export default function LayerConfig() {
   const { layerConfig, onCloseLayerConfig } = useLayerConfig();
 
   // Globals
-  const { tahun, setTahun, kategoriSuara, setKategoriSuara, layer, setLayer } =
-    useLayerConfig();
+  const {
+    tahun,
+    setTahun,
+    kategoriSuara,
+    setKategoriSuara,
+    layer,
+    setLayer,
+    opacity,
+    setOpacity,
+  } = useLayerConfig();
 
   // Formik
   const formik = useFormik({
@@ -29,16 +41,19 @@ export default function LayerConfig() {
       tahun: tahun,
       kategori_suara: kategoriSuara,
       layer: layer,
+      opacity: opacity,
     },
     validationSchema: yup.object().shape({
       tahun: yup.number().required("Harus diisi"),
       kategori_suara: yup.object().required("Harus diisi"),
       layer: yup.object().required("Harus diisi"),
+      opacity: yup.number().required("Harus diisi"),
     }),
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: (values) => {
       setTahun(values.tahun);
       setKategoriSuara(values.kategori_suara);
       setLayer(values.layer);
+      setOpacity(values.opacity);
     },
   });
 
@@ -59,10 +74,7 @@ export default function LayerConfig() {
       <CContainer px={5} pb={5} overflowY={"auto"} className={"scrollY"}>
         <form id="layerConfigForm" onSubmit={formik.handleSubmit}>
           <FormControl mb={4} isInvalid={!!formik.errors.tahun}>
-            <FormLabel>
-              Tahun
-              <RequiredForm />
-            </FormLabel>
+            <FormLabel>Tahun</FormLabel>
             <NumberInput
               name="tahun"
               placeholder={`${new Date().getFullYear()}`}
@@ -77,10 +89,7 @@ export default function LayerConfig() {
           </FormControl>
 
           <FormControl mb={4} isInvalid={!!formik.errors.kategori_suara}>
-            <FormLabel>
-              Jenis Pemilihan
-              <RequiredForm />
-            </FormLabel>
+            <FormLabel>Jenis Pemilihan</FormLabel>
             <SelectKategoriSuara
               name="kategori_suara"
               onConfirm={(input) => {
@@ -95,10 +104,7 @@ export default function LayerConfig() {
           </FormControl>
 
           <FormControl mb={6} isInvalid={!!formik.errors.layer}>
-            <FormLabel>
-              Layer
-              <RequiredForm />
-            </FormLabel>
+            <FormLabel>Layer</FormLabel>
             <SelectLayer
               name="layer"
               onConfirm={(input) => {
@@ -106,6 +112,25 @@ export default function LayerConfig() {
               }}
               inputValue={formik.values.layer}
             />
+            <FormErrorMessage>{formik.errors.layer as string}</FormErrorMessage>
+          </FormControl>
+
+          <FormControl mb={6} isInvalid={!!formik.errors.layer}>
+            <FormLabel>Opacity</FormLabel>
+            <Slider
+              aria-label="slider-ex-1"
+              defaultValue={100}
+              colorScheme="ap"
+              onChange={(val) => formik.setFieldValue("opacity", val)}
+            >
+              <SliderTrack>
+                <SliderFilledTrack />
+              </SliderTrack>
+
+              <Tooltip placement="top" label={`${formik.values.opacity}%`}>
+                <SliderThumb bg={"p.500"} />
+              </Tooltip>
+            </Slider>
             <FormErrorMessage>{formik.errors.layer as string}</FormErrorMessage>
           </FormControl>
         </form>

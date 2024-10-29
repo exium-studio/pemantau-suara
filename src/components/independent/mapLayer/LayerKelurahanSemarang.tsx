@@ -103,6 +103,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     setLabelMapSpinner,
     resetLabelMapSpinner,
     setIsDisabledLayerConfig,
+    setLayerConfigIsOpen,
   ]);
 
   // Handle onclick geoJSON kelurahan

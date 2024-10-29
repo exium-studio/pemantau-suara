@@ -628,7 +628,7 @@ const SuaraKPUTable = ({ dataStates }: any) => {
   });
 
   return (
-    <CustomTableContainer minH="fit-content" maxH={"400px"}>
+    <CustomTableContainer minH="400px" maxH={"auto"}>
       <CustomTable
         formattedHeader={formattedHeader}
         formattedBody={formattedBody}

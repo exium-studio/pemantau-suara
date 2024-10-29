@@ -10,13 +10,16 @@ import Login from "./pages/Login";
 import Middleware from "./pages/Middleware";
 import MissingPage from "./pages/MissingPage";
 import { globalTheme } from "./theme/globalTheme";
+import RealTimeUpdateQuickCount from "./components/independent/RealTimeUpdateQuickCount";
 
 export const App = () => {
   return (
     <ChakraProvider theme={globalTheme}>
-      <BrowserRouter>
-        <FixedFullscreenSpinner />
+      <FixedFullscreenSpinner />
 
+      <RealTimeUpdateQuickCount />
+
+      <BrowserRouter>
         <Watermark />
 
         <Routes>

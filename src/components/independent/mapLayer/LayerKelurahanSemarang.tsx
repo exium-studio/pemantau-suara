@@ -172,7 +172,6 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
 
     // const layerFillOpacity = colorMode === "dark" ? 0.8 : 0.8;
     const layerFillOpacity = opacity * 0.01;
-    console.log(layerFillOpacity);
     const layerLineColor = colorMode === "dark" ? "#ccc" : "#444";
 
     return (

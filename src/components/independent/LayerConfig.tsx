@@ -3,11 +3,12 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  HStack,
   Slider,
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
-  Tooltip,
+  Text,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -116,21 +117,27 @@ export default function LayerConfig() {
           </FormControl>
 
           <FormControl mb={6} isInvalid={!!formik.errors.layer}>
-            <FormLabel>Opacity</FormLabel>
-            <Slider
-              aria-label="slider-ex-1"
-              defaultValue={100}
-              colorScheme="ap"
-              onChange={(val) => formik.setFieldValue("opacity", val)}
-            >
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
+            <FormLabel>Fill Opacity</FormLabel>
+            <HStack>
+              <Slider
+                aria-label="slider-ex-1"
+                defaultValue={100}
+                colorScheme="ap"
+                onChange={(val) => formik.setFieldValue("opacity", val)}
+                mr={2}
+              >
+                <SliderTrack>
+                  <SliderFilledTrack />
+                </SliderTrack>
 
-              <Tooltip placement="top" label={`${formik.values.opacity}%`}>
                 <SliderThumb bg={"p.500"} />
-              </Tooltip>
-            </Slider>
+              </Slider>
+
+              <Text w={"41px"} flexShrink={0} textAlign={"right"}>
+                {formik.values.opacity}%
+              </Text>
+            </HStack>
+
             <FormErrorMessage>{formik.errors.layer as string}</FormErrorMessage>
           </FormControl>
         </form>

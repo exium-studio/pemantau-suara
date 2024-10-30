@@ -121,7 +121,7 @@ export default function LayerConfig() {
             <HStack>
               <Slider
                 aria-label="slider-ex-1"
-                defaultValue={100}
+                defaultValue={formik.values.opacity}
                 colorScheme="ap"
                 onChange={(val) => formik.setFieldValue("opacity", val)}
                 mr={2}

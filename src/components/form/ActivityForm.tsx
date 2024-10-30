@@ -165,7 +165,7 @@ export default function ActivityForm({
   });
   const formikRef = useRef(formik);
 
-  console.log(formik.values.kelurahan);
+  // console.log(formik.values.kelurahan);
 
   // Handle response status
   useEffect(() => {

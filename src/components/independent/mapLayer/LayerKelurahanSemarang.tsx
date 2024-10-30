@@ -5,6 +5,8 @@ import useLayerConfig from "../../../global/useLayerConfig";
 import useMapSpinner from "../../../global/useMapSpinner";
 import useSelectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../../hooks/useDataState";
+import getUserData from "../../../lib/getUserData";
+import ComponentShowcaseTitle from "../wrapper/ComponentShowcaseTitle";
 
 interface Props {
   geoJSONData: any[];
@@ -37,6 +39,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     conditions: !dataRef.current,
     dependencies: [tahun, kategoriSuara],
   });
+  const isUserPenggerak = getUserData().role.id === 3;
 
   // Update dataRef ketika data baru tersedia
   useEffect(() => {
@@ -117,6 +120,10 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
   // Handle onclick geoJSON kelurahan
   const handleLayerClick = useCallback(
     (event: any) => {
+      if (isUserPenggerak) {
+        return;
+      }
+
       const clickedFeature = event.features[0];
       if (!clickedFeature) return;
 

@@ -1,7 +1,18 @@
-import { ButtonProps, useDisclosure } from "@chakra-ui/react";
+import {
+  Button,
+  ButtonProps,
+  Icon,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Portal,
+  Text,
+} from "@chakra-ui/react";
+import { RiArrowDownSLine } from "@remixicon/react";
 import { Interface__SelectOption } from "../../../constant/interfaces";
-import SingleSelectModal from "../input/SingleSelectModal";
 import { optionsKategoriSuara } from "../../../constant/selectOptions";
+import { iconSize } from "../../../constant/sizes";
 
 interface Props extends ButtonProps {
   name: string;
@@ -27,26 +38,35 @@ export default function SelectKategoriSuara({
   options = optionsKategoriSuara,
   ...props
 }: Props) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
-    <SingleSelectModal
-      id="select-kategori-suara-modal"
-      name={name}
-      isOpen={isOpen}
-      onOpen={onOpen}
-      onClose={onClose}
-      options={options}
-      onConfirm={(input) => {
-        onConfirm(input);
-      }}
-      inputValue={inputValue}
-      withSearch={withSearch}
-      optionsDisplay={optionsDisplay}
-      isError={isError}
-      placeholder={placeholder || "Pilih Kategori Suara"}
-      nonNullable={nonNullable}
-      {...props}
-    />
+    <Menu>
+      <MenuButton
+        as={Button}
+        rightIcon={<Icon as={RiArrowDownSLine} fontSize={iconSize} />}
+        className="btn-outline"
+        w={"100%"}
+        px={4}
+        textAlign={"left"}
+      >
+        <Text className="noofline1">
+          {inputValue?.label || placeholder || "Select"}
+        </Text>
+      </MenuButton>
+
+      <Portal>
+        <MenuList minW={"221px"} zIndex={2}>
+          {options?.map((option, i) => (
+            <MenuItem
+              key={i}
+              onClick={() => {
+                onConfirm(option);
+              }}
+            >
+              {option.label}
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Portal>
+    </Menu>
   );
 }

@@ -97,7 +97,7 @@ export default function LayerConfig() {
                 formik.setFieldValue("kategori_suara", input);
               }}
               inputValue={formik.values.kategori_suara}
-              isDisabled
+              // isDisabled
             />
             <FormErrorMessage>
               {formik.errors.kategori_suara as string}

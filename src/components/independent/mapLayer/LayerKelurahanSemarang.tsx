@@ -6,6 +6,7 @@ import useMapSpinner from "../../../global/useMapSpinner";
 import useSelectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../../hooks/useDataState";
 import getUserData from "../../../lib/getUserData";
+import useRenderTrigger from "../../../hooks/useRenderTrigger";
 
 interface Props {
   geoJSONData: any[];
@@ -26,6 +27,8 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     setIsDisabledLayerConfig,
     setLayerConfigIsOpen,
   } = useLayerConfig();
+  const { rt, setRt } = useRenderTrigger();
+  const rtRef = useRef(rt);
 
   // States
   const dataRef = useRef<any[] | null>(null);
@@ -46,6 +49,11 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
       dataRef.current = data;
     }
   }, [data]);
+
+  useEffect(() => {
+    dataRef.current = null;
+    setRt(!rtRef.current);
+  }, [tahun, kategoriSuara, setRt]);
 
   // Gabungkan semua GeoJSON menjadi satu FeatureCollection
   const combinedGeoJSON = useMemo(() => {

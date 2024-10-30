@@ -27,7 +27,7 @@ const useLayerConfig = create<State & Actions>((set) => ({
 
   // tahun: new Date().getFullYear(),
   tahun: 2024,
-  kategoriSuara: { value: 2, label: "Pemilu" },
+  kategoriSuara: { value: 2, label: "Pileg" },
   layer: { value: 1, label: "Aktivitas" },
   opacity: 100,
 

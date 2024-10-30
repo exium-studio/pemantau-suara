@@ -181,7 +181,7 @@ const optionsRole = [
 
 const optionsKategoriSuara = [
   { value: 1, label: "Pilkada" },
-  { value: 2, label: "Pemilu" },
+  { value: 2, label: "Pileg" },
 ];
 
 const optionsLayer = [

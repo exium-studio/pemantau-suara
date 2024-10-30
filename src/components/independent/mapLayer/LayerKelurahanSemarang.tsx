@@ -6,7 +6,6 @@ import useMapSpinner from "../../../global/useMapSpinner";
 import useSelectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../../hooks/useDataState";
 import getUserData from "../../../lib/getUserData";
-import ComponentShowcaseTitle from "../wrapper/ComponentShowcaseTitle";
 
 interface Props {
   geoJSONData: any[];
@@ -151,7 +150,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
         color: fillColor,
       });
     },
-    [setSelectedGeoJSONKelurahan, layer?.label]
+    [setSelectedGeoJSONKelurahan, layer?.label, isUserPenggerak]
   );
 
   // Menggunakan useRef untuk menyimpan handleLayerClick agar tidak selalu diperbarui

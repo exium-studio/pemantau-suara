@@ -93,7 +93,9 @@ export default function ActivityForm({
               return true; // If role.value is 2, skip the required check
             })
         : yup.mixed(),
-      status_aktivitas: yup.object().required("Harus diisi"),
+      status_aktivitas: !excludeFields?.includes("status_aktivitas")
+        ? yup.object().required("Harus diisi")
+        : yup.mixed(),
       potensi_suara: yup.number().required("Harus diisi"),
       deskripsi: yup.string().required("Harus diisi"),
       tgl_mulai: yup.date().required("Harus diisi"),

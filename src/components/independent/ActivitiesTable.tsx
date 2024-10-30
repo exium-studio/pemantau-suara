@@ -33,8 +33,8 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
   // States
   const userData = getUserData();
 
-  const isUserPenggerak = userData?.role?.id === 3;
-  const editPermission = isUserPenggerak;
+  const isUserSuperAdmin = userData?.role?.id === 1;
+  const editPermission = isUserSuperAdmin;
 
   // Row options
   const rowOptions = [

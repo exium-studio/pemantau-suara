@@ -57,40 +57,42 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
 
   // Gabungkan semua GeoJSON menjadi satu FeatureCollection
   const combinedGeoJSON = useMemo(() => {
-    return {
-      type: "FeatureCollection",
-      features: geoJSONData.map((geoJSON) => {
-        const kelurahanData = dataRef.current?.find(
-          (item: any) =>
-            item.kode_kelurahan === geoJSON?.properties?.village_code
-        );
+    if (tahun && kategoriSuara && layer) {
+      return {
+        type: "FeatureCollection",
+        features: geoJSONData.map((geoJSON) => {
+          const kelurahanData = dataRef.current?.find(
+            (item: any) =>
+              item.kode_kelurahan === geoJSON?.properties?.village_code
+          );
 
-        const statusAktivitasColor = `#${
-          kelurahanData?.status_aktivitas_kelurahan?.color ?? "F0F0F0"
-        }`;
-        const suaraKPUTerbanyakColor = `#${
-          kelurahanData?.suara_kpu_terbanyak?.partai?.color ?? "F0F0F0"
-        }`;
+          const statusAktivitasColor = `#${
+            kelurahanData?.status_aktivitas_kelurahan?.color ?? "F0F0F0"
+          }`;
+          const suaraKPUTerbanyakColor = `#${
+            kelurahanData?.suara_kpu_terbanyak?.partai?.color ?? "F0F0F0"
+          }`;
 
-        const fillColor =
-          layer?.label === "Aktivitas"
-            ? statusAktivitasColor
-            : layer?.label === "Suara KPU"
-            ? suaraKPUTerbanyakColor
-            : "#F0F0F0";
+          const fillColor =
+            layer?.label === "Aktivitas"
+              ? statusAktivitasColor
+              : layer?.label === "Suara KPU"
+              ? suaraKPUTerbanyakColor
+              : "#F0F0F0";
 
-        // console.log(layer?.label, fillColor);
+          // console.log(layer?.label, fillColor);
 
-        return {
-          ...geoJSON,
-          properties: {
-            ...geoJSON.properties,
-            fillColor,
-          },
-        };
-      }),
-    };
-  }, [geoJSONData, layer]);
+          return {
+            ...geoJSON,
+            properties: {
+              ...geoJSON.properties,
+              fillColor,
+            },
+          };
+        }),
+      };
+    }
+  }, [geoJSONData, tahun, kategoriSuara, layer]);
 
   // Handle loading
   const {

@@ -123,7 +123,6 @@ interface TableProps {
   dataStates: Interface__DataStates;
   dataConfig: Interface__DataConfig;
 }
-
 const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
   // States
   const userData = getUserData();

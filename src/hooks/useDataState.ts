@@ -39,6 +39,8 @@ const useDataState = <T>({
     successToast: false,
   });
 
+  console.log(loading);
+
   // useRef to store a stable reference to the request function
   const makeRequestRef = useRef<() => void>(() => {});
 

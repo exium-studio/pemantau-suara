@@ -97,10 +97,10 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
       );
 
       const statusAktivitasColor = `#${
-        kelurahanData?.status_aktivitas_kelurahan?.color ?? "F0F0F0"
+        kelurahanData?.status_aktivitas_kelurahan?.color ?? "FAFAFA"
       }`;
       const suaraKPUTerbanyakColor = `#${
-        kelurahanData?.suara_kpu_terbanyak?.partai?.color ?? "F0F0F0"
+        kelurahanData?.suara_kpu_terbanyak?.partai?.color ?? "FAFAFA"
       }`;
 
       const fillColor =
@@ -108,7 +108,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
           ? statusAktivitasColor
           : layer?.label === "Suara KPU"
           ? suaraKPUTerbanyakColor
-          : "#F0F0F0";
+          : "#FAFAFA";
 
       // console.log(layer?.label, fillColor);
 

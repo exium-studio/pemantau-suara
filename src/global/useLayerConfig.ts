@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { Interface__SelectOption } from "../constant/interfaces";
+import { optionsKategoriSuara, optionsLayer } from "../constant/selectOptions";
 
 interface State {
   layerConfig: boolean;
@@ -27,8 +28,8 @@ const useLayerConfig = create<State & Actions>((set) => ({
 
   // tahun: new Date().getFullYear(),
   tahun: 2024,
-  kategoriSuara: { value: 2, label: "Pileg" },
-  layer: { value: 1, label: "Aktivitas" },
+  kategoriSuara: optionsKategoriSuara[0],
+  layer: optionsLayer[0],
   opacity: 100,
 
   setOpacity: (newState) =>

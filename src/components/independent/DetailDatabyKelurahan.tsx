@@ -630,7 +630,7 @@ const SuaraKPUTable = ({ dataStates }: any) => {
 
 const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
   // States
-  const { layer } = useLayerConfig();
+  const { layer, kategoriSuara } = useLayerConfig();
   const jenisDataProps = [
     {
       title: "Dummy",
@@ -650,8 +650,9 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
   const { dataStates } = useDataState<any>({
     url: jenisDataProps[layer.value].url,
     payload: {
-      tahun: [2024],
       kode_kelurahan: [kodeKelurahan],
+      tahun: [2024],
+      kategori_suara: [kategoriSuara?.value],
       // tahun: [new Date().getFullYear()],
     },
     conditions: isOpen,

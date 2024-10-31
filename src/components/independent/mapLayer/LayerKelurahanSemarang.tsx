@@ -203,7 +203,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
         id="all-kelurahan-layer-line"
         type="line"
         paint={{
-          "line-color": colorMode === "dark" ? "#ccc" : "#222",
+          "line-color": colorMode === "dark" ? "#ccc" : "#ccc",
           "line-width": 1,
         }}
         layout={{

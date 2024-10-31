@@ -3,11 +3,6 @@ import {
   Button,
   Center,
   HStack,
-  Icon,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   SimpleGrid,
   Text,
   Tooltip,
@@ -15,12 +10,12 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { CaretDown } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import chartColors from "../../constant/chartColors";
 import { useLightDarkColor } from "../../constant/colors";
 import useDataKelurahanComparisonMode from "../../global/useDataKelurahanComparisonMode";
 import useHighlighedKecamatan from "../../global/useHighlighedKecamatan";
+import useLayerConfig from "../../global/useLayerConfig";
 import useselectedGeoJSONKelurahan from "../../global/useSelectedGeoJSONKelurahan";
 import useDataState from "../../hooks/useDataState";
 import useScreenWidth from "../../hooks/useScreenWidth";
@@ -40,39 +35,41 @@ import CContainer from "./wrapper/CContainer";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
 
-const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
-  return (
-    <Menu>
-      <MenuButton
-        as={Button}
-        size={"sm"}
-        pr={2}
-        rightIcon={<Icon as={CaretDown} />}
-        className="btn"
-      >
-        {jenisDataProps[jenisData].title}
-      </MenuButton>
-      <MenuList minW={"160px"} zIndex={4}>
-        <MenuItem
-          onClick={() => {
-            setJenisData("potensi_suara");
-          }}
-          color={jenisData === "potensi_suara" ? "p.500" : ""}
-        >
-          Aktivitas
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            setJenisData("suara_kpu");
-          }}
-          color={jenisData === "suara_kpu" ? "p.500" : ""}
-        >
-          Suara KPU
-        </MenuItem>
-      </MenuList>
-    </Menu>
-  );
-};
+// const JenisDataMenu = ({ jenisDataProps, jenisData, setJenisData }: any) => {
+//   const { layer } = useLayerConfig();
+
+//   return (
+//     <Menu>
+//       <MenuButton
+//         as={Button}
+//         size={"sm"}
+//         pr={2}
+//         rightIcon={<Icon as={CaretDown} />}
+//         className="btn"
+//       >
+//         {jenisDataProps[layer.value].title}
+//       </MenuButton>
+//       <MenuList minW={"160px"} zIndex={4}>
+//         <MenuItem
+//           onClick={() => {
+//             setJenisData("potensi_suara");
+//           }}
+//           color={jenisData === "potensi_suara" ? "p.500" : ""}
+//         >
+//           Aktivitas
+//         </MenuItem>
+//         <MenuItem
+//           onClick={() => {
+//             setJenisData("suara_kpu");
+//           }}
+//           color={jenisData === "suara_kpu" ? "p.500" : ""}
+//         >
+//           Suara KPU
+//         </MenuItem>
+//       </MenuList>
+//     </Menu>
+//   );
+// };
 // const ToggleComparisonMode = () => {
 //   const { dataKelurahanComparaisonMode, toggleDataKelurahanComparisonMode } =
 //     useDataKelurahanComparisonMode();
@@ -626,23 +623,29 @@ const SuaraKPUTable = ({ dataStates }: any) => {
 
 const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
   // States
-  const jenisDataProps: Record<string, any> = {
-    potensi_suara: {
+  const { layer } = useLayerConfig();
+  const jenisDataProps = [
+    {
+      title: "Dummy",
+      url: ``,
+    },
+    {
       title: "Aktivitas",
       url: `/api/pemantau-suara/dashboard/monitoring/potensi-suara`,
     },
-    suara_kpu: {
+    {
       title: "Suara KPU",
       url: `/api/pemantau-suara/dashboard/monitoring/suara-kpu`,
     },
-  };
-  const [jenisData, setJenisData] = useState<string>("potensi_suara");
+  ];
+
+  // const [jenisData, setJenisData] = useState<string>("potensi_suara");
   const { dataStates } = useDataState<any>({
-    url: jenisDataProps[jenisData].url,
+    url: jenisDataProps[layer.value].url,
     payload: {
+      tahun: [2024],
       kode_kelurahan: [kodeKelurahan],
       // tahun: [new Date().getFullYear()],
-      tahun: [2024],
     },
     conditions: isOpen,
     dependencies: [kodeKelurahan],
@@ -659,7 +662,7 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
     empty: <NoData />,
     loaded: (
       <CContainer px={5} {...props}>
-        {jenisData === "potensi_suara" && (
+        {layer.value === 1 && (
           <>
             <AktivitasChart
               data={dataStates?.data?.chart}
@@ -669,7 +672,7 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
           </>
         )}
 
-        {jenisData === "suara_kpu" && (
+        {layer.value === 2 && (
           <>
             <SuaraKPUChart
               data={dataStates?.data?.chart}
@@ -695,7 +698,7 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
       className="scrollY"
     >
       {/* Jenis Data & Tahun */}
-      <Wrap px={5} mb={2} align={"center"} justify={"space-between"}>
+      {/* <Wrap px={5} mb={2} align={"center"} justify={"space-between"}>
         <JenisDataMenu
           jenisDataProps={jenisDataProps}
           jenisData={jenisData}
@@ -704,7 +707,7 @@ const DataCard = ({ kodeKelurahan, isOpen, ...props }: any) => {
         <Text fontWeight={500} mr={4}>
           {new Date().getFullYear()}
         </Text>
-      </Wrap>
+      </Wrap> */}
 
       {dataStates.loading && render.loading}
 

@@ -120,6 +120,8 @@ const AktivitasChart = ({ data, data2 }: any) => {
     },
   ];
 
+  console.log(data2);
+
   // Data Potensi Suara
   const labels2 = data2?.map((item: any) => `RW ${item.rw}`);
   const colors2 = Array.from({ length: data2?.length }).map(
@@ -211,24 +213,6 @@ const AktivitasChart = ({ data, data2 }: any) => {
         </SimpleGrid>
       </CContainer>
 
-      {/* <CContainer
-        border={"1px solid var(--divider3)"}
-        borderRadius={8}
-        flex={0}
-        gap={6}
-        p={5}
-        mb={4}
-      >
-        <SimpleGrid columns={3} gap={4}>
-          {data?.map((item: any, i: number) => (
-            <Center
-              bg={`#${item?.color}`}
-              color={item?.id === null ? "black" : "white"}
-            >{`RW ${i + 1}`}</Center>
-          ))}
-        </SimpleGrid>
-      </CContainer> */}
-
       <CContainer
         border={"1px solid var(--divider3)"}
         borderRadius={8}
@@ -241,32 +225,36 @@ const AktivitasChart = ({ data, data2 }: any) => {
           Potensi Suara
         </Text>
 
-        <VStack flex={"1 0 0"} position={"relative"}>
-          <VStack zIndex={2} w={"100%"} className="doughnutChartContainer">
-            <ChartDoughnut
-              labels={labels2}
-              datasets={datasets2}
-              cutout={"70"}
-            />
-          </VStack>
+        {totalPotensiSuara > 0 ? (
+          <VStack flex={"1 0 0"} position={"relative"}>
+            <VStack zIndex={2} w={"100%"} className="doughnutChartContainer">
+              <ChartDoughnut
+                labels={labels2}
+                datasets={datasets2}
+                cutout={"70"}
+              />
+            </VStack>
 
-          <VStack
-            position={"absolute"}
-            left={"50%"}
-            top={"50%"}
-            transform={"translate(-50%, -50%)"}
-            gap={0}
-          >
-            <Text textAlign={"center"} opacity={0.6}>
-              Total
-            </Text>
-            <Text fontSize={30} fontWeight={600} lineHeight={1.2}>
-              {formatNumber(totalPotensiSuara)}
-            </Text>
+            <VStack
+              position={"absolute"}
+              left={"50%"}
+              top={"50%"}
+              transform={"translate(-50%, -50%)"}
+              gap={0}
+            >
+              <Text textAlign={"center"} opacity={0.6}>
+                Total
+              </Text>
+              <Text fontSize={30} fontWeight={600} lineHeight={1.2}>
+                {formatNumber(totalPotensiSuara)}
+              </Text>
+            </VStack>
           </VStack>
-        </VStack>
+        ) : (
+          <NoData label="Potensi suara masih 0" />
+        )}
 
-        <Wrap
+        {/* <Wrap
           m={"auto"}
           justify={"center"}
           h={"fit-content"}
@@ -290,7 +278,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
               </HStack>
             </Tooltip>
           ))}
-        </Wrap>
+        </Wrap> */}
       </CContainer>
     </>
   );

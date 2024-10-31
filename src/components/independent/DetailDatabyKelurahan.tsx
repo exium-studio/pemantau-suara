@@ -113,7 +113,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
       label: "Nominal (N)",
       data: result?.map((item: any) => item?.total),
       backgroundColor: colors,
-      borderWidth: 2,
+      borderWidth: 1,
       borderColor: `#7e7e7e15`,
     },
   ];
@@ -129,7 +129,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
       label: "Nominal (N)",
       data: data2?.map((item: any) => item?.potensi_suara),
       backgroundColor: colors2,
-      borderWidth: 2,
+      borderWidth: 1,
       borderColor: `#7e7e7e15`,
     },
   ];
@@ -206,6 +206,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
             <Center
               key={i}
               bg={`#${item?.color}`}
+              border={"1px solid var(--divider)"}
               color={item?.id === 2 ? "white" : "dark"}
               borderRadius={6}
               p={2}
@@ -479,7 +480,7 @@ const SuaraKPUChart = ({ data, dataStates }: any) => {
       label: "Nominal (N)",
       data: data?.map((item: any) => item?.jumlah_suara),
       backgroundColor: colors,
-      borderWidth: 2,
+      borderWidth: 1,
       borderColor: `#7e7e7e15`,
     },
   ];

@@ -207,7 +207,7 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
                     false,
                   ],
                   layerFillOpacity,
-                  0.1 * opacity * 0.01,
+                  layerFillOpacity * 0.01,
                 ]
               : layerFillOpacity,
           }}

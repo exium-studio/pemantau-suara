@@ -1,19 +1,21 @@
 import { useColorMode } from "@chakra-ui/react";
-import { RefObject, useCallback, useEffect, useMemo, useRef } from "react";
+import { Dispatch, RefObject, useCallback, useEffect, useState } from "react";
 import { Layer, MapRef, Source } from "react-map-gl";
 import useLayerConfig from "../../../global/useLayerConfig";
 import useMapSpinner from "../../../global/useMapSpinner";
 import useSelectedGeoJSONKelurahan from "../../../global/useSelectedGeoJSONKelurahan";
-import useDataState from "../../../hooks/useDataState";
 import getUserData from "../../../lib/getUserData";
-import useRenderTrigger from "../../../hooks/useRenderTrigger";
+import request from "../../../lib/request";
 
 interface Props {
   geoJSONData: any[];
   mapRef: RefObject<MapRef>;
+  setKey: Dispatch<number>;
+  mapKey: number;
 }
 
 export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
+  // Utils
   const { colorMode } = useColorMode();
 
   // Globals
@@ -27,74 +29,34 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     setIsDisabledLayerConfig,
     setLayerConfigIsOpen,
   } = useLayerConfig();
-  const { rt, setRt } = useRenderTrigger();
-  const rtRef = useRef(rt);
 
-  // States
-  const dataRef = useRef<any[] | null>(null);
-  const { data, loading } = useDataState<any>({
-    url: `/api/pemantau-suara/publik-request/get-map-kelurahan`,
-    payload: {
+  // Data state
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  useEffect(() => {
+    setLoading(true);
+
+    const payload = {
       tahun: [tahun],
       kategori_suara: [kategoriSuara?.value],
-    },
-    conditions: !dataRef.current,
-    dependencies: [tahun, kategoriSuara],
-  });
-  const isUserPenggerak = getUserData().role.id === 3;
+    };
 
-  // Update dataRef ketika data baru tersedia
-  useEffect(() => {
-    if (data && (!dataRef.current || dataRef.current !== data)) {
-      dataRef.current = data;
-    }
-  }, [data]);
+    request
+      .post(`/api/pemantau-suara/publik-request/get-map-kelurahan`, payload)
+      .then((r) => {
+        if (r.status === 200) {
+          setData(r.data.data);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [tahun, kategoriSuara]);
 
-  useEffect(() => {
-    dataRef.current = null;
-    setRt(!rtRef.current);
-  }, [tahun, kategoriSuara, setRt]);
-
-  // Gabungkan semua GeoJSON menjadi satu FeatureCollection
-  const combinedGeoJSON = useMemo(() => {
-    if (tahun && kategoriSuara && layer) {
-      return {
-        type: "FeatureCollection",
-        features: geoJSONData.map((geoJSON) => {
-          const kelurahanData = dataRef.current?.find(
-            (item: any) =>
-              item.kode_kelurahan === geoJSON?.properties?.village_code
-          );
-
-          const statusAktivitasColor = `#${
-            kelurahanData?.status_aktivitas_kelurahan?.color ?? "F0F0F0"
-          }`;
-          const suaraKPUTerbanyakColor = `#${
-            kelurahanData?.suara_kpu_terbanyak?.partai?.color ?? "F0F0F0"
-          }`;
-
-          const fillColor =
-            layer?.label === "Aktivitas"
-              ? statusAktivitasColor
-              : layer?.label === "Suara KPU"
-              ? suaraKPUTerbanyakColor
-              : "#F0F0F0";
-
-          // console.log(layer?.label, fillColor);
-
-          return {
-            ...geoJSON,
-            properties: {
-              ...geoJSON.properties,
-              fillColor,
-            },
-          };
-        }),
-      };
-    }
-  }, [geoJSONData, tahun, kategoriSuara, layer]);
-
-  // Handle loading
+  // Handle map fullscreen spinner
   const {
     onOpenMapSpinner,
     onCloseMapSpinner,
@@ -126,19 +88,12 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
     setSelectedGeoJSONKelurahan,
   ]);
 
-  // Handle onclick geoJSON kelurahan
-  const handleLayerClick = useCallback(
-    (event: any) => {
-      if (isUserPenggerak) {
-        return;
-      }
-
-      const clickedFeature = event.features[0];
-      if (!clickedFeature) return;
-
-      const clickedVillageCode = clickedFeature.properties.village_code;
-      const kelurahanData = dataRef.current?.find(
-        (item: any) => item.kode_kelurahan === clickedVillageCode
+  // Gabungkan geoJSON dan data dari Sendi
+  const combinedGeoJSON = {
+    type: "FeatureCollection",
+    features: geoJSONData.map((geoJSON) => {
+      const kelurahanData = data?.find(
+        (item: any) => item.kode_kelurahan === geoJSON?.properties?.village_code
       );
 
       const statusAktivitasColor = `#${
@@ -155,78 +110,109 @@ export default function LayerKelurahanSemarang({ geoJSONData, mapRef }: Props) {
           ? suaraKPUTerbanyakColor
           : "#F0F0F0";
 
-      setSelectedGeoJSONKelurahan({
-        geoJSON: clickedFeature,
-        color: fillColor,
-      });
-    },
-    [setSelectedGeoJSONKelurahan, layer?.label, isUserPenggerak]
+      // console.log(layer?.label, fillColor);
+
+      return {
+        ...geoJSON,
+        properties: {
+          ...geoJSON.properties,
+          fillColor,
+        },
+      };
+    }),
+  };
+
+  // Handle onclick bidang kelurahan
+  // const isUserPenggerak = getUserData().role.id === 3;
+  // const handleOnClickBidangKelurahan = useCallback(
+  //   (event: any) => {
+  //     if (isUserPenggerak) {
+  //       return;
+  //     }
+
+  //     const clickedFeature = event.features[0];
+  //     if (!clickedFeature) return;
+
+  //     const clickedVillageCode = clickedFeature.properties.village_code;
+  //     const kelurahanData = data?.find(
+  //       (item: any) => item.kode_kelurahan === clickedVillageCode
+  //     );
+
+  //     const statusAktivitasColor = `#${
+  //       kelurahanData?.status_aktivitas_kelurahan?.color ?? "F0F0F0"
+  //     }`;
+  //     const suaraKPUTerbanyakColor = `#${
+  //       kelurahanData?.suara_kpu_terbanyak?.partai?.color ?? "F0F0F0"
+  //     }`;
+
+  //     const fillColor =
+  //       layer?.label === "Aktivitas"
+  //         ? statusAktivitasColor
+  //         : layer?.label === "Suara KPU"
+  //         ? suaraKPUTerbanyakColor
+  //         : "#F0F0F0";
+
+  //     setSelectedGeoJSONKelurahan({
+  //       geoJSON: clickedFeature,
+  //       color: fillColor,
+  //     });
+  //   },
+  //   [setSelectedGeoJSONKelurahan, layer?.label, isUserPenggerak]
+  // );
+  // useEffect(() => {
+  //   const map = mapRef.current?.getMap();
+  //   if (!map) return;
+
+  //   const clickHandler = (event: any) => handleOnClickBidangKelurahan(event);
+
+  //   map.on("click", "all-kelurahan-layer-fill", clickHandler);
+
+  //   return () => {
+  //     map.off("click", "all-kelurahan-layer-fill", clickHandler);
+  //   };
+  // }, [mapRef]);
+
+  return (
+    <Source type="geojson" data={combinedGeoJSON}>
+      <Layer
+        id="all-kelurahan-layer-fill"
+        type="fill"
+        paint={{
+          "fill-color": ["get", "fillColor"],
+          // "fill-opacity": selectedGeoJSONKelurahan ? 0.1 : 0.8,
+          "fill-opacity": selectedGeoJSONKelurahan?.geoJSON.properties
+            ?.village_code
+            ? [
+                "case",
+                [
+                  "boolean",
+                  [
+                    "==",
+                    ["get", "village_code"],
+                    selectedGeoJSONKelurahan?.geoJSON.properties?.village_code,
+                  ],
+                  false,
+                ],
+                opacity * 0.01,
+                opacity * 0.01 * 0.01,
+              ]
+            : opacity * 0.01,
+        }}
+      />
+      <Layer
+        id="all-kelurahan-layer-line"
+        type="line"
+        paint={{
+          "line-color": colorMode === "dark" ? "#ccc" : "#444",
+          "line-width": 1,
+        }}
+        layout={{
+          "line-cap": "round",
+          "line-join": "round",
+        }}
+      />
+    </Source>
   );
 
-  // Menggunakan useRef untuk menyimpan handleLayerClick agar tidak selalu diperbarui
-  const handleLayerClickRef = useRef(handleLayerClick);
-  handleLayerClickRef.current = handleLayerClick;
-  useEffect(() => {
-    const map = mapRef.current?.getMap();
-    if (!map) return;
-
-    const clickHandler = (event: any) => handleLayerClickRef.current(event);
-
-    map.on("click", "all-kelurahan-layer-fill", clickHandler);
-
-    return () => {
-      map.off("click", "all-kelurahan-layer-fill", clickHandler);
-    };
-  }, [mapRef]);
-
-  // Render GeoJSON
-  const render = useMemo(() => {
-    if (!combinedGeoJSON) return null;
-
-    const selectedVillageCode =
-      selectedGeoJSONKelurahan?.geoJSON.properties?.village_code;
-
-    // const layerFillOpacity = colorMode === "dark" ? 0.8 : 0.8;
-    const layerFillOpacity = opacity * 0.01;
-    const layerLineColor = colorMode === "dark" ? "#ccc" : "#444";
-
-    return (
-      <Source type="geojson" data={combinedGeoJSON}>
-        <Layer
-          id="all-kelurahan-layer-fill"
-          type="fill"
-          paint={{
-            "fill-color": ["get", "fillColor"],
-            // "fill-opacity": selectedGeoJSONKelurahan ? 0.1 : 0.8,
-            "fill-opacity": selectedVillageCode
-              ? [
-                  "case",
-                  [
-                    "boolean",
-                    ["==", ["get", "village_code"], selectedVillageCode],
-                    false,
-                  ],
-                  layerFillOpacity,
-                  layerFillOpacity * 0.01,
-                ]
-              : layerFillOpacity,
-          }}
-        />
-        <Layer
-          id="all-kelurahan-layer-line"
-          type="line"
-          paint={{
-            "line-color": layerLineColor,
-            "line-width": 1,
-          }}
-          layout={{
-            "line-cap": "round",
-            "line-join": "round",
-          }}
-        />
-      </Source>
-    );
-  }, [combinedGeoJSON, colorMode, selectedGeoJSONKelurahan, opacity]);
-
-  return render;
+  // return null;
 }

@@ -24,6 +24,8 @@ export default function Maps({
   markerLng,
   style,
 }: Props) {
+  const [key, setKey] = useState(1);
+
   // SX
   const { colorMode } = useColorMode();
 
@@ -79,6 +81,7 @@ export default function Maps({
 
   return (
     <Map
+      key={key}
       ref={mapRef}
       onLoad={() => setIsMapLoaded(true)}
       initialViewState={viewState}
@@ -116,6 +119,8 @@ export default function Maps({
 
           {/* Layer all kelurahan */}
           <LayerKelurahanSemarang
+            mapKey={key}
+            setKey={setKey}
             mapRef={mapRef}
             geoJSONData={filteredGeoJSON}
           />

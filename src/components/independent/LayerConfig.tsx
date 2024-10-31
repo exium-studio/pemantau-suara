@@ -20,9 +20,11 @@ import NumberInput from "../dependent/input/NumberInput";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
 import FlexLine from "./FlexLine";
+import useRenderTrigger from "../../hooks/useRenderTrigger";
 
 export default function LayerConfig() {
   const { layerConfig, onCloseLayerConfig } = useLayerConfig();
+  const { rt, setRt } = useRenderTrigger();
 
   // Globals
   const {
@@ -56,8 +58,11 @@ export default function LayerConfig() {
       setKategoriSuara(values.kategori_suara);
       setLayer(values.layer);
       setOpacity(values.opacity);
+      setRt(!rt);
     },
   });
+
+  // console.log(layer, kategoriSuara);
 
   return (
     <FloatingContainer
@@ -67,7 +72,7 @@ export default function LayerConfig() {
       // zIndex={3}
     >
       <DisclosureHeader
-        title="Layer Filter"
+        title="Layer Data Filter"
         disableBackOnClose
         onClose={onCloseLayerConfig}
         zIndex={20}
@@ -106,7 +111,7 @@ export default function LayerConfig() {
           </FormControl>
 
           <Text opacity={0.4} fontSize={"sm"} lineHeight={1.2}>
-            *Perubahan filter akan mendapatkan data ulang
+            *Setiap kali filter diubah, data akan diperbarui
           </Text>
 
           <FlexLine mx={"-20px"} mt={5} mb={4} />

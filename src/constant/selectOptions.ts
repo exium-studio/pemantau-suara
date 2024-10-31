@@ -187,7 +187,7 @@ const optionsKategoriSuara = [
 const optionsLayer = [
   { value: 1, label: "Aktivitas" },
   { value: 2, label: "Suara KPU" },
-  // { value: 2, label: "Quick Count Suara KPU" },
+  { value: 2, label: "Quick Count" },
 ];
 
 const optionsStatusAktivitas = [

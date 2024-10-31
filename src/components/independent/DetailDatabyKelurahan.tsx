@@ -205,7 +205,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
           {data?.map((item: any, i: number) => (
             <Center
               bg={`#${item?.color}`}
-              color={item?.id === 3 ? "white" : "dark"}
+              color={item?.id === 2 ? "white" : "dark"}
               borderRadius={6}
               p={2}
             >{`RW ${i + 1}`}</Center>

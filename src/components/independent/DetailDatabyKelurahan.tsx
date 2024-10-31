@@ -100,7 +100,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
       return acc;
     },
     [
-      { status_aktivitas: "Belum Ada Aktivitas", total: 0, color: "#F0F0F0" },
+      { status_aktivitas: "Belum Ada Aktivitas", total: 0, color: "#FAFAFA" },
       { status_aktivitas: "Alat Peraga", total: 0, color: "#00CCFF" },
       { status_aktivitas: "Sosialisasi", total: 0, color: "#0C6091" },
     ]
@@ -113,7 +113,8 @@ const AktivitasChart = ({ data, data2 }: any) => {
       label: "Nominal (N)",
       data: result?.map((item: any) => item?.total),
       backgroundColor: colors,
-      borderWidth: 0,
+      borderWidth: 2,
+      borderColor: `#7e7e7e15`,
     },
   ];
 
@@ -128,7 +129,8 @@ const AktivitasChart = ({ data, data2 }: any) => {
       label: "Nominal (N)",
       data: data2?.map((item: any) => item?.potensi_suara),
       backgroundColor: colors2,
-      borderWidth: 0,
+      borderWidth: 2,
+      borderColor: `#7e7e7e15`,
     },
   ];
   const totalPotensiSuara = data2
@@ -149,6 +151,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
           Status Aktivitas
         </Text>
 
+        {/* Chart */}
         <VStack flex={"1 0 0"} position={"relative"}>
           <VStack zIndex={2} w={"100%"} className="doughnutChartContainer">
             <ChartDoughnut labels={labels} datasets={datasets} cutout={"70"} />
@@ -170,6 +173,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
           </VStack>
         </VStack>
 
+        {/* Legends */}
         <Wrap
           m={"auto"}
           justify={"center"}
@@ -196,6 +200,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
           ))}
         </Wrap>
 
+        {/* Rw's */}
         <SimpleGrid columns={3} gap={2} mt={4}>
           {data?.map((item: any, i: number) => (
             <Center
@@ -474,7 +479,8 @@ const SuaraKPUChart = ({ data, dataStates }: any) => {
       label: "Nominal (N)",
       data: data?.map((item: any) => item?.jumlah_suara),
       backgroundColor: colors,
-      borderWidth: 0,
+      borderWidth: 2,
+      borderColor: `#7e7e7e15`,
     },
   ];
 

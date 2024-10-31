@@ -19,6 +19,7 @@ import DisclosureHeader from "../dependent/DisclosureHeader";
 import NumberInput from "../dependent/input/NumberInput";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
+import FlexLine from "./FlexLine";
 
 export default function LayerConfig() {
   const { layerConfig, onCloseLayerConfig } = useLayerConfig();
@@ -66,7 +67,7 @@ export default function LayerConfig() {
       // zIndex={3}
     >
       <DisclosureHeader
-        title="Layer Config"
+        title="Layer Filter"
         disableBackOnClose
         onClose={onCloseLayerConfig}
         zIndex={20}
@@ -103,6 +104,16 @@ export default function LayerConfig() {
               {formik.errors.kategori_suara as string}
             </FormErrorMessage>
           </FormControl>
+
+          <Text opacity={0.4} fontSize={"sm"} lineHeight={1.2}>
+            *Perubahan filter akan mendapatkan data ulang
+          </Text>
+
+          <FlexLine mx={"-20px"} mt={5} mb={4} />
+
+          <Text fontSize={[18, null, 20]} fontWeight={600} mb={4}>
+            Layer Config
+          </Text>
 
           <FormControl mb={6} isInvalid={!!formik.errors.layer}>
             <FormLabel>Layer</FormLabel>

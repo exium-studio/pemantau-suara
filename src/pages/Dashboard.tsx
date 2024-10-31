@@ -1,4 +1,11 @@
-import { Box, HStack, Icon, IconButton, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  Icon,
+  IconButton,
+  Tooltip,
+  useColorMode,
+} from "@chakra-ui/react";
 import { Stack } from "@phosphor-icons/react";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import DashboardMap from "../components/independent/DashboardMap";
@@ -23,14 +30,16 @@ const LayerConfigButton = () => {
     useLayerConfig();
 
   return (
-    <IconButton
-      aria-label="Layer Config"
-      icon={<Icon as={Stack} fontSize={iconSize} />}
-      className="btn"
-      onClick={toggleLayerConfig}
-      color={layerConfig ? "p.500" : ""}
-      isDisabled={isDisabledLayerConfig}
-    />
+    <Tooltip label={"Opsi Layer"} openDelay={500} mt={1}>
+      <IconButton
+        aria-label="Layer Config"
+        icon={<Icon as={Stack} fontSize={iconSize} />}
+        className="btn"
+        onClick={toggleLayerConfig}
+        color={layerConfig ? "p.500" : ""}
+        isDisabled={isDisabledLayerConfig}
+      />
+    </Tooltip>
   );
 };
 
@@ -41,6 +50,7 @@ export default function Dashboard() {
   // Utils
   const { searchMode } = useSearchMode();
   const ss = useIsSmScreen();
+  const { colorMode } = useColorMode();
 
   return (
     <CContainer
@@ -101,7 +111,7 @@ export default function Dashboard() {
               bg={lightDarkColor}
             >
               <Tooltip
-                label={"Dark Mode"}
+                label={colorMode === "dark" ? "Light Mode" : "Dark Mode"}
                 placement="bottom"
                 mt={1}
                 openDelay={500}

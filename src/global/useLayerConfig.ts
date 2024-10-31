@@ -5,8 +5,8 @@ interface State {
   layerConfig: boolean;
   isDisabledLayerConfig: boolean;
   tahun: number | undefined;
-  kategoriSuara: Interface__SelectOption | undefined;
-  layer: Interface__SelectOption | undefined;
+  kategoriSuara: Interface__SelectOption;
+  layer: Interface__SelectOption;
   opacity: number;
 }
 

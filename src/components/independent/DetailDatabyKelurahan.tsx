@@ -120,8 +120,6 @@ const AktivitasChart = ({ data, data2 }: any) => {
     },
   ];
 
-  console.log(data2);
-
   // Data Potensi Suara
   const labels2 = data2?.map((item: any) => `RW ${item.rw}`);
   const colors2 = Array.from({ length: data2?.length }).map(
@@ -204,6 +202,7 @@ const AktivitasChart = ({ data, data2 }: any) => {
         <SimpleGrid columns={3} gap={2} mt={4}>
           {data?.map((item: any, i: number) => (
             <Center
+              key={i}
               bg={`#${item?.color}`}
               color={item?.id === 2 ? "white" : "dark"}
               borderRadius={6}

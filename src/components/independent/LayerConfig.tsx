@@ -17,14 +17,13 @@ import SelectKategoriSuara from "../dependent/dedicated/SelectKategoriSuara";
 import SelectLayer from "../dependent/dedicated/SelectLayer";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import NumberInput from "../dependent/input/NumberInput";
+import FlexLine from "./FlexLine";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
-import FlexLine from "./FlexLine";
-import useRenderTrigger from "../../hooks/useRenderTrigger";
 
 export default function LayerConfig() {
   const { layerConfig, onCloseLayerConfig } = useLayerConfig();
-  const { rt, setRt } = useRenderTrigger();
+  // const { rt, setRt } = useRenderTrigger();
 
   // Globals
   const {
@@ -54,15 +53,21 @@ export default function LayerConfig() {
       opacity: yup.number().required("Harus diisi"),
     }),
     onSubmit: (values) => {
-      setTahun(values.tahun);
-      setKategoriSuara(values.kategori_suara);
-      setLayer(values.layer);
-      setOpacity(values.opacity);
-      setRt(!rt);
+      if (tahun !== values.tahun) {
+        setTahun(values.tahun);
+      }
+      if (kategoriSuara.value !== values.kategori_suara.value) {
+        setKategoriSuara(values.kategori_suara);
+      }
+      if (layer.value !== values.layer.value) {
+        setLayer(values.layer);
+      }
+      if (opacity !== values.opacity) {
+        setOpacity(values.opacity);
+      }
+      // setRt(!rt);
     },
   });
-
-  // console.log(layer, kategoriSuara);
 
   return (
     <FloatingContainer

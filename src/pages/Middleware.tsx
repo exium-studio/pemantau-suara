@@ -36,8 +36,8 @@ const Middleware = () => {
         })
         .catch((e) => {
           console.log(e);
-          localStorage.removeItem("__auth_token");
-          localStorage.removeItem("__user_data");
+          // localStorage.removeItem("__auth_token");
+          // localStorage.removeItem("__user_data");
         })
         .finally(() => {
           setLoading(false);

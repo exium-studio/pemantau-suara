@@ -36,10 +36,8 @@ const useDataState = <T>({
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const { req, response, loading, error, status } = useRequest({
-    successToast: false,
+    showSuccessToast: false,
   });
-
-  console.log(loading);
 
   // useRef to store a stable reference to the request function
   const makeRequestRef = useRef<() => void>(() => {});

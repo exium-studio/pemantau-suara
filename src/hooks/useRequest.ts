@@ -8,11 +8,14 @@ interface Request__Interface {
 }
 
 interface Props {
-  successToast?: boolean;
-  errorToast?: boolean;
+  showSuccessToast?: boolean;
+  showErrorToast?: boolean;
 }
 
-const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
+const useRequest = ({
+  showSuccessToast = true,
+  showErrorToast = true,
+}: Props = {}) => {
   // States
   const [loading, setLoading] = useState<boolean>(false);
   const [status, setStatus] = useState<number | undefined>(undefined);
@@ -25,9 +28,9 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
 
   // Make request func
   function req({ config }: Request__Interface) {
+    setLoading(true);
     setError(false);
     setStatus(undefined);
-    setLoading(true);
 
     // Abort request
     if (abortControllerRef.current) {
@@ -42,6 +45,7 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
         setStatus(r.status);
         if (r.status === 200 || r.status === 201) {
           setResponse(r);
+          setLoading(false);
         }
       })
       .catch((e) => {
@@ -63,11 +67,10 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
         if (e.code !== "ERR_CANCELED") {
           // Set error if the request fails and is not canceled
           setError(true);
+          setLoading(false);
         }
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => {});
   }
 
   // Handle toast by response status
@@ -76,7 +79,7 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
       switch (status) {
         case 200:
         case 201:
-          successToast &&
+          showSuccessToast &&
             fireToast({
               status: "success",
               title:
@@ -90,7 +93,7 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
         case 403:
         case 404:
         case 500:
-          errorToast &&
+          showErrorToast &&
             fireToast({
               status: "error",
               title:
@@ -106,8 +109,8 @@ const useRequest = ({ successToast = true, errorToast = true }: Props = {}) => {
     status,
     fireToast,
     response?.data?.message,
-    successToast,
-    errorToast,
+    showSuccessToast,
+    showErrorToast,
   ]);
 
   return {

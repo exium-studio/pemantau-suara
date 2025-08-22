@@ -131,7 +131,9 @@ export default function SearchAddress() {
           <Image
             src={"/asset/favicon.svg"}
             flexShrink={0}
-            h={searchMode ? "0" : "40px"}
+            h={searchMode ? "0" : "20px"}
+            my={"auto"}
+            mx={searchMode ? 0 : "10px"}
             // mx={searchMode ? 0 : 2}
             visibility={searchMode ? "hidden" : "visible"}
           />

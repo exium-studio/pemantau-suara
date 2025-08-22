@@ -22,7 +22,6 @@ import useAuth from "../hooks/useAuth";
 import useRenderTrigger from "../hooks/useRenderTrigger";
 import getAuthToken from "../lib/getAuthToken";
 import getUserData from "../lib/getUserData";
-import useScreenWidth from "../hooks/useScreenWidth";
 
 const Logout = () => {
   // States
@@ -65,7 +64,6 @@ export default function Login() {
   const authToken = getAuthToken();
   const userData = getUserData();
   const [key, setKey] = useState(1);
-  const sw = useScreenWidth();
 
   // Utils
   const navigate = useNavigate();

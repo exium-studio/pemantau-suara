@@ -1,10 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+
 * {
-  font-family: "Inter", sans-serif !important;
-  -webkit-tap-highlight-color: transparent;
-  /* -webkit-user-select: none !important;  */
-  /* -moz-user-select: none !important;  */
-  /* -ms-user-select: none !important;  */
-  /* user-select: none !important; */
+  font-family: "Nunito Sans", serif !important;
+  font-optical-sizing: auto;
+  box-sizing: border-box !important;
 }
 
 .mapboxgl-ctrl,

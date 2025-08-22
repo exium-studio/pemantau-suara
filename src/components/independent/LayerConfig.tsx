@@ -154,7 +154,7 @@ export default function LayerConfig() {
                 <SliderThumb bg={"p.500"} />
               </Slider>
 
-              <Text w={"41px"} flexShrink={0} textAlign={"right"}>
+              <Text w={"44px"} flexShrink={0} textAlign={"right"}>
                 {formik.values.opacity}%
               </Text>
             </HStack>

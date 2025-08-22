@@ -15,17 +15,17 @@ export default function Watermark() {
       left={"50%"}
       transform={"translateX(-50%)"}
       pointerEvents={"none"}
-      gap={0}
       justify={sw < 500 && pathname !== "/" ? "start" : "center"}
       px={4}
       pr={"calc(40px + 32px)"}
     >
-      <Image src="/asset/logo.png" w={"30px"} />
+      <Image src="/asset/favicon.svg" w={"16px"} />
+
       <Wrap spacingY={0}>
         <Text fontSize={"sm"} whiteSpace={"nowrap"}>
-          Beautifully Crafted by{" "}
+          Powered by{" "}
         </Text>
-        <a href="https://distrostudio.org/" target="_blank" rel="noreferrer">
+        <a href="https://exium.id/" target="_blank" rel="noreferrer">
           <Text
             fontSize={"sm"}
             pointerEvents={"auto"}
@@ -34,7 +34,7 @@ export default function Watermark() {
             transition={"200ms"}
             fontWeight={700}
           >
-            Distro Studio
+            Exium.id
           </Text>
         </a>
       </Wrap>

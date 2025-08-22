@@ -129,7 +129,7 @@ export default function SearchAddress() {
           zIndex={4}
         >
           <Image
-            src={"/asset/logo.png"}
+            src={"/asset/favicon.svg"}
             flexShrink={0}
             h={searchMode ? "0" : "40px"}
             // mx={searchMode ? 0 : 2}

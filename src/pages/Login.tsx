@@ -141,8 +141,8 @@ export default function Login() {
         position={"relative"}
       >
         <Image
-          src="/asset/images/yoyokjossmark.png"
-          w={"200px"}
+          src="/asset/images/demokrat.png"
+          w={"100px"}
           mx={"auto"}
           mb={8}
         />
@@ -227,12 +227,6 @@ export default function Login() {
           </>
         )}
       </CContainer>
-
-      {sw > 768 && (
-        <CContainer flex={"1 0 300px"}>
-          <Image src="/asset/images/yoyokjoss2.png" w={"100vw"} m={"auto"} />
-        </CContainer>
-      )}
     </Stack>
   );
 }

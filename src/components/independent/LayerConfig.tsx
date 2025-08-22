@@ -81,6 +81,9 @@ export default function LayerConfig() {
         disableBackOnClose
         onClose={onCloseLayerConfig}
         zIndex={20}
+        textProps={{
+          fontSize: "1rem",
+        }}
       />
 
       <CContainer px={5} pb={5} overflowY={"auto"} className={"scrollY"}>
@@ -121,7 +124,7 @@ export default function LayerConfig() {
 
           <FlexLine mx={"-20px"} mt={5} mb={4} />
 
-          <Text fontSize={[18, null, 20]} fontWeight={600} mb={4}>
+          <Text fontWeight={600} mb={4}>
             Layer Config
           </Text>
 

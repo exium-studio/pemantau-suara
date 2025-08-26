@@ -27,12 +27,12 @@ export default function ExportData({
       .get(url, { responseType: "blob" })
       .then((r) => {
         if (r.status === 200) {
-          console.log(r);
+          // console.log(r);
           download(r.data, fileName, ext);
         }
       })
       .catch((e) => {
-        console.log(e);
+        console.error(e);
       })
       .finally(() => {
         setLoading(false);

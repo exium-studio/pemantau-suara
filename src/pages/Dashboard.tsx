@@ -24,6 +24,7 @@ import useIsSmScreen from "../hooks/useIsSmScreen";
 import useLayerConfig from "../global/useLayerConfig";
 import ManageUsers from "../components/independent/ManageUsers";
 import ManageActivities from "../components/independent/ManageActivities";
+import ManageSaksi from "../components/independent/ManageSaksi";
 
 const LayerConfigButton = () => {
   const { isDisabledLayerConfig, layerConfig, toggleLayerConfig } =
@@ -78,6 +79,9 @@ export default function Dashboard() {
 
       {/* Manage Activities */}
       <ManageActivities />
+
+      {/* Manage Saksi */}
+      <ManageSaksi />
 
       {/* Legend Component */}
       <Legend />

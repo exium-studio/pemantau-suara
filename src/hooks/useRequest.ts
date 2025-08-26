@@ -49,7 +49,8 @@ const useRequest = ({
         }
       })
       .catch((e) => {
-        console.log(e);
+        console.error(e);
+
         setStatus(e.response?.status);
         setResponse(e.response);
 

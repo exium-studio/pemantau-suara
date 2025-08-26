@@ -82,7 +82,7 @@ const ManageSaksi = () => {
 
   return (
     <Tooltip
-      label={"Kelola Aktivitas"}
+      label={"Kelola Saksi"}
       openDelay={500}
       placement="bottom"
       mt={1}

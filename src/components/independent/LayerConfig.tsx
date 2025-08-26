@@ -74,7 +74,7 @@ export default function LayerConfig() {
       maxW={"264px"}
       top={"74px"}
       right={layerConfig ? "16px" : "calc(-264px + -30px)"}
-      // zIndex={3}
+      zIndex={3}
     >
       <DisclosureHeader
         title="Layer Data Filter"

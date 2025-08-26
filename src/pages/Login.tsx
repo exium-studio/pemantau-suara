@@ -33,9 +33,11 @@ const Logout = () => {
 
   // Handle Response
   useEffect(() => {
-    localStorage.removeItem("__auth_token");
-    localStorage.removeItem("__user_data");
-    setRt(!rtRef?.current);
+    if (response) {
+      localStorage.removeItem("__auth_token");
+      localStorage.removeItem("__user_data");
+      setRt(!rtRef?.current);
+    }
   }, [status, response, setRt]);
 
   return (

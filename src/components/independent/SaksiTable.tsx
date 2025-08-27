@@ -12,7 +12,7 @@ import formatNumber from "../../lib/formatNumber";
 import getUserData from "../../lib/getUserData";
 import AvatarUserTableBody from "../dependent/AvatarUserTableBody";
 import CustomTable from "../dependent/CustomTable";
-import EditActivityModalDisclosure from "../dependent/EditActivityModalDisclosure";
+import EditSaksiModalDisclosure from "../dependent/EditSaksiModalDisclosure";
 import ImageViewModalDisclosure from "../dependent/ImageViewModalDisclosure";
 import NooflineText from "../dependent/NooflineText";
 import StatusAktivitasBadge from "../dependent/StatusAktivitasBadge";
@@ -23,7 +23,6 @@ import Skeleton from "./feedback/Skeleton";
 import CContainer from "./wrapper/CContainer";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 import PermissionTooltip from "./wrapper/PermissionTooltip";
-import EditSaksiModalDisclosure from "../dependent/EditSaksiModalDisclosure";
 
 interface TableProps {
   dataStates: Interface__DataStates;

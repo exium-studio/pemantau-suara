@@ -54,7 +54,7 @@ export default function SelectKategoriSuara({
       </MenuButton>
 
       <Portal>
-        <MenuList minW={"221px"} zIndex={2}>
+        <MenuList minW={"221px"} zIndex={4}>
           {options?.map((option, i) => (
             <MenuItem
               key={i}

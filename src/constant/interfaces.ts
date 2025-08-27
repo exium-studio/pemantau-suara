@@ -1,5 +1,17 @@
 import { StackProps } from "@chakra-ui/react";
 // Custom Type
+export type Type__SaksiInitialValues = {
+  pelaksana?: Interface__SelectOption;
+  kelurahan?: Interface__SelectOption;
+  rw?: Interface__SelectOption;
+  status_aktivitas?: Interface__SelectOption;
+  tps?: number;
+  deskripsi?: string;
+  tgl_mulai?: Date;
+  tgl_selesai?: Date;
+  tempat_aktivitas?: string;
+  foto_aktivitas?: any;
+};
 
 export type Type__ActivityInitialValues = {
   pelaksana?: Interface__SelectOption;

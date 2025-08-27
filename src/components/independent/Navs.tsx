@@ -12,11 +12,11 @@ const ManageUsers = () => {
   const { onCloseManageActivities } = useManageActivities();
   const { onCloseManageSaksi } = useManageSaksi();
 
-  const isPenggerak = getUserData()?.role?.id === 3;
+  const isNotSuperAdmin = getUserData()?.role?.id !== 1;
 
   return (
     <Tooltip
-      label={isPenggerak ? "Tidak ada akses" : "Kelola Pengguna"}
+      label={isNotSuperAdmin ? "Tidak ada akses" : "Kelola Pengguna"}
       openDelay={500}
       placement="bottom"
       mt={1}
@@ -32,7 +32,7 @@ const ManageUsers = () => {
           />
         }
         className="btn"
-        isDisabled={isPenggerak}
+        isDisabled={isNotSuperAdmin}
         onClick={() => {
           onCloseManageActivities();
           onCloseManageSaksi();
@@ -47,9 +47,11 @@ const ManageActivities = () => {
   const { onCloseManageUsers } = useManageUsers();
   const { onCloseManageSaksi } = useManageSaksi();
 
+  const isSaksi = getUserData()?.role?.id === 4;
+
   return (
     <Tooltip
-      label={"Kelola Aktivitas"}
+      label={isSaksi ? "Tidak ada akses" : "Kelola Aktivitas"}
       openDelay={500}
       placement="bottom"
       mt={1}
@@ -71,6 +73,7 @@ const ManageActivities = () => {
           onCloseManageSaksi();
           toggleManageActivities();
         }}
+        isDisabled={isSaksi}
       />
     </Tooltip>
   );

@@ -1,24 +1,22 @@
-import { Box, HStack, Icon, IconButton, Tooltip } from "@chakra-ui/react";
-import { Plus } from "@phosphor-icons/react";
+import { Box, HStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useLightDarkColor } from "../../constant/colors";
-import { iconSize } from "../../constant/sizes";
+import useManageSaksi from "../../global/useManageSaksi";
 import getUserData from "../../lib/getUserData";
 import DisclosureHeader from "../dependent/DisclosureHeader";
 import ExportData from "../dependent/ExportData";
 import SearchComponent from "../dependent/input/SearchComponent";
-import UsersTable from "./UsersTable";
+import AddSaksiModal from "./AddSaksiModal";
+import SaksiTable from "./SaksiTable";
 import CContainer from "./wrapper/CContainer";
 import FloatingContainer from "./wrapper/FloatingContainer";
-import UserFormModalDisclosure from "./wrapper/UserFormModalDisclosure";
-import useManageSaksi from "../../global/useManageSaksi";
 
 export default function ManageSaksi() {
   // SX
   const lightDarkColor = useLightDarkColor();
 
   // States
-  const isPenggerak = getUserData()?.role?.id === 3;
+  const isSaksi = getUserData()?.role?.id === 4;
 
   // Utils
   const { manageSaksi, onCloseManageSaksi } = useManageSaksi();
@@ -69,7 +67,7 @@ export default function ManageSaksi() {
               inputValue={filterConfig.search}
             />
 
-            {!isPenggerak && (
+            {isSaksi && (
               <ExportData
                 tooltipLabel="Export Saksi"
                 url={`/api/pemantau-suara/dashboard/management/export-pengguna`}
@@ -78,25 +76,11 @@ export default function ManageSaksi() {
               />
             )}
 
-            <UserFormModalDisclosure
-              id="tambah-pengguna"
-              title="Tambah Pengguna"
-              submitUrl="/api/pemantau-suara/dashboard/management/pengguna"
-              submitLabel="Tambahkan"
-            >
-              <Tooltip label="Tambah Pengguna" openDelay={500} mr={9}>
-                <IconButton
-                  aria-label="add-user"
-                  icon={<Icon as={Plus} fontSize={iconSize} />}
-                  colorScheme="ap"
-                  className="btn-ap clicky"
-                />
-              </Tooltip>
-            </UserFormModalDisclosure>
+            <AddSaksiModal />
           </HStack>
         </Box>
 
-        <UsersTable conditions={manageSaksi} filterConfig={filterConfig} />
+        <SaksiTable conditions={manageSaksi} filterConfig={filterConfig} />
       </CContainer>
     </FloatingContainer>
   );

@@ -1,5 +1,6 @@
 import { Button, Icon, MenuItem, Text } from "@chakra-ui/react";
 import { Pencil } from "@phosphor-icons/react";
+import { useEffect, useRef } from "react";
 import {
   Interface__DataConfig,
   Interface__DataStates,
@@ -14,15 +15,14 @@ import CustomTable from "../dependent/CustomTable";
 import EditActivityModalDisclosure from "../dependent/EditActivityModalDisclosure";
 import ImageViewModalDisclosure from "../dependent/ImageViewModalDisclosure";
 import NooflineText from "../dependent/NooflineText";
+import StatusAktivitasBadge from "../dependent/StatusAktivitasBadge";
+import TableFooterConfig from "../dependent/TableFooterConfig";
 import NoData from "./feedback/NoData";
 import Retry from "./feedback/Retry";
 import Skeleton from "./feedback/Skeleton";
+import CContainer from "./wrapper/CContainer";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 import PermissionTooltip from "./wrapper/PermissionTooltip";
-import { useEffect, useRef } from "react";
-import CContainer from "./wrapper/CContainer";
-import TableFooterConfig from "../dependent/TableFooterConfig";
-import StatusAktivitasBadge from "../dependent/StatusAktivitasBadge";
 
 interface TableProps {
   dataStates: Interface__DataStates;
@@ -281,14 +281,14 @@ interface Props {
   filterConfig?: any;
 }
 
-export default function ActivitiesTable({ conditions, filterConfig }: Props) {
+export default function SaksiTable({ conditions, filterConfig }: Props) {
   // States
   const userData = getUserData();
   const allowedKelurahan = userData?.kelurahan?.map(
     (kelurahan: any) => kelurahan?.kode_kelurahan
   );
   const { dataStates, dataConfig } = useDataState<any>({
-    url: `/api/pemantau-suara/dashboard/management/get-aktivitas`,
+    url: `/api/pemantau-suara/dashboard/management/get-aktivitas-saksi`,
     payload: {
       search: filterConfig?.search?.split(" "),
       limit: 20,
@@ -307,7 +307,7 @@ export default function ActivitiesTable({ conditions, filterConfig }: Props) {
 
   return (
     <>
-      <CContainer id="manage-activity-body" overflowY={"auto"}>
+      <CContainer id="manage-saksi-body" overflowY={"auto"}>
         <CContainer overflowY={"auto"} className={"scrollY"}>
           <TableComponent dataStates={dataStates} dataConfig={dataConfig} />
         </CContainer>

@@ -23,6 +23,7 @@ import Skeleton from "./feedback/Skeleton";
 import CContainer from "./wrapper/CContainer";
 import CustomTableContainer from "./wrapper/CustomTableContainer";
 import PermissionTooltip from "./wrapper/PermissionTooltip";
+import EditSaksiModalDisclosure from "../dependent/EditSaksiModalDisclosure";
 
 interface TableProps {
   dataStates: Interface__DataStates;
@@ -42,7 +43,7 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
       const item = rowData?.originalData;
 
       const initialValues = {
-        potensi_suara: item?.potensi_suara,
+        tps: item?.tps,
         deskripsi: item?.deskripsi,
         tgl_mulai: new Date(formatDate(item?.tgl_mulai, "iso")),
         tgl_selesai: new Date(formatDate(item?.tgl_selesai, "iso")),
@@ -51,7 +52,7 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
       };
 
       return (
-        <EditActivityModalDisclosure
+        <EditSaksiModalDisclosure
           id={`${rowData?.id}`}
           initialValues={initialValues}
         >
@@ -61,7 +62,7 @@ const TableComponent = ({ dataStates, dataConfig }: TableProps) => {
               <Icon as={Pencil} fontSize={iconSize} opacity={0.4} />
             </MenuItem>
           </PermissionTooltip>
-        </EditActivityModalDisclosure>
+        </EditSaksiModalDisclosure>
       );
     },
   ];

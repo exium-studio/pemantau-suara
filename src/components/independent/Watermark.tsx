@@ -17,7 +17,6 @@ export default function Watermark() {
       pointerEvents={"none"}
       justify={sw < 500 && pathname !== "/" ? "start" : "center"}
       px={4}
-      pr={"calc(40px + 32px)"}
     >
       <Image src="/asset/favicon.svg" w={"16px"} />
 

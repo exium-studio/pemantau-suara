@@ -83,9 +83,11 @@ const ManageSaksi = () => {
   const { onCloseManageUsers } = useManageUsers();
   const { onCloseManageActivities } = useManageActivities();
 
+  const isSaksi = getUserData()?.role?.id === 4;
+
   return (
     <Tooltip
-      label={"Kelola Saksi"}
+      label={!isSaksi ? "Tidak ada akses" : "Kelola Saksi"}
       openDelay={500}
       placement="bottom"
       mt={1}
@@ -107,6 +109,7 @@ const ManageSaksi = () => {
           onCloseManageActivities();
           toggleManageSaksi();
         }}
+        isDisabled={!isSaksi}
       />
     </Tooltip>
   );
